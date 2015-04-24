@@ -21,5 +21,10 @@ class Engine
 	 */
 	public function __construct(Configuration $config)
 	{
+		/**
+		 * Load the driver for this engine instance and pass it appropriate
+		 * configuration data.
+		 */
+		$this->driver = new 'Driver\\'.$config->driver.'\\Driver'($config);
 	}
 }

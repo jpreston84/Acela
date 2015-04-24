@@ -12,4 +12,8 @@ use \Acela\Core\Database as Database;
  */
 class Driver extends Database\DriverTemplate
 {
+	/**
+	 * @var Database\Configuration $config The configuration for this driver. 
+	 */
+	public $config;
 }
