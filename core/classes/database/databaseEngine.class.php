@@ -1,6 +1,6 @@
 <?php
 /**
- *  The database handler.
+ * The database handler.
  */
 
 namespace Acela\Core\Database;
@@ -11,9 +11,9 @@ namespace Acela\Core\Database;
 class DatabaseEngine
 {	
 	/**
-	 *  Instantiate the database handler and connect to the specified source.
-	 *  @param string $configName A database configuration name.
-	 *  @see config/database.config.php
+	 * Instantiate the database handler and connect to the specified source.
+	 * @param string $configName A database configuration name.
+	 * @see config/database.config.php
 	 */
 	public function __construct($configName)
 	{
