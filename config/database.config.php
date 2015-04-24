@@ -5,11 +5,9 @@
 
 /**
  *  A list of all the database connections used by this application.
- *  
- *  @global array $core->config->database
  */
-$core->config->database = new \stdClass();
-$core->config->database->connections = [
+$GLOBALS['core']->config->database = new \stdClass();
+$GLOBALS['core']->config->database->connections = [
 	'default' => [
 		'driver'	=> 'MySQL',
 		'host'		=> 'localhost',
