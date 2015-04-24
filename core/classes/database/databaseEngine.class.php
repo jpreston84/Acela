@@ -9,9 +9,7 @@ namespace Acela\Core\Database;
  *  Database handler class.
  */
 class DatabaseEngine
-{
-	private $conn = null;
-	
+{	
 	/**
 	 *  Instantiate the database handler and connect to the specified source.
 	 *  
