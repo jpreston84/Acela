@@ -1,4 +1,8 @@
 <?php
+/**
+ *  The data model template.
+ */
+
 namespace Acela\Core;
 
 /**
