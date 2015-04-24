@@ -25,6 +25,7 @@ class Engine
 		 * Load the driver for this engine instance and pass it appropriate
 		 * configuration data.
 		 */
-		$this->driver = new 'Driver\\'.$config->driver.'\\Driver'($config);
+		$tmpDriverClass = 'Driver\\'.$config->driver.'\Driver';
+		$this->driver = new $tmpDriverClass($config);
 	}
 }
