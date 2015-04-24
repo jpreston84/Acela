@@ -18,7 +18,7 @@ class Driver extends Database\DriverTemplate
 	public $config;
 	
 	/**
-	 * @var \PDO $pdo The PDO handle for this driver.
+	 * @var PDO $pdo The PDO handle for this driver.
 	 */
 	public $pdo;
 	
