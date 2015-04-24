@@ -3,14 +3,13 @@
  *  Database configuration.
  */
 
-namespace Acela\Core\Config;
-
 /**
  *  A list of all the database connections used by this application.
  *  
- *  @global array $databases
+ *  @global array $core->config->database
  */
-$databases = [
+$core->config->database = new \stdClass();
+$core->config->database->connections = [
 	'default' => [
 		'driver'	=> 'MySQL',
 		'host'		=> 'localhost',
