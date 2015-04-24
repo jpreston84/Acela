@@ -10,6 +10,6 @@ use \Acela\Core\Database as Database;
 /**
  *  Database driver class for MySQL.
  */
-class Driver extends Database\DriverTemplate;
+class Driver extends Database\DriverTemplate
 {
 }
