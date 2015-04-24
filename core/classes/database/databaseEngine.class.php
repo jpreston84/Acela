@@ -6,16 +6,15 @@
 namespace Acela\Core\Database;
 
 /**
- *  Database handler class.
+ * Database handler class.
  */
 class DatabaseEngine
 {	
 	/**
 	 * Instantiate the database handler and connect to the specified source.
-	 * @param string $configName A database configuration name.
-	 * @see config/database.config.php
+	 * @param DatabaseEngineConfiguration $config A database configuration.
 	 */
-	public function __construct($configName)
+	public function __construct(DatabaseEngineConfiguration $config)
 	{
 	}
 }
