@@ -7,9 +7,9 @@ namespace Acela\Core\Database;
 
 /**
  * A configuration for the database engine.
- * @see DatabaseEngine DatabaseEngine
+ * @see Engine Engine
  */
-abstract class DatabaseEngineConfiguration
+abstract class Configuration
 {
 	/**
 	 * @var string $name The name of this configuration.
