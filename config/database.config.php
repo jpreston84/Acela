@@ -8,7 +8,7 @@ namespace Acela\Core\Config;
 /**
  *  A list of all the database connections used by this application.
  *  
- *  @global $databases
+ *  @global array $databases
  */
 $databases = [
 	'default' => [
