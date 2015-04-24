@@ -4,7 +4,7 @@ namespace Acela\Core;
 /**
  *  A template for data models.
  */
-abstract class Model
+abstract class ModelTemplate
 {
 	/**
 	 *  Create a new instance of the model.
