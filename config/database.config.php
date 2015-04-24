@@ -1,4 +1,8 @@
 <?php
+/**
+ *  Database configuration.
+ */
+
 namespace Acela\Core\Config;
 
 /**
