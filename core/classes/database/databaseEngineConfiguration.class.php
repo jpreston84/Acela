@@ -7,7 +7,7 @@ namespace Acela\Core\Database;
 
 /**
  * A configuration for the database engine.
- * @see \Acela\Core\DatabaseEngine \Acela\Core\DatabaseEngine
+ * @see DatabaseEngine DatabaseEngine
  */
 abstract class DatabaseEngineConfiguration
 {
