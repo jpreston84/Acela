@@ -1,6 +1,6 @@
 <?php
 /**
- *  Database driver for connecting to a MySQL database server.
+ *  Database driver for connecting to a MySQL database.
  */
 
 namespace Acela\Core\Database\Drivers
