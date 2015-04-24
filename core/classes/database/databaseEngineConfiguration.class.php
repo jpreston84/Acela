@@ -1,28 +1,20 @@
 <?php
 /**
  * A class for storing configurations for the DatabaseEngine.
- * @see \Acela\Core\Database\DatabaseEngine
  */
 
 namespace Acela\Core\Database;
 
 /**
  * A configuration for the database engine.
+ * @see DatabaseEngine
+ * @property string $name The name of this configuration.
+ * @property string $driver The name of the driver used in this configuration.
+ * @property bool $readOnly Is this configuration read-only?
  */
 abstract class DatabaseEngineConfiguration
 {
-	/**
-	 * The name of this configuration.
-	 */
 	public $name;
-	
-	/**
-	 * The name of the driver used in this configuration.
-	 */
 	public $driver;
-	
-	/**
-	 * Is this configuration read-only?
-	 */
 	public $readOnly = false;
 }
