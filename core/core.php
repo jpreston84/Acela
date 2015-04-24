@@ -8,5 +8,7 @@
 /**
  *  Core object that contains references to class instances and holds
  *  configuration data.
+ *  
+ *  @global $core
  */
 $core = new \stdClass;
