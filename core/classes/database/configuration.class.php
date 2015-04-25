@@ -3,7 +3,7 @@
  * A class for storing configurations for the DatabaseEngine.
  */
 
-namespace Acela\Core\Database;
+namespace Acela\Core\Database\Drivers;
 
 /**
  * A configuration for the database engine.

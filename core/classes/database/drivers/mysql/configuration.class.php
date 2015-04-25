@@ -5,13 +5,13 @@
 
 namespace Acela\Core\Database\Drivers\MySQL;
 
-use Acela\Core as Core;
+use Acela\Core\Database as Database;
 
 /**
  * A configuration for the MySQL database driver.
  * @see DatabaseEngine DatabaseEngine
  */
-class Configuration extends Core\Database\Configuration
+class Configuration extends Database\Drivers\Configuration
 {
 	/**
 	 * @var string $driver The name of the driver.

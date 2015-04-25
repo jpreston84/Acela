@@ -10,7 +10,7 @@ use \Acela\Core\Database as Database;
 /**
  * Class for MySQL database result sets.
  */
-class ResultSet extends Database\ResultSet
+class ResultSet extends Database\Drivers\ResultSet
 {
 	/**
 	 * @var \PDOStatement $res Resource for the result set.
