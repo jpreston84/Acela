@@ -14,7 +14,6 @@ abstract class Query
 	 * @var array $tables List of tables in this query.
 	 */
 	private $tables = [];
-	private 
 	
 	/**
 	 * Add a new table to the query.
