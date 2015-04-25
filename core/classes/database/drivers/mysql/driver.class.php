@@ -10,7 +10,7 @@ use \Acela\Core\Database as Database;
 /**
  *  Database driver class for MySQL.
  */
-class Driver extends Database\DriverTemplate
+class Driver extends Database\Driver
 {
 	/**
 	 * @var Configuration $config The configuration for this driver. 
@@ -18,7 +18,7 @@ class Driver extends Database\DriverTemplate
 	public $config;
 	
 	/**
-	 * @var PDO $pdo The PDO handle for this driver.
+	 * @var \PDO $pdo The PDO handle for this driver.
 	 */
 	public $pdo;
 	
@@ -45,5 +45,19 @@ class Driver extends Database\DriverTemplate
 				\PDO::ATTR_PERSISTENT => true,
 			]
 		);
+	}
+	
+	/**
+	 * Run a query just as it is and return the resource handle for the result
+	 * set. No extra processing.
+	 * 
+	 * @param string $query An SQL query you wish to run.
+	 * @return \PDOStatement A PDO statement resource handle.
+	 */
+	public function rawQuery($query)
+	{
+		$res = $this->pdo->query($query); // Run the query and retrieve the result handle.
+		$res->setFetchMode(PDO::FETCH_ASSOC); // Set the result handler to return associative arrays.
+		return $res; // Return the result handle.
 	}
 }

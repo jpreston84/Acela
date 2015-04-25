@@ -8,6 +8,6 @@ namespace Acela\Core\Database;
 /**
  * Template for database drivers.
  */
-abstract class DriverTemplate
+abstract class Driver
 {
 }
