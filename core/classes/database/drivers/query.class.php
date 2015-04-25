@@ -12,10 +12,17 @@ abstract class Query
 {
 	/**
 	 * @var array $tables List of tables in this query.
-	 * @var array $wheres List of where conditions in this query.
 	 */
 	private $tables = [];
+	
+	/**
+	 * @var array $wheres List of where conditions in this query.
+	 */
 	private $wheres = [];
+
+	/**
+	 * @var string|null $nextOperator The operator to use for the next ->cond() or ->where().
+	 */
 	private $nextOperator = null;
 	
 	/**
