@@ -28,4 +28,15 @@ class Engine
 		$tmpDriverClass = 'Driver\\'.$config->driver.'\Driver';
 		$this->driver = new $tmpDriverClass($config);
 	}
+	
+	/**
+	 * Run a query directly against the database driver, and return the result.
+	 * 
+	 * @param mixed $data The input for the database driver's ->rawQuery(), which is usually a string.
+	 * @return mixed The data returned from the database driver. This is usually an array.
+	 */
+	public function rawQuery($data)
+	{
+		return $driver->rawQuery($data);
+	}
 }

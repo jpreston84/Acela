@@ -60,4 +60,14 @@ class Driver extends Database\Driver
 		$res->setFetchMode(PDO::FETCH_ASSOC); // Set the result handler to return associative arrays.
 		return $res; // Return the result handle.
 	}
+	
+	/**
+	 * Create a new query to run against the database.
+	 * 
+	 * @return Query A new database query object.
+	 */
+	public function query()
+	{
+		return new Query;
+	}
 }
