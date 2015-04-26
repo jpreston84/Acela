@@ -26,6 +26,16 @@ abstract class Query
 	private $nextOperator = null;
 	
 	/**
+	 * @var int $groupDepth What depth are we in in the current group structure? 0 for no grouping.
+	 */
+	private $groupDepth = 0;
+	
+	/**
+	 * @var array $groupContents Contents of the current group of clauses.
+	 */
+	private $groupContents = [];
+	
+	/**
 	 * Add a new table to the query.
 	 * 
 	 * @param string $name The name of the table to add.
@@ -37,8 +47,7 @@ abstract class Query
 		$this->tables[] = [
 			'name' => $name,
 			'alias' => $alias,
-			'conditions' => [
-			],
+			'conditions' => [],
 		];
 		return $this;
 	}
@@ -89,7 +98,7 @@ abstract class Query
 	 */
 	public function where($alias, $name, $matchType, $value)
 	{
-		$this->wheres[] = [
+		$tmpWhere = [
 			'alias' => $alias,
 			'name' => $name,
 			'matchType' => $matchType,
@@ -99,8 +108,23 @@ abstract class Query
 		
 		if($this->nextOperator != null)
 		{
-			$this->wheres[key($this->wheres)]['type'] = $this->nextOperator;
+			$tmpWhere['type'] = $this->nextOperator;
 			$this->nextOperator = null;
+		}
+		
+		/**
+		 * Place the conditional into the appropriate group structure, if applicable.
+		 */
+		if($this->groupDepth > 0) // If we're in a group...
+		{
+			$tmpGroupDepth = $this->groupDepth - 1; // Get the depth we need to access to in the ->groupContents array.
+			$tmpGroupData = &$this->groupContents;
+			while($tmpGroupDepth > 0) // For each level of group depth we need to get to...
+			{
+				$tmpGroupData = &$tmpGroupData[key($tmpGroupData)]; // Reference the last item at the current depth.
+				$tmpGroupDepth--;
+			}
+			$tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
 		}
 		
 		return $this;
@@ -130,5 +154,47 @@ abstract class Query
 		return $this;
 	}
 	
+	/**
+	 * Start a group of conditions.
+	 * 
+	 * If you need to subgroup your conditions, either for join clauses or for where
+	 * clauses, simply execute ->group() multiple times. For instance, you may do...
+	 * 
+	 * $db
+	 *      ->query()
+	 *      ->table('table1', 't1')
+	 *      ->group()
+	 *           ->where('t1', 'foo', '=', 'bar')
+	 *           ->o()
+	 *           ->group()
+	 *                ->where('t1', 'foo', '=', 'aha')
+	 *                ->a()->where('t1', 'bar', '=', true)
+	 *           ->groupEnd()
+	 * 	    ->groupEnd()
+	 *      ->o()->where('t1', 'baz', '=', false)
+	 * ;
+	 * 
+	 * @return self A reference to the current object.
+	 */
+	public function group()
+	{
+		$this->groupDepth++; // Go one level deeper in the group structure.
+		return $this;
+	}
 	
+	/**
+	 * End a group of conditions.
+	 * 
+	 * @return self A reference to the current object.
+	 */
+	public groupEnd()
+	{
+		$this->groupDepth--; // Go one level up in the group structure.
+		if(empty($this->groupDepth))
+		{
+			$this->wheres[] = $this->groupContents;
+			$this->groupContents = [];
+		}
+		return $this;
+	}
 }
