@@ -36,6 +36,11 @@ abstract class Query
 	private $groupContents = [];
 	
 	/**
+	 * @var array $queryData Completed data for running a query.
+	 */
+	private $queryData = null;
+	
+	/**
 	 * Add a new table to the query.
 	 * 
 	 * @param string $name The name of the table to add.
@@ -126,6 +131,10 @@ abstract class Query
 			}
 			$tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
 		}
+		else
+		{
+			$this->wheres[] = $tmpWhere; // Add the where clause to the list of where clauses.
+		}
 		
 		return $this;
 	}
@@ -195,6 +204,33 @@ abstract class Query
 			$this->wheres[] = $this->groupContents;
 			$this->groupContents = [];
 		}
+		return $this;
+	}
+	
+	/**
+	 * Abstract function that builds the query for the selected database driver.
+	 * 
+	 * @return array A complete query, ready to be executed.
+	 */
+	abstract private function buildQuery();
+	
+	/**
+	 * Abstract function that executes a query for the selected database driver.
+	 * 
+	 * @param array $queryData The data necessary to execute the query.
+	 */
+	abstract private function executeQuery(array $queryData);
+	
+	/**
+	 * Run the query that's been constructed.
+	 * 
+	 * @return self A reference to the current object.
+	 */
+	public function run()
+	{
+		$this->queryData = $this->buildQuery();
+		$this->executeQuery($this->queryData);
+		
 		return $this;
 	}
 }
