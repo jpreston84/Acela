@@ -187,7 +187,7 @@ abstract class Query
 	 * 
 	 * @return self A reference to the current object.
 	 */
-	public groupEnd()
+	public function groupEnd()
 	{
 		$this->groupDepth--; // Go one level up in the group structure.
 		if(empty($this->groupDepth))
