@@ -17,7 +17,7 @@ class Query extends Database\Drivers\Query
 	 * 
 	 * @return string A MySQL databse query, as a string.
 	 */
-	private function buildQuery()
+	public function buildQuery()
 	{
 		/**
 		 * Build SELECT segment.
@@ -93,7 +93,7 @@ class Query extends Database\Drivers\Query
 	 * @param int $num A numeric counter for where in the current array level this element is.
 	 * @return string The completed string for this where clause.
 	 */
-	public function buildQueryWheres($where, $num = 0)
+	private function buildQueryWheres($where, $num = 0)
 	{
 		if(is_array($where[0])) // If the first item in this condition is an array, it's a sub-group, and we should handle it differently...
 		{
