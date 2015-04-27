@@ -61,7 +61,7 @@ class Query extends Database\Drivers\Query
 					$tmpConditions = [];
 					foreach($table['conditions'] as $cond)
 					{
-						$tmpConditions[] = $cond['field1'][0]'.`'.$cond['field1'][1].'` '.$cond['matchType'].' '.$cond['field2'][0]'.`'.$cond['field2'][1].'`';
+						$tmpConditions[] = $cond['field1'][0].'.`'.$cond['field1'][1].'` '.$cond['matchType'].' '.$cond['field2'][0].'.`'.$cond['field2'][1].'`';
 					}
 					$tmpConditions = 'ON '.implode(' AND ', $tmpConditions);
 					$tmpQueryTableSegment .= ' '.$tmpConditions;
