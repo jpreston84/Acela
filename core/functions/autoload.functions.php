@@ -38,7 +38,7 @@ function autoloadClasses($class)
 			
 			foreach($classNameComponents as $num => $component)
 			{
-				$classNameComponents[$num][0] = strtoupper($component[0]);
+				$classNameComponents[$num] = strtolower($component);
 			}
 			
 			require_once __DIR__.'/../../'.implode('/', $classNameComponents);
