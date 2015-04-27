@@ -20,7 +20,7 @@ $GLOBALS['core'] = new \stdClass;
  * Load the autoloader functions.
  */
 require_once __DIR__.'/functions/autoload.functions.php';
-spl_autoload_register('autoloadClasses');
+spl_autoload_register('Acela\Core\autoloadClasses');
 
 /**
  * Include the global configuration file.
