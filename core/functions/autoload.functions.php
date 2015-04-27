@@ -34,14 +34,14 @@ function autoloadClasses($class)
 				array_slice($classNameComponents, 1)
 			);
 			
-			$classNameComponents[key($classNameComponents)] .= '.class.php';
+			$classNameComponents[count($classNameComponents) - 1] .= '.class.php';
 			
 			foreach($classNameComponents as $num => $component)
 			{
 				$classNameComponents[$num][0] = strtoupper($component[0]);
 			}
 			
-			require_once __DIR__.'/../'.implode('/', $classNameComponents);
+			require_once __DIR__.'/../../'.implode('/', $classNameComponents);
 		}
 	}
 }
