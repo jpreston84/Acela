@@ -5,7 +5,7 @@
  * Main file.
  */
 
-namespace \Acela\Core;
+namespace Acela\Core;
 
 /**
  * Core object that contains references to class instances and holds
