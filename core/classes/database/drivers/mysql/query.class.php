@@ -90,6 +90,7 @@ class Query extends Database\Drivers\Query
 	 * Build a WHERE clause from an array. Handles subgrouping.
 	 * 
 	 * @param array $where An array of parameters to build a where clause.
+	 * @param int $num A numeric counter for where in the current array level this element is.
 	 * @return string The completed string for this where clause.
 	 */
 	private function buildQueryWheres($where, $num = 0)
