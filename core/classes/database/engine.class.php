@@ -25,7 +25,7 @@ class Engine
 		 * Load the driver for this engine instance and pass it appropriate
 		 * configuration data.
 		 */
-		$tmpDriverClass = 'Driver\\'.$config->driver.'\Driver';
+		$tmpDriverClass = 'Drivers\\'.$config->driver.'\Driver';
 		$this->driver = new $tmpDriverClass($config);
 	}
 	
@@ -47,7 +47,7 @@ class Engine
 	 */
 	public function query()
 	{
-		$tmpQueryClass = 'Driver\\'.$config->driver.'\Query'; // Determine the full path of the appropriate Query class.
+		$tmpQueryClass = 'Drivers\\'.$config->driver.'\Query'; // Determine the full path of the appropriate Query class.
 		$query = new $tmpQueryClass(); // Instantiate the Query object.
 
 		$query->driver = $this->driver; // Store a reference to the instantiated driver in the query object.
