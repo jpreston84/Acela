@@ -93,7 +93,7 @@ class Query extends Database\Drivers\Query
 	 * @param int $num A numeric counter for where in the current array level this element is.
 	 * @return string The completed string for this where clause.
 	 */
-	private function buildQueryWheres($where, $num = 0)
+	public function buildQueryWheres($where, $num = 0)
 	{
 		if(is_array($where[0])) // If the first item in this condition is an array, it's a sub-group, and we should handle it differently...
 		{
