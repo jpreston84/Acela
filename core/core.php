@@ -5,6 +5,8 @@
  * Main file.
  */
 
+namespace \Acela\Core;
+
 /**
  * Core object that contains references to class instances and holds
  * configuration data.
@@ -18,3 +20,9 @@ $GLOBALS['core'] = new \stdClass;
  * Include the global configuration file.
  */
 require_once __DIR__.'/../config/config.php';
+
+/**
+ * Load the database engine.
+ */
+require_once __DIR__.'/database/engine.class.php';
+$core->db = new Database\Engine($core->config->databases->default);

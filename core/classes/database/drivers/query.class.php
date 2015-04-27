@@ -11,9 +11,19 @@ namespace Acela\Core\Database\Drivers;
 abstract class Query
 {
 	/**
+	 * @var Driver $driver A reference to the instantiated database driver.
+	 */
+	private $driver;
+	
+	/**
 	 * @var array $tables List of tables in this query.
 	 */
 	private $tables = [];
+
+	/**
+	 * @var array $selects List of columns to be selected by this query.
+	 */
+	private $selects = [];
 	
 	/**
 	 * @var array $wheres List of where conditions in this query.
@@ -88,7 +98,38 @@ abstract class Query
 			];
 		}
 		
-		$this->tables[key($this->tables)]['conditions'] = [$field1, $condType, $field2]; // Add the condition to the table it applies to.
+		$this->tables[key($this->tables)]['conditions'] = [
+			'field1' => $field1,
+			'matchType' => $condType,
+			'field2' => $field2
+		]; // Add the condition to the table it applies to.
+		return $this;
+	}
+	
+	/**
+	 * Specify a field or set of fields to select from the tables.
+	 * 
+	 * @param string $tableAlias The alias of the table the fields should be retrieved from.
+	 * @param string $name The name of the field to be retrieved from.
+	 * @param string $alias An alias for the retrieved data.
+	 * @return self A reference to the current object.
+	 */
+	public function select($tableAlias, $name, $alias = null)
+	{
+		/**
+		 * If no alias provided, use field name.
+		 */
+		if(empty($alias))
+		{
+			$alias = $name;
+		}
+		
+		$this->selects[] = [
+			'table' => $tableAlias,
+			'field' => $name,
+			'alias' => $alias,
+		];
+		
 		return $this;
 	}
 	

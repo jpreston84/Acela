@@ -70,4 +70,16 @@ class Driver extends Database\Drivers\Driver
 	{
 		return new Query;
 	}
+	
+	/**
+	 * Make a string safe for MySQL database use.
+	 * 
+	 * @param string $string A string to be sanitized.
+	 * @return string The sanitized string.
+	 */
+	public function safeString($string)
+	{
+		$string = $this->pdo->quote($string);
+		return $string;
+	}
 }

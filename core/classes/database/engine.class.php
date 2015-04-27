@@ -39,4 +39,19 @@ class Engine
 	{
 		return $driver->rawQuery($data);
 	}
+	
+	/**
+	 * Generate a new query object for the selected database driver.
+	 * 
+	 * @return Driver\Query A database query object.
+	 */
+	public function query()
+	{
+		$tmpQueryClass = 'Driver\\'.$config->driver.'\Query'; // Determine the full path of the appropriate Query class.
+		$query = new $tmpQueryClass(); // Instantiate the Query object.
+
+		$query->driver = $this->driver; // Store a reference to the instantiated driver in the query object.
+		
+		return $query;		
+	}
 }
