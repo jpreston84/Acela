@@ -25,7 +25,7 @@ class Engine
 		 * Load the driver for this engine instance and pass it appropriate
 		 * configuration data.
 		 */
-		$tmpDriverClass = 'Drivers\\'.$config->driver.'\Driver';
+		$tmpDriverClass = 'Acela\Core\Database\Drivers\\'.$config->driver.'\Driver';
 		$this->driver = new $tmpDriverClass($config);
 	}
 	
