@@ -95,11 +95,13 @@ class Query extends Database\Drivers\Query
 	 */
 	private function buildQueryWheres($where, $num = 0)
 	{
-		if(!empty($where[0]) and is_array($where[0])) // If the first item in this condition is an array, it's a sub-group, and we should handle it differently...
+		if(!empty($where[0]) and is_array($where[0])) // If the first item in this condition is an array, this $where is actually a sub-group, and we should handle it differently...
 		{
 			$tmpQueryStrings = [];
 			foreach($where as $num => $subWhere) // For each element in the sub-group...
 			{
+				echo 'getting first condition type from...'
+				print_r($subWhere);
 				$tmpQueryStrings[] = $this->buildQueryWhereFirstConditionType($subWhere).' '.$this->buildQueryWheres($subWhere, $num); // Process the element, generate a string, and store it.
 			}
 			$whereString = '('.implode(' ', $tmpQueryStrings).')'; // Implode the group of clauses, surround with parentheses, and prepend the condition type from the first item in the set (which will be presumed to apply to the set).
@@ -161,7 +163,7 @@ class Query extends Database\Drivers\Query
 	 * @return [type] Return_Description
 	 */
 	private function buildQueryWhereFirstConditionType($where)
-	{
+	{		
 		if(!empty($where[0]) and is_array($where[0])) // If this is not a condition clause, but is a sub-group...
 		{
 			return $this->buildQueryWhereFirstConditionType($where[0]);
