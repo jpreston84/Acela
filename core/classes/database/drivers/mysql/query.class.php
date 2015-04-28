@@ -171,4 +171,9 @@ class Query extends Database\Drivers\Query
 			return $where['type'];
 		}
 	}
+	
+	public function executeQuery()
+	{
+		
+	}
 }
