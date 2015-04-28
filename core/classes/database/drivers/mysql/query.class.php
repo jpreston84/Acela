@@ -70,7 +70,7 @@ class Query extends Database\Drivers\Query
 			
 			$tmpQueryTables[] = $tmpQueryTableSegment;
 		}
-		$tmpQueryTables = 'FROM '.implode(' LEFT JOIN '.$tmpQueryTables);
+		$tmpQueryTables = 'FROM '.implode(' LEFT JOIN ', $tmpQueryTables);
 		
 		/**
 		 * Build WHERE clauses.
