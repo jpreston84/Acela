@@ -100,7 +100,7 @@ class Query extends Database\Drivers\Query
 			$tmpQueryStrings = [];
 			foreach($where as $num => $subWhere) // For each element in the sub-group...
 			{
-				echo 'getting first condition type from...'
+				echo 'getting first condition type from...';
 				print_r($subWhere);
 				$tmpQueryStrings[] = $this->buildQueryWhereFirstConditionType($subWhere).' '.$this->buildQueryWheres($subWhere, $num); // Process the element, generate a string, and store it.
 			}
