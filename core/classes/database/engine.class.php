@@ -25,7 +25,7 @@ class Engine
 		 * Load the driver for this engine instance and pass it appropriate
 		 * configuration data.
 		 */
-		$tmpDriverClass = 'Acela\Core\Database\Drivers\\'.$config->driver.'\Driver';
+		$tmpDriverClass = __NAMESPACE__.'\Drivers\\'.$config->driver.'\Driver';
 		$this->driver = new $tmpDriverClass($config);
 	}
 	
@@ -47,7 +47,7 @@ class Engine
 	 */
 	public function query()
 	{
-		$tmpQueryClass = 'Drivers\\'.$config->driver.'\Query'; // Determine the full path of the appropriate Query class.
+		$tmpQueryClass = __NAMESPACE__.'\Drivers\\'.$config->driver.'\Query'; // Determine the full path of the appropriate Query class.
 		$query = new $tmpQueryClass(); // Instantiate the Query object.
 
 		$query->driver = $this->driver; // Store a reference to the instantiated driver in the query object.
