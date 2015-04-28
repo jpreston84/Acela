@@ -163,7 +163,7 @@ abstract class Query
 		 */
 		if($this->groupDepth > 0) // If we're in a group...
 		{
-			$tmpGroupDepth = $this->groupDepth - 1; // Get the depth we need to access to in the ->groupContents array.
+			$tmpGroupDepth = $this->groupDepth; // Get the depth we need to access to in the ->groupContents array.
 			$tmpGroupData = &$this->groupContents;
 			while($tmpGroupDepth > 0) // For each level of group depth we need to get to...
 			{
@@ -229,7 +229,25 @@ abstract class Query
 	public function group()
 	{
 		$this->groupDepth++; // Go one level deeper in the group structure.
+		$this->addArrayAtDepth($this->groupDepth - 1, $this->groupContents);
 		return $this;
+	}
+	
+	/**
+	 * Append a new array to the end of a multi-dimensional array, at the specified
+	 * depth.
+	 * 
+	 * @param int $depth The depth at which to add the new array.
+	 * @param array $data The array of data to which the new array is to be added.
+	 */
+	protected function addArrayAtDepth($depth, &$data)
+	{
+		$currentRef = &$data;
+		while($depth > 0)
+		{
+			$currentRef = &$currentRef[count($currentRef) - 1]; // Make the new current reference the very last element of the previous current reference.
+			$depth--;
+		}
 	}
 	
 	/**
