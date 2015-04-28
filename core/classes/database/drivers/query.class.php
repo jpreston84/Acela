@@ -167,7 +167,7 @@ abstract class Query
 			$tmpGroupData = &$this->groupContents;
 			while($tmpGroupDepth > 0) // For each level of group depth we need to get to...
 			{
-				$tmpGroupData = &$tmpGroupData[key($tmpGroupData)]; // Reference the last item at the current depth.
+				$tmpGroupData = &$tmpGroupData[count($tmpGroupData) - 1]; // Reference the last item at the current depth.
 				$tmpGroupDepth--;
 			}
 			$tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
