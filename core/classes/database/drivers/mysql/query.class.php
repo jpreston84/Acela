@@ -172,7 +172,7 @@ class Query extends Database\Drivers\Query
 		}
 	}
 	
-	public function executeQuery()
+	public function executeQuery(array $queryData)
 	{
 		
 	}
