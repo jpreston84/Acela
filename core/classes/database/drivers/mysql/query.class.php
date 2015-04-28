@@ -95,7 +95,7 @@ class Query extends Database\Drivers\Query
 	 */
 	private function buildQueryWheres($where, $num = 0)
 	{
-		if(is_array($where[0])) // If the first item in this condition is an array, it's a sub-group, and we should handle it differently...
+		if(!empty($where[0]) and is_array($where[0])) // If the first item in this condition is an array, it's a sub-group, and we should handle it differently...
 		{
 			$tmpQueryStrings = [];
 			foreach($where as $num => $subWhere) // For each element in the sub-group...
@@ -162,7 +162,7 @@ class Query extends Database\Drivers\Query
 	 */
 	private function buildQueryWhereFirstConditionType($where)
 	{
-		if(is_array($where[0])) // If this is not a condition clause, but is a sub-group...
+		if(!empty($where[0]) and is_array($where[0])) // If this is not a condition clause, but is a sub-group...
 		{
 			return $this->buildQueryWhereFirstConditionType($where[0]);
 		}
