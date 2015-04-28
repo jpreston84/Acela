@@ -41,6 +41,7 @@ function autoloadClasses($class)
 				$classNameComponents[$num] = strtolower($component);
 			}
 			
+			error_log('Loading '.implode('/', $classNameComponents));
 			require_once __DIR__.'/../../'.implode('/', $classNameComponents);
 		}
 	}
