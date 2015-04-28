@@ -253,14 +253,14 @@ abstract class Query
 	 * 
 	 * @return array A complete query, ready to be executed.
 	 */
-	abstract private function buildQuery();
+	abstract public function buildQuery();
 	
 	/**
 	 * Abstract function that executes a query for the selected database driver.
 	 * 
 	 * @param array $queryData The data necessary to execute the query.
 	 */
-	abstract private function executeQuery(array $queryData);
+	abstract public function executeQuery(array $queryData);
 	
 	/**
 	 * Run the query that's been constructed.
