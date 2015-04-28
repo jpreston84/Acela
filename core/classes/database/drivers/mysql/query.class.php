@@ -111,7 +111,7 @@ class Query extends Database\Drivers\Query
 			{
 				$whereString = $where['type'].' ';
 			}
-			$whereString .= $where['alias'].'.`'.$name.'` '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
+			$whereString .= $where['alias'].'.`'.$where['name'].'` '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
 		}
 		
 		return $whereString;
