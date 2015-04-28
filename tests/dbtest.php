@@ -25,4 +25,4 @@ $query
 		->groupEnd()
 	->groupEnd();
 
-echo '<pre>$query->buildQuery()</pre>';
+echo '<pre>'.$query->buildQuery().'</pre>';
