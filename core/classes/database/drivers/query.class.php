@@ -13,7 +13,7 @@ abstract class Query
 	/**
 	 * @var Driver $driver A reference to the instantiated database driver.
 	 */
-	protected $driver;
+	public $driver;
 	
 	/**
 	 * @var array $tables List of tables in this query.
