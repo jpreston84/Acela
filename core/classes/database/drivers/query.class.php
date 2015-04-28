@@ -13,42 +13,42 @@ abstract class Query
 	/**
 	 * @var Driver $driver A reference to the instantiated database driver.
 	 */
-	private $driver;
+	protected $driver;
 	
 	/**
 	 * @var array $tables List of tables in this query.
 	 */
-	private $tables = [];
+	protected $tables = [];
 
 	/**
 	 * @var array $selects List of columns to be selected by this query.
 	 */
-	private $selects = [];
+	protected $selects = [];
 	
 	/**
 	 * @var array $wheres List of where conditions in this query.
 	 */
-	private $wheres = [];
+	protected $wheres = [];
 
 	/**
 	 * @var string|null $nextOperator The operator to use for the next ->cond() or ->where().
 	 */
-	private $nextOperator = null;
+	protected $nextOperator = null;
 	
 	/**
 	 * @var int $groupDepth What depth are we in in the current group structure? 0 for no grouping.
 	 */
-	private $groupDepth = 0;
+	protected $groupDepth = 0;
 	
 	/**
 	 * @var array $groupContents Contents of the current group of clauses.
 	 */
-	private $groupContents = [];
+	protected $groupContents = [];
 	
 	/**
 	 * @var array $queryData Completed data for running a query.
 	 */
-	private $queryData = null;
+	protected $queryData = null;
 	
 	/**
 	 * Add a new table to the query.
