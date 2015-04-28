@@ -47,7 +47,7 @@ class Engine
 	 */
 	public function query()
 	{
-		$tmpQueryClass = __NAMESPACE__.'\Drivers\\'.$config->driver.'\Query'; // Determine the full path of the appropriate Query class.
+		$tmpQueryClass = __NAMESPACE__.'\Drivers\\'.$this->driver->config->driver.'\Query'; // Determine the full path of the appropriate Query class.
 		$query = new $tmpQueryClass(); // Instantiate the Query object.
 
 		$query->driver = $this->driver; // Store a reference to the instantiated driver in the query object.
