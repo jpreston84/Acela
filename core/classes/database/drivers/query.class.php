@@ -88,12 +88,12 @@ abstract class Query
 		{
 			$tmpFieldName = $field1; // Store a copy of the field name that must match.			
 			$field1 = [
-				$this->tables[key($this->tables) - 1]['alias'], // Get second-to-last added table and find its alias.
+				$this->tables[count($this->tables) - 2]['alias'], // Get second-to-last added table and find its alias.
 				$tmpFieldName,
 			];
 			$condType = '=';
 			$field2 = [
-				$this->tables[key($this->tables)]['alias'], // Get last added table and find its alias.
+				$this->tables[count($this->tables) - 1]['alias'], // Get last added table and find its alias.
 				$tmpFieldName,
 			];
 		}
