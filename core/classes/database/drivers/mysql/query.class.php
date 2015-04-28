@@ -80,9 +80,7 @@ class Query extends Database\Drivers\Query
 		{
 			$tmpQueryWheres = 'WHERE '.implode('', $this->buildQueryWheres($this->wheres));
 		}
-		
-		print_r($this->wheres);
-		
+				
 		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQueryWheres;
 		
 		return $query;
@@ -170,6 +168,8 @@ class Query extends Database\Drivers\Query
 		}
 		else
 		{
+			echo 'okay, not a group<br />';
+			print_r($where);
 			return $where['type'];
 		}
 	}
