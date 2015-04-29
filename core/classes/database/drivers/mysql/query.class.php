@@ -102,7 +102,12 @@ class Query extends Database\Drivers\Query
 			{
 				$tmpQueryStrings[] = $this->buildQueryWheres($subWhere, $subNum); // Process the element, generate a string, and store it.
 			}
-			$whereString = $this->buildQueryWhereFirstConditionType($subWhere).' ('.implode(' ', $tmpQueryStrings).')'; // Implode the group of clauses, surround with parentheses, and prepend the condition type from the first item in the set (which will be presumed to apply to the set).
+			$whereString = '';
+			if($num > 0) // If this is not the first item in the set, attach the condition type...
+			{
+				$whereString = $this->buildQueryWhereFirstConditionType($where).' ';
+			}
+			$whereString .= '('.implode(' ', $tmpQueryStrings).')'; // Implode the group of clauses, surround with parentheses, and prepend the condition type from the first item in the set (which will be presumed to apply to the set).
 		}
 		else // If the first item is not an array, assume we've actually reached a condition...
 		{
