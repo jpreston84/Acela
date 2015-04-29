@@ -98,7 +98,7 @@ class Query extends Database\Drivers\Query
 		if(!empty($where[0]) and is_array($where[0])) // If the first item in this condition is an array, this $where is actually a sub-group, and we should handle it differently...
 		{
 			echo 'Found subgroup <br />';
-			print_r($where)
+			print_r($where);
 			$tmpQueryStrings = [];
 			foreach($where as $subNum => $subWhere) // For each element in the sub-group...
 			{
@@ -114,7 +114,7 @@ class Query extends Database\Drivers\Query
 		else // If the first item is not an array, assume we've actually reached a condition...
 		{
 			echo 'Found item <br />';
-			print_r($where)
+			print_r($where);
 			$whereString = '';
 			if($num > 0) // If this is not the first item in the set, attach the condition type...
 			{
