@@ -78,7 +78,7 @@ class Query extends Database\Drivers\Query
 		$tmpQueryWheres = '';
 		if(!empty($this->wheres))
 		{
-			$tmpQueryWheres = 'WHERE '.implode('', $this->buildQueryWheres($this->wheres));
+			$tmpQueryWheres = 'WHERE '.$this->buildQueryWheres($this->wheres);
 		}
 				
 		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQueryWheres;
@@ -113,8 +113,6 @@ class Query extends Database\Drivers\Query
 			}
 			$whereString .= $where['alias'].'.`'.$where['name'].'` '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
 		}
-		
-		echo $whereString.'<br />';
 		
 		return $whereString;
 	}
