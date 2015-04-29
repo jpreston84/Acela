@@ -97,9 +97,6 @@ class Query extends Database\Drivers\Query
 	{
 		if(!empty($where[0]) and is_array($where[0])) // If the first item in this condition is an array, this $where is actually a sub-group, and we should handle it differently...
 		{
-			echo 'Detected that this is a subgroup...<br />';
-			print_r($where);
-			echo '<br />';
 			$tmpQueryStrings = [];
 			foreach($where as $num => $subWhere) // For each element in the sub-group...
 			{
@@ -116,6 +113,8 @@ class Query extends Database\Drivers\Query
 			}
 			$whereString .= $where['alias'].'.`'.$where['name'].'` '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
 		}
+		
+		echo $whereString.'<br />';
 		
 		return $whereString;
 	}
@@ -171,8 +170,6 @@ class Query extends Database\Drivers\Query
 		}
 		else
 		{
-			echo 'okay, not a group<br />';
-			print_r($where);
 			return $where['type'];
 		}
 	}
