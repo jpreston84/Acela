@@ -245,7 +245,7 @@ abstract class Query
 		$currentRef = &$data;
 		while($depth > 0)
 		{
-			$currentRef = &$currentRef[( (count($currentRef) - 1) :? 0 )]; // Make the new current reference the very last element of the previous current reference.
+			$currentRef = &$currentRef[( (count($currentRef) - 1) ?: 0 )]; // Make the new current reference the very last element of the previous current reference.
 			$depth--;
 		}
 	}
