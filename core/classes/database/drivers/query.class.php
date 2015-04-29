@@ -229,7 +229,7 @@ abstract class Query
 	public function group()
 	{
 		$this->groupDepth++; // Go one level deeper in the group structure.
-		$this->addArrayAtDepth($this->groupDepth - 1, $this->groupContents);
+		$this->addArrayAtDepth($this->groupDepth, $this->groupContents);
 		return $this;
 	}
 	
@@ -237,18 +237,27 @@ abstract class Query
 	 * Append a new array to the end of a multi-dimensional array, at the specified
 	 * depth.
 	 * 
-	 * @param int $depth The depth at which to add the new array.
+	 * @param int $depth The depth at which to add the new array, 1-indexed.
 	 * @param array $data The array of data to which the new array is to be added.
 	 */
 	protected function addArrayAtDepth($depth, &$data)
 	{
+		$depth--; // We start at depth 1 in the array, so we don't need to process that.
 		$currentRef = &$data;
-		while($depth > 0)
+		while($depth > 0) // For each level of depth...
 		{
-			$currentRef = &$currentRef[( (count($currentRef) - 1) < 0 ?: 0 )]; // Make the new current reference the very last element of the previous current reference.
-			$currentRef[] = []; // Add a new array.
+			/**
+			 * Get last member at the current level.
+			 */
+			$keys = array_keys($currentRef);
+			$currentRef = &$currentRef[end($keys)];
 			$depth--;
 		}
+		
+		/**
+		 * Add a new array to the end of the selected array element.
+		 */
+		$currentRef[] = [];
 	}
 	
 	/**
