@@ -247,7 +247,14 @@ abstract class Query
 		echo '<br />';
 		
 		$depth--; // We start at depth 1 in the array, so we don't need to process that.
+		
+		
 		$currentRef = &$this->groupContents;
+
+		echo 'Selected...<br />';
+		print_r($currentRef);
+		echo '<br />';
+
 		while($depth > 0) // For each level of depth...
 		{
 			/**
@@ -256,6 +263,10 @@ abstract class Query
 			$keys = array_keys($currentRef);
 			$currentRef = &$currentRef[end($keys)];
 			$depth--;
+
+			echo 'Selected...<br />';
+			print_r($currentRef);
+			echo '<br />';
 		}
 		
 		/**
