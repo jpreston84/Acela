@@ -258,7 +258,7 @@ abstract class Query
 		/**
 		 * Add a new array to the end of the selected array element.
 		 */
-		$currentRef[] = [];
+		// $currentRef[] = [];
 	}
 	
 	/**
