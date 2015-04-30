@@ -78,7 +78,7 @@ class Query extends Database\Drivers\Query
 		$tmpQueryWheres = '';
 		if(!empty($this->wheres))
 		{
-			$tmpQueryWheres = 'WHERE '.$this->buildQueryWheres($this->wheres[0]);
+			$tmpQueryWheres = 'WHERE '.$this->buildQueryWheres($this->wheres);
 		}
 				
 		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQueryWheres;
