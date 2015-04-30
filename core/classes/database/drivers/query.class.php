@@ -277,6 +277,7 @@ abstract class Query
 		$currentRef[] = [];
 		
 		echo 'After add array <br />';
+		print_r($currentRef);
 		print_r($this->groupContents);
 		echo '<br />';
 
