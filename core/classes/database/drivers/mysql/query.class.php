@@ -139,6 +139,7 @@ class Query extends Database\Drivers\Query
 	 */
 	private function buildQueryWhereValue($value)
 	{
+		echo 'formatting value '.$value.'<br />';
 		if(is_null($value))
 		{
 			$value = 'NULL';
