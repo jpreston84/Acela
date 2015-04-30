@@ -299,7 +299,7 @@ abstract class Query
 		$this->groupDepth--; // Go one level up in the group structure.
 		if(empty($this->groupDepth))
 		{
-			$this->wheres[] = $this->groupContents;
+			$this->wheres[] = $this->groupContents[0];
 			$this->groupContents = [];
 		}
 		return $this;
