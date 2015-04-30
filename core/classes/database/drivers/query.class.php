@@ -168,10 +168,16 @@ abstract class Query
 			while($tmpGroupDepth > 0) // For each level of group depth we need to get to...
 			{
 				$tmpKeys = array_keys($tmpGroupData);
-				$tmpGroupData = &$tmpGroupData[end($tmpKeys)];
+				$newTmpGroupData = &$tmpGroupData[end($tmpKeys)];
+				unset($tmpGroupData);
+				$tmpGroupData = &$newTmpGroupData;
+				unset($newTmpGroupData);
 				$tmpGroupDepth--;
 			}
 			$tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
+			echo 'Group data now looks like...<br />';
+			print_r($this->groupContents);
+			echo '<br />';
 		}
 		else
 		{
