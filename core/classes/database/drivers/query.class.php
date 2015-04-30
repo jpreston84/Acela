@@ -175,9 +175,6 @@ abstract class Query
 				$tmpGroupDepth--;
 			}
 			$tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
-			echo 'Group data now looks like...<br />';
-			print_r($this->groupContents);
-			echo '<br />';
 		}
 		else
 		{
@@ -247,18 +244,10 @@ abstract class Query
 	 * @param int $depth The depth at which to add the new array, 1-indexed.
 	 */
 	protected function addArrayAtDepth($depth)
-	{
-		echo 'Before add array <br />';
-		print_r($this->groupContents);
-		echo '<br />';
-		
+	{		
 		$depth--; // We start at depth 1 in the array, so we don't need to process that.
 		
 		$currentRef = &$this->groupContents;
-
-		echo 'Selected...<br />';
-		print_r($currentRef);
-		echo '<br />';
 
 		while($depth > 0) // For each level of depth...
 		{
@@ -271,22 +260,12 @@ abstract class Query
 			$currentRef = &$newRef;
 			unset($newRef);
 			$depth--;
-
-			echo 'Selected...<br />';
-			print_r($currentRef);
-			echo '<br />';
 		}
 		
 		/**
 		 * Add a new array to the end of the selected array element.
 		 */
 		$currentRef[] = [];
-		
-		echo 'After add array <br />';
-		print_r($currentRef);
-		print_r($this->groupContents);
-		echo '<br />';
-
 	}
 	
 	/**
