@@ -230,7 +230,7 @@ abstract class Query
 	public function group()
 	{
 		$this->groupDepth++; // Go one level deeper in the group structure.
-		$this->addArrayAtDepth($this->groupDepth, $this->groupContents);
+		$this->addArrayAtDepth($this->groupDepth);
 		return $this;
 	}
 	
@@ -239,16 +239,15 @@ abstract class Query
 	 * depth.
 	 * 
 	 * @param int $depth The depth at which to add the new array, 1-indexed.
-	 * @param array $data The array of data to which the new array is to be added.
 	 */
-	protected function addArrayAtDepth($depth, &$data)
+	protected function addArrayAtDepth($depth)
 	{
 		echo 'Before add array <br />';
-		print_r($data);
+		print_r($this->groupContents);
 		echo '<br />';
 		
 		$depth--; // We start at depth 1 in the array, so we don't need to process that.
-		$currentRef = &$data;
+		$currentRef = &$this->groupContents;
 		while($depth > 0) // For each level of depth...
 		{
 			/**
@@ -265,7 +264,7 @@ abstract class Query
 		$currentRef[] = [];
 		
 		echo 'After add array <br />';
-		print_r($data);
+		print_r($this->groupContents);
 		echo '<br />';
 
 	}
