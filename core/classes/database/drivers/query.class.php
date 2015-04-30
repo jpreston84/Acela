@@ -171,7 +171,7 @@ abstract class Query
 				$tmpGroupData = &$tmpGroupData[end($tmpKeys)];
 				$tmpGroupDepth--;
 			}
-			$tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
+			// $tmpGroupData[] = $tmpWhere; // Add the where clause to the end of the current group.
 		}
 		else
 		{
