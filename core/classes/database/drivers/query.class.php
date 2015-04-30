@@ -98,7 +98,7 @@ abstract class Query
 			];
 		}
 		
-		$this->tables[key($this->tables)]['conditions'] = [
+		$this->tables[count($this->tables) - 1]['conditions'] = [
 			'field1' => $field1,
 			'matchType' => $condType,
 			'field2' => $field2
