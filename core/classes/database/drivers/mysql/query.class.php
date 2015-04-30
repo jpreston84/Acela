@@ -56,14 +56,11 @@ class Query extends Database\Drivers\Query
 			 */
 			if($num > 0)
 			{
-				echo 'Checking for conditions on table '.$num.'<br />';
 				if(!empty($table['conditions']))
 				{
-					echo 'Found conditions on table '.$num.'<br />';
 					$tmpConditions = [];
 					foreach($table['conditions'] as $num2 => $cond)
 					{
-						echo 'Condition '.$num2.'<br />';
 						$tmpConditions[] = $cond['field1'][0].'.`'.$cond['field1'][1].'` '.$cond['matchType'].' '.$cond['field2'][0].'.`'.$cond['field2'][1].'`';
 					}
 					$tmpConditions = 'ON '.implode(' AND ', $tmpConditions);
@@ -119,6 +116,15 @@ class Query extends Database\Drivers\Query
 			{
 				$whereString = $where['type'].' ';
 			}
+			
+			/**
+			 * Set match type for NULL.
+			 */
+			if(is_null($where['value']))
+			{
+				$where['matchType'] = 'IS'; // Use the IS keyword, rather than =, because the expression ( anything = NULL ) always evaluates to null, never true. The expression (something IS NULL) can evaluate true.
+			}
+			
 			$whereString .= $where['alias'].'.`'.$where['name'].'` '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
 		}
 		
