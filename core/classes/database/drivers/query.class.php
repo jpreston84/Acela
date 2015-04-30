@@ -261,7 +261,9 @@ abstract class Query
 			 */
 			$keys = array_keys($currentRef);
 			$newRef = &$currentRef[end($keys)];
+			unset($currentRef);
 			$currentRef = &$newRef;
+			unset($newRef);
 			$depth--;
 
 			echo 'Selected...<br />';
