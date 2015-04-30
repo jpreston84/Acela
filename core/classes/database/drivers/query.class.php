@@ -248,7 +248,6 @@ abstract class Query
 		
 		$depth--; // We start at depth 1 in the array, so we don't need to process that.
 		
-		
 		$currentRef = &$this->groupContents;
 
 		echo 'Selected...<br />';
@@ -261,7 +260,8 @@ abstract class Query
 			 * Get last member at the current level.
 			 */
 			$keys = array_keys($currentRef);
-			$currentRef = &$currentRef[end($keys)];
+			$newRef = &$currentRef[end($keys)];
+			$currentRef = &$newRef;
 			$depth--;
 
 			echo 'Selected...<br />';
