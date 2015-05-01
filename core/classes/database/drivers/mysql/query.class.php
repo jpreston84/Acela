@@ -158,7 +158,7 @@ class Query extends Database\Drivers\Query
 		}
 		else // Otherwise, treat this as a string...
 		{
-			$value = '"'.$this->driver->safeString($value).'"';
+			$value = $this->driver->safeString($value);
 		}
 		
 		return $value;
