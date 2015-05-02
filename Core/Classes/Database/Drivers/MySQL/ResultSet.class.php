@@ -10,7 +10,7 @@ use \Acela\Core\Database as Database;
 /**
  * Class for MySQL database result sets.
  */
-class ResultSet extends Database\Drivers\ResultSet implements Countable, Iterator
+class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Iterator
 {
 	/**
 	 * @var \PDOStatement $stmt Resource for the result set.
