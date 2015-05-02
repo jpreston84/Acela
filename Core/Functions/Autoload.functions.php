@@ -30,7 +30,7 @@ function autoloadClasses($class)
 		{
 			$classNameComponents = array_merge( // Add 'classes' as the second element of the file path.
 				array_slice($classNameComponents, 0, 1),
-				['classes'],
+				['Classes'],
 				array_slice($classNameComponents, 1)
 			);
 			
