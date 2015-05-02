@@ -5,6 +5,7 @@ $query = $core->db->query();
 
 $query
 	->table('users', 'u')
+;
 
 echo '<pre>'.$query->build().'</pre>';
 
