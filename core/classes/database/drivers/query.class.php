@@ -289,14 +289,12 @@ abstract class Query
 	 * 
 	 * @return array A complete query, ready to be executed.
 	 */
-	abstract public function buildQuery();
+	abstract public function build();
 	
 	/**
 	 * Abstract function that executes a query for the selected database driver.
-	 * 
-	 * @param array $queryData The data necessary to execute the query.
 	 */
-	abstract public function executeQuery(array $queryData);
+	abstract public function execute();
 	
 	/**
 	 * Run the query that's been constructed.
@@ -305,8 +303,8 @@ abstract class Query
 	 */
 	public function run()
 	{
-		$this->queryData = $this->buildQuery();
-		$this->executeQuery($this->queryData);
+		$this->build();
+		$this->execute();
 		
 		return $this;
 	}

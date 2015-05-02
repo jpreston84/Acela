@@ -52,13 +52,16 @@ class Driver extends Database\Drivers\Driver
 	 * set. No extra processing.
 	 * 
 	 * @param string $query An SQL query you wish to run.
-	 * @return \PDOStatement A PDO statement resource handle.
+	 * @return ResultSet A result set.
 	 */
 	public function rawQuery($query)
 	{
-		$res = $this->pdo->query($query); // Run the query and retrieve the result handle.
-		$res->setFetchMode(PDO::FETCH_ASSOC); // Set the result handler to return associative arrays.
-		return $res; // Return the result handle.
+		$stmt = $this->pdo->query($query); // Run the query and retrieve the result handle.
+
+		$resultSet = new ResultSet($stmt);
+		$resultSet->driver = $this;
+
+		return $resultSet; // Return the result set.
 	}
 	
 	/**
