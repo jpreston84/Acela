@@ -11,8 +11,10 @@ echo '<pre>'.$query->build().'</pre>';
 
 $results = $query->run();
 
+print_r($results);
+
 foreach($results as $result)
 {
-	echo '<br />';
+	echo '<br />Going through results';
 	print_r($result);
 }
