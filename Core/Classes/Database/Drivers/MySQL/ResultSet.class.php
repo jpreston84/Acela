@@ -59,6 +59,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Itera
 	 */
 	public function current()
 	{
+		error_log('Iterator - current');
 		return $this->currentRecord;
 	}
 
@@ -69,6 +70,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Itera
 	 */
 	public function key()
 	{
+		error_log('Iterator - key');
 		return $this->currentRecordKey;
 	}
 	
@@ -77,6 +79,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Itera
 	 */
 	public function next()
 	{
+		error_log('Iterator - next');
 		$this->get();
 	}
 	
@@ -85,6 +88,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Itera
 	 */
 	public function rewind()
 	{
+		error_log('Iterator - rewind');
 		$this->stmt->rewind();
 	}
 	
