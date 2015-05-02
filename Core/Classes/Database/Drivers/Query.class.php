@@ -49,6 +49,11 @@ abstract class Query
 	 * @var array $queryData Completed data for running a query.
 	 */
 	protected $queryData = null;
+
+	/**
+	 * @var ResultSet $resultSet The result set that came from running this query.
+	 */
+	protected $resultSet = null;
 	
 	/**
 	 * Add a new table to the query.
@@ -306,6 +311,6 @@ abstract class Query
 		$this->build();
 		$this->execute();
 		
-		return $this;
+		return $this->resultSet;
 	}
 }

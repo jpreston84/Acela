@@ -13,11 +13,6 @@ use \Acela\Core\Database as Database;
 class Query extends Database\Drivers\Query
 {
 	/**
-	 * @var \PDOStatement $stmt The PDO Statement resource handle once a query has been executed.
-	 */
-	protected $stmt = null;
-
-	/**
 	 * Generate a MySQL query from the components that have been input into the Query class.
 	 * 
 	 * @return string A MySQL databse query, as a string.
@@ -200,6 +195,6 @@ class Query extends Database\Drivers\Query
 	 */
 	public function execute()
 	{
-		$this->stmt = $this->driver->rawQuery($this->queryData[0]); // Take the already-prepared query, and execute it, returning the PDO Statement handle.
+		$this->resultSet = $this->driver->rawQuery($this->queryData[0]); // Take the already-prepared query, and execute it, returning the ResultSet object.
 	}
 }
