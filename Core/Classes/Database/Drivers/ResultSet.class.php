@@ -13,5 +13,5 @@ abstract class ResultSet implements \Countable, \Iterator
 	/**
 	 * @var $driver A reference to the database driver being used.
 	 */
-	protected $driver;
+	public $driver;
 }
