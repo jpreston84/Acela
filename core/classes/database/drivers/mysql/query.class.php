@@ -22,7 +22,7 @@ class Query extends Database\Drivers\Query
 	 * 
 	 * @return string A MySQL databse query, as a string.
 	 */
-	public function buildQuery()
+	public function build()
 	{
 		/**
 		 * Build SELECT segment.
