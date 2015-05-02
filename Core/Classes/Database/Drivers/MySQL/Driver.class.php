@@ -43,6 +43,7 @@ class Driver extends Database\Drivers\Driver
 			$this->config->password,
 			[
 				\PDO::ATTR_PERSISTENT => true,
+				\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
 			]
 		);
 	}
