@@ -35,7 +35,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Itera
 	public function __construct($stmt)
 	{
 		$this->stmt = $stmt;
-		$this->stmt->setFetchMode(PDO::FETCH_ASSOC); // Set the result handler to return associative arrays.
+		$this->stmt->setFetchMode(\PDO::FETCH_ASSOC); // Set the result handler to return associative arrays.
 	}
 	
 	/**
