@@ -35,13 +35,7 @@ function autoloadClasses($class)
 			);
 			
 			$classNameComponents[count($classNameComponents) - 1] .= '.class.php';
-			
-			foreach($classNameComponents as $num => $component)
-			{
-				$classNameComponents[$num] = strtolower($component);
-			}
-			
-			error_log('Loading '.implode('/', $classNameComponents));
+
 			require_once __DIR__.'/../../'.implode('/', $classNameComponents);
 		}
 	}
