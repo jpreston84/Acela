@@ -15,7 +15,7 @@ class Config
 	 */
 	public function __get($name)
 	{
-		if(empty($this->$name)))
+		if(empty($this->$name))
 		{
 			$filename = __DIR__.'/../../Config/'.$name.'.config.php';
 			if(file_exists($filename))
