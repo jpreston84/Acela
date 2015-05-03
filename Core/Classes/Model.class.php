@@ -18,7 +18,7 @@ class Model
 	 */
 	static function get($name)
 	{
-		$className = 'Models\\'.$name.'\Manager';
+		$className = __NAMESPACE__.'\Models\\'.$name.'\Manager';
 		$instance = $className::getInstance();
 		return $instance;
 	}
