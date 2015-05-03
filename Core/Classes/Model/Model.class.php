@@ -12,10 +12,4 @@ use \Acela\Core as Core;
  */
 abstract class Model
 {
-	/**
-	 *  Create a new instance of the model.
-	 */
-	function __construct()
-	{
-	}
 }
