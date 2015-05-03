@@ -90,6 +90,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Itera
 	{
 		error_log('Iterator - rewind');
 		$this->reset(); // Reset the ResultSet to the beginning.
+		$this->get(); // Get the first record.
 	}
 	
 	/**
