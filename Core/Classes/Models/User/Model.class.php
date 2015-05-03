@@ -3,14 +3,14 @@
  *  The data model for Users.
  */
 
-namespace Acela\Core\Model\Models\User;
+namespace Acela\Core\Models\User;
 
-use \Acela\Core\Model as Model;
+use \Acela\Core\Models as Models;
 
 /**
  *  The data model for Users.
  */
-class Model extends Model\Model
+class Model extends Models\Model
 {
 	public $table = 'users';
 	public $prefix = 'user';

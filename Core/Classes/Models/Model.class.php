@@ -3,12 +3,12 @@
  *  The data model template.
  */
 
-namespace Acela\Core\Model;
+namespace Acela\Core\Models;
 
 use \Acela\Core as Core;
 
 /**
- *  A template for data models.
+ *  The data model template.
  */
 abstract class Model
 {

@@ -3,7 +3,7 @@
  *  The data model manager template.
  */
 
-namespace Acela\Core\Model;
+namespace Acela\Core\Models;
 
 use \Acela\Core as Core;
 
