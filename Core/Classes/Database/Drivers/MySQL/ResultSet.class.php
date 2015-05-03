@@ -10,12 +10,12 @@ use \Acela\Core\Database as Database;
 /**
  * Class for MySQL database result sets.
  */
-class ResultSet extends Database\Drivers\ResultSet implements \Countable, \NoRewindIterator
+class ResultSet extends Database\Drivers\ResultSet implements \Countable, \Iterator
 {
 	/**
 	 * @var \PDOStatement $stmt Resource for the result set.
 	 */
-	private $stmt;
+	public $stmt;
 	
 	/**
 	 * @var array $currentRecord The current record from the data set (for Iterator interface).
@@ -25,7 +25,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \NoRew
 	/**
 	 * @var array $currentRecordKey A key for the current record from the data set (for Iterator interface).
 	 */
-	private $currentRecordKey;
+	private $currentRecordKey = null;
 	
 	/**
 	 * Instantiate the result set and save the PDO resource.
@@ -89,6 +89,7 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \NoRew
 	public function rewind()
 	{
 		error_log('Iterator - rewind');
+		$this->reset(); // Reset the ResultSet to the beginning.
 	}
 	
 	/**
@@ -119,12 +120,11 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \NoRew
 	}
 	
 	/**
-	 * Get one or more rows of data from the record set.
+	 * Get the next row of data from the record set.
 	 * 
-	 * @param int $qty The number of rows to retrieve. Default 1.
 	 * @return array|false An associative array containing the names of columns as array keys and values of columns as array values.
 	 */
-	public function get($qty = 1)
+	public function get()
 	{
 		/**
 		 * Update the ->currentRecordKey.
@@ -154,5 +154,42 @@ class ResultSet extends Database\Drivers\ResultSet implements \Countable, \NoRew
 	public function getAll()
 	{
 		return $this->stmt->fetchAll();
+	}
+	
+	/**
+	 * Close the current ResultSet.
+	 */
+	public function close()
+	{
+		$this->stmt->closeCursor();
+	}
+	
+	/**
+	 * Reset the record set to its original state.
+	 */
+	public function reset()
+	{
+		if(is_null($this->currentRecordKey)) // If we have not run ->get() for the first record yet...
+		{
+			return; // The record set is in its original state, so don't do anything.
+		}
+		else
+		{
+			/**
+			 * Close database handle.
+			 */
+			$this->close(); // Close the current database query.
+			
+			/**
+			 * Reset class properties.
+			 */
+			$this->currentRecord = null;
+			$this->currentRecordKey = null;
+			
+			/**
+			 * Rebuild data set.
+			 */
+			$this->driver->rawQuery($this->queryData[0], $this); // Re-run the original database query that generated this ResultSet.
+		}
 	}
 }

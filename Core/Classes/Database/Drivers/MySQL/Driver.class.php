@@ -53,14 +53,27 @@ class Driver extends Database\Drivers\Driver
 	 * set. No extra processing.
 	 * 
 	 * @param string $query An SQL query you wish to run.
+	 * @param ResultSet|null $resultSet An existing result set to reset (optional).
 	 * @return ResultSet A result set.
 	 */
-	public function rawQuery($query)
+	public function rawQuery($query, $resultSet = null)
 	{
 		$stmt = $this->pdo->query($query); // Run the query and retrieve the result handle.
 
-		$resultSet = new ResultSet($stmt);
-		$resultSet->driver = $this;
+		/**
+		 * If no result set was provided, create a new one. Otherwise, update the
+		 * existing one.
+		 */
+		if(is_null($resultSet))
+		{
+			$resultSet = new ResultSet($stmt);
+			$resultSet->driver = $this;
+			$resultSet->queryData = [$query];
+		}
+		else // If an existing result set was provided...
+		{
+			$resultSet->stmt = $stmt; // Pass the new PDO statement variable to it.
+		}
 
 		return $resultSet; // Return the result set.
 	}
