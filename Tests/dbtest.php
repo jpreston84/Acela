@@ -1,4 +1,8 @@
 <?php
+/**
+ * A database test routine.
+ */
+
 require_once __DIR__.'/../Core/Core.php';
 
 $query = $core->db->query();

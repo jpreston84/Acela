@@ -5,6 +5,9 @@
 
 namespace Acela\Core;
 
+/**
+ * The core object.
+ */
 class Core
 {
 	/**

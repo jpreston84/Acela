@@ -5,6 +5,9 @@
 
 namespace Acela\Core;
 
+/**
+ * The global configuration object.
+ */
 class Config
 {
 	/**
