@@ -15,8 +15,6 @@ echo '<pre>'.$query->build().'</pre>';
 
 $results = $query->run();
 
-print_r($results);
-
 foreach($results as $result)
 {
 	echo '<br />Going through results';
