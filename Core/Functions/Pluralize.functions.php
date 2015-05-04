@@ -97,7 +97,7 @@ function wordPluralize($word)
 	/**
 	 * Rule - Words ending in o preceded by a consonant have "es" added.
 	 */
-	elseif(preg_match('/([b-df-hj-np-tv-z]o)$/', $word)
+	elseif(preg_match('/([b-df-hj-np-tv-z]o)$/', $word))
 	{
 		$word .= 'es';
 	}
