@@ -102,7 +102,7 @@ abstract class ResultSet implements \Countable, \Iterator
 	{
 		foreach($this->databaseResultSet as $result)
 		{
-			$modelClass = __NAMESPACE__.'\Model';
+			$modelClass = __NAMESPACE__.'\\'.$this->manager->modelName.'\Model';
 			$model = new $modelClass;
 			
 			/**
