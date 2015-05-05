@@ -80,8 +80,21 @@ class Query extends Database\Drivers\Query
 		{
 			$tmpQueryWheres = 'WHERE '.$this->buildQueryWheres($this->wheres);
 		}
-				
-		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQueryWheres;
+
+		/**
+		 * Build LIMIT clause.
+		 */
+		$tmpQueryLimit = '';
+		if($this->quantity > 0) // If we are trying to retrieve a specific number of records...
+		{
+			$startLimit = ( (int) $this->page - 1 ) * ( (int) $this->quantity ); // Start of the limit should be (pageNum - 1) * numRecords.
+			$tmpQueryLimit = 'LIMIT '.$startLimit.', '.( (int) $this->quantity );
+		}
+		
+		/**
+		 * Assemble the completed query string.
+		 */
+		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQueryWheres.' '.$tmpQueryLimit.';';
 		
 		/**
 		 * Put the built query into the appropriate property.

@@ -44,6 +44,16 @@ abstract class Query
 	 * @var array $groupContents Contents of the current group of clauses.
 	 */
 	protected $groupContents = [];
+
+	/**
+	 * @var int $quantity The number of records to be retrieved by this query (0 for unlimited).
+	 */
+	protected $quantity = 0;
+	
+	/**
+	 * @var int $page The page number of results to retrieve (1 by default).
+	 */
+	protected $page = 1;
 	
 	/**
 	 * @var array $queryData Completed data for running a query.
@@ -286,6 +296,35 @@ abstract class Query
 			$this->wheres[] = $this->groupContents[0];
 			$this->groupContents = [];
 		}
+		return $this;
+	}
+	
+	/**
+	 * Set the number of results to be retrieved. 
+	 * 
+	 * @param int $qty The number of results to be retrieved.
+	 * @return self A reference to the current object.
+	 */
+	public function quantity($qty)
+	{
+		$this->quantity = $qty;
+		
+		return $this;
+	}
+
+	/**
+	 * Set the page of results to be retrieved.
+	 * 
+	 * If we're retrieving 10 results, setting the page to 1 will get records 1
+	 * through 10, page 2 will get records 11 through 20, and so on.
+	 * 
+	 * @param int $num The page number of results to be retrieved.
+	 * @return self A reference to the current object.
+	 */
+	public function page($num)
+	{
+		$this->page = $num;
+		
 		return $this;
 	}
 	

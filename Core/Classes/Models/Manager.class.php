@@ -121,8 +121,8 @@ abstract class Manager
 	public function get($params, $qty = 1)
 	{
 		$query = $GLOBALS['core']->db->query();
-		$query->table($this->databaseTableName);
-		$query->limit($qty);
+		$query->table($this->databaseTableName, 't1');
+		$query->quantity($qty);
 		$results = $query->run();
 		
 		$className = __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
