@@ -3,20 +3,24 @@
  * A plural test routine.
  */
 
+namespace Acela\Application;
+
+use \Acela\Core as Core;
+
 require_once __DIR__.'/../Core/Core.php';
 
 echo 'Pluralize<br />';
-echo wordPluralize('potato').'<br />';
-echo wordPluralize('fish').'<br />';
-echo wordPluralize('ox').'<br />';
-echo wordPluralize('quiz').'<br />';
-echo wordPluralize('gas').'<br />';
-echo wordPluralize('cow').'<br />';
+echo Core\wordPluralize('potato').'<br />';
+echo Core\wordPluralize('fish').'<br />';
+echo Core\wordPluralize('ox').'<br />';
+echo Core\wordPluralize('quiz').'<br />';
+echo Core\wordPluralize('gas').'<br />';
+echo Core\wordPluralize('cow').'<br />';
 
 echo 'Singularize<br />';
-echo wordPluralize('potatoes').'<br />';
-echo wordPluralize('fish').'<br />';
-echo wordPluralize('oxen').'<br />';
-echo wordPluralize('quizzes').'<br />';
-echo wordPluralize('gases').'<br />';
-echo wordPluralize('cows').'<br />';
+echo Core\wordPluralize('potatoes').'<br />';
+echo Core\wordPluralize('fish').'<br />';
+echo Core\wordPluralize('oxen').'<br />';
+echo Core\wordPluralize('quizzes').'<br />';
+echo Core\wordPluralize('gases').'<br />';
+echo Core\wordPluralize('cows').'<br />';
