@@ -66,6 +66,7 @@ class Driver extends Database\Drivers\Driver
 		 */
 		if(is_null($resultSet))
 		{
+			print_r($stmt);
 			$resultSet = new ResultSet($stmt);
 			$resultSet->driver = $this;
 			$resultSet->queryData = [$query];
