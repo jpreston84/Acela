@@ -107,8 +107,14 @@ abstract class Manager
 	 */
 	public function get($params, $qty = 1)
 	{
+		$query = $GLOBALS['core']->db->query();
+		$query->table($this->databaseTableName);
+		$query->limit($qty);
+		$results = $query->run();
+		
 		$className = __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
-		$resultSet = new $className;
+		$resultSet = new $className($results);
+		
 		
 		return $resultSet;
 	}
