@@ -107,7 +107,7 @@ abstract class Manager
 	 */
 	public function get($params, $qty = 1)
 	{
-		$resultSet = new __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
+		$resultSet = new namespace\$this->modelName\ResultSet;
 		
 		return $resultSet;
 	}
