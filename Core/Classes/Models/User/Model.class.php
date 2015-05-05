@@ -12,6 +12,4 @@ use \Acela\Core\Models as Models;
  */
 class Model extends Models\Model
 {
-	public $table = 'users';
-	public $prefix = 'user';
 }
