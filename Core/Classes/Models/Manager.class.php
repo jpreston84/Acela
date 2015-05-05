@@ -100,7 +100,7 @@ abstract class Manager
 	 */
 	protected function setDatabaseTableName()
 	{
-		$this->databaseTableName = strtolower($this->modelName);
+		$this->databaseTableName = Core\wordPluralize(strtolower($this->modelName));
 	}
 
 	/**
