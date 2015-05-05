@@ -16,7 +16,7 @@ class Model
 	 * @param string $name The model type to get the manager for.
 	 * @return Models\Manager A manager for the selected model type.
 	 */
-	static function get($name)
+	static function getInstance($name)
 	{
 		$className = __NAMESPACE__.'\Models\\'.$name.'\Manager';
 		$instance = $className::getInstance();

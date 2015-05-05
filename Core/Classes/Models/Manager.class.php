@@ -13,6 +13,16 @@ use \Acela\Core as Core;
 abstract class Manager
 {
 	/**
+	 * @var string $modelName The name of the model.
+	 */
+	public $modelName;
+	
+	/**
+	 * @var string $databaseTableName The name of the database table used by this model.
+	 */
+	public $databaseTableName;
+	
+	/**
 	 * Return the singleton instance of this manager.
 	 * 
 	 * It is important to note that this is not the only means of creating an
@@ -41,5 +51,64 @@ abstract class Manager
 	 */
 	public function __construct()
 	{
+		/**
+		 * Set the model name.
+		 */
+		$this->setModelName();
+		
+		/**
+		 * Set database table name.
+		 */
+		$this->setDatabaseTableName();
+	}
+	
+	/**
+	 * Determine the model name.
+	 */
+	protected function setModelName()
+	{
+		/**
+		 * Get the class name.
+		 */
+		$className = get_called_class();
+		
+		/**
+		 * Break the class name into components.
+		 */
+		$classNameParts = explode('\\', $className);
+		
+		/**
+		 * Get the model name. Since model classes take the form
+		 * \Acela\Core\Models\User\Manager
+		 * we will get the penultimate path component.
+		 */
+		$modelName = $classNameParts[count($classNameParts) - 2];
+		
+		/**
+		 * Set the model name in this class.
+		 */
+		$this->modelName = $modelName;
+	}
+	
+	/**
+	 * Set the database table name.
+	 */
+	protected function setDatabaseTableName()
+	{
+		$this->databaseTableName = strtolower($this->modelName);
+	}
+	
+	/**
+	 * Get one or more records matching the provided parameters.
+	 * 
+	 * @param array $params An array of parameters to use in selecting records.
+	 * @param int $qty The number of records to retrieve.
+	 * @return ResultSet A set of results.
+	 */
+	public function get($params, $qty = 1)
+	{
+		$resultSet = new __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
+		
+		return $resultSet;
 	}
 }

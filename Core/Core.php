@@ -24,8 +24,6 @@ foreach(glob(__DIR__.'/Functions/*.functions.php') as $filename)
 /**
  * Core object that contains references to class instances and holds
  * configuration data.
- *  
- * @global Core $GLOBALS['core']
  */
 $GLOBALS['core'] = new Core;
 
