@@ -140,7 +140,7 @@ abstract class Manager
 	 * @param string $databaseFieldName The name of the database field to map to an object field.
 	 * @return string The name of the object field.
 	 */
-	protected function getObjectFieldName($databaseFieldName)
+	public function getObjectFieldName($databaseFieldName)
 	{
 		/**
 		 * If database field name begins with the database field prefix, remove the
