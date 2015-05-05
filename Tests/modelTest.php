@@ -9,7 +9,7 @@ use \Acela\Core as Core;
 
 require_once __DIR__.'/../Core/Core.php';
 
-$userManager = Core\Model::get('User');
+$userManager = Core\Model::getInstance('User');
 $users = $userManager->get( [], 10);
 print_r($users);
 foreach($users as $user)
