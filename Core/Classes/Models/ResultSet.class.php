@@ -98,7 +98,7 @@ abstract class ResultSet implements \Countable, \Iterator
 	/**
 	 * Load ->databaseResultSet into the ResultSet.
 	 */
-	protected function loadResultSet()
+	public function loadResultSet()
 	{
 		foreach($this->databaseResultSet as $result)
 		{
