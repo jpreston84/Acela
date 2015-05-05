@@ -209,14 +209,5 @@ class Query extends Database\Drivers\Query
 	public function execute()
 	{
 		$this->resultSet = $this->driver->rawQuery($this->queryData[0]); // Take the already-prepared query, and execute it, returning the ResultSet object.
-		
-		/**
-		 * Error handling.
-		 */
-		if(!$this->resultSet)
-		{
-			error_log('There was a query error: '.$this->queryData[0].' -- '.print_r($this->driver->pdo->errorInfo()));
-			die();
-		}
 	}
 }
