@@ -104,7 +104,7 @@ function wordPluralize($word)
 	/**
 	 * Rule - Words ending in -is should end in "es" instead.
 	 */
-	elseif(sustr($word, -2) === 'is')
+	elseif(substr($word, -2) === 'is')
 	{
 		$word = substr($word, 0, -2).'es';
 	}
