@@ -65,6 +65,11 @@ abstract class Manager
 		 * Set database table name.
 		 */
 		$this->setDatabaseTableName();
+
+		/**
+		 * Set database field prefix.
+		 */
+		$this->setDatabaseFieldPrefix();
 	}
 	
 	/**
