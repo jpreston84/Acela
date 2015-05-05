@@ -59,9 +59,6 @@ class Driver extends Database\Drivers\Driver
 	public function rawQuery($query, $resultSet = null)
 	{
 		$stmt = $this->pdo->query($query); // Run the query and retrieve the result handle.
-		print_r($stmt);
-		echo 'sstatement';
-
 		
 		/**
 		 * If no result set was provided, create a new one. Otherwise, update the
