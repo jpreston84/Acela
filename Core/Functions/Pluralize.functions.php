@@ -76,7 +76,7 @@ function wordPluralize($word)
 	 * Rule - Some words either have identical singular and plural forms, or are
 	 * uncountable.
 	 */
-	if(!empty($rules['unpluralizable'][$word]))
+	if(in_array($word, $rules['unpluralizable'][$word]))
 	{
 		// Do nothing.
 	}
@@ -164,7 +164,7 @@ function wordSingularize($word)
 	 * Rule - Some words either have identical singular and plural forms, or are
 	 * uncountable.
 	 */
-	if(!empty($rules['unpluralizable'][$word]))
+	if(in_array($word, $rules['unpluralizable'][$word]))
 	{
 		// Do nothing.
 	}

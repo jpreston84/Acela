@@ -18,9 +18,9 @@ echo Core\wordPluralize('gas').'<br />';
 echo Core\wordPluralize('cow').'<br />';
 
 echo 'Singularize<br />';
-echo Core\wordPluralize('potatoes').'<br />';
-echo Core\wordPluralize('fish').'<br />';
-echo Core\wordPluralize('oxen').'<br />';
-echo Core\wordPluralize('quizzes').'<br />';
-echo Core\wordPluralize('gases').'<br />';
-echo Core\wordPluralize('cows').'<br />';
+echo Core\wordSingularize('potatoes').'<br />';
+echo Core\wordSingularize('fish').'<br />';
+echo Core\wordSingularize('oxen').'<br />';
+echo Core\wordSingularize('quizzes').'<br />';
+echo Core\wordSingularize('gases').'<br />';
+echo Core\wordSingularize('cows').'<br />';
