@@ -208,6 +208,7 @@ class Query extends Database\Drivers\Query
 	 */
 	public function execute()
 	{
+		echo 'executing query';
 		$this->resultSet = $this->driver->rawQuery($this->queryData[0]); // Take the already-prepared query, and execute it, returning the ResultSet object.
 		
 		print_r($this->queryData[0]);
