@@ -150,6 +150,10 @@ abstract class Manager
 		{
 			$objectFieldName = substr($databaseFieldName, strlen($this->databaseFieldPrefix));
 		}
+		else
+		{
+			$objectFieldName = $databaseFieldName;
+		}
 		
 		return $objectFieldName;
 	}
