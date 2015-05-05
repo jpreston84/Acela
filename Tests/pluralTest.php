@@ -16,6 +16,7 @@ echo Core\wordPluralize('ox').'<br />';
 echo Core\wordPluralize('quiz').'<br />';
 echo Core\wordPluralize('gas').'<br />';
 echo Core\wordPluralize('cow').'<br />';
+echo Core\wordPluralize('thesis').'<br />';
 
 echo 'Singularize<br />';
 echo Core\wordSingularize('potatoes').'<br />';
@@ -24,3 +25,4 @@ echo Core\wordSingularize('oxen').'<br />';
 echo Core\wordSingularize('quizzes').'<br />';
 echo Core\wordSingularize('gases').'<br />';
 echo Core\wordSingularize('cows').'<br />';
+echo Core\wordSingularize('theses').'<br />';

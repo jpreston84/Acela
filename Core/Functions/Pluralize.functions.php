@@ -204,7 +204,7 @@ function wordSingularize($word)
 	/**
 	 * Rule - Words ending in -es should end in "is" instead.
 	 */
-	elseif(sustr($word, -2) === 'es')
+	elseif(substr($word, -2) === 'es')
 	{
 		$word = substr($word, 0, -2).'is';
 	}
