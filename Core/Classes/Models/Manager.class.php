@@ -23,6 +23,11 @@ abstract class Manager
 	public $databaseTableName;
 	
 	/**
+	 * @var string $databaseFieldPrefix The database field prefix for the fields in the database table.
+	 */
+	public $databaseFieldPrefix;
+	
+	/**
 	 * Return the singleton instance of this manager.
 	 * 
 	 * It is important to note that this is not the only means of creating an
@@ -97,6 +102,14 @@ abstract class Manager
 	{
 		$this->databaseTableName = strtolower($this->modelName);
 	}
+
+	/**
+	 * Set the database field prefix.
+	 */
+	protected function setDatabaseFieldPrefix()
+	{
+		$this->databaseFieldPrefix = strtolower($this->modelName);
+	}
 	
 	/**
 	 * Get one or more records matching the provided parameters.
@@ -113,9 +126,31 @@ abstract class Manager
 		$results = $query->run();
 		
 		$className = __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
-		$resultSet = new $className($results);
-		
+		$resultSet = new $className;
+		$resultSet->manager = $this;
+		$resultSet->databaseResultSet = $results;
+		$resultSet->loadResultSet();
 		
 		return $resultSet;
+	}
+	
+	/**
+	 * Get an object field's name based on the corresponding database field name.
+	 * 
+	 * @param string $databaseFieldName The name of the database field to map to an object field.
+	 * @return string The name of the object field.
+	 */
+	protected function getObjectFieldName($databaseFieldName)
+	{
+		/**
+		 * If database field name begins with the database field prefix, remove the
+		 * prefix.
+		 */
+		if(substr($databaseFieldName, 0, strlen($this->databaseFieldPrefix)) === $this->databaseFieldPrefix)
+		{
+			$objectFieldName = substr($databaseFieldName, strlen($this->databaseFieldPrefix));
+		}
+		
+		return $objectFieldName;
 	}
 }

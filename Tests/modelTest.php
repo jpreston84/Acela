@@ -10,6 +10,16 @@ use \Acela\Core as Core;
 require_once __DIR__.'/../Core/Core.php';
 
 $userManager = Core\Model::get('User');
+$users = $userManager->get( [], 10);
+print_r($users);
+foreach($users as $user)
+{
+	print_r($user);
+}
+
+
+/* 
+$userManager = Core\Model::get('User');
 $userManager->name = 'Instance 1';
 
 print_r($userManager);
@@ -22,3 +32,4 @@ print_r($userManager);
 $userManager = Core\Model::get('User');
 
 print_r($userManager);
+ */
