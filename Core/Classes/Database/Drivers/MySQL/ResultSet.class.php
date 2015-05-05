@@ -34,7 +34,6 @@ class ResultSet extends Database\Drivers\ResultSet
 	 */
 	public function __construct($stmt)
 	{
-		print_r($stmt);
 		$this->stmt = $stmt;
 		$this->stmt->setFetchMode(\PDO::FETCH_ASSOC); // Set the result handler to return associative arrays.
 	}
