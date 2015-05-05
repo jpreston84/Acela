@@ -343,7 +343,7 @@ abstract class Query
 	/**
 	 * Run the query that's been constructed.
 	 * 
-	 * @return self A reference to the current object.
+	 * @return ResultSet A reference to the generated result set.
 	 */
 	public function run()
 	{
