@@ -220,7 +220,7 @@ abstract class Manager
 	 */
 	public function getDatabaseFieldName($objectFieldName)
 	{
-		foreach($this->databaseTableInfo['fields']] as $field)
+		foreach($this->databaseTableInfo['fields'] as $field)
 		{
 			if($field['objectFieldName'] === $objectFieldName)
 			{
