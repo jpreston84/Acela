@@ -96,7 +96,143 @@ class Driver extends Database\Drivers\Driver
 	 */
 	public function getTableInfo($tableName)
 	{
+		/**
+		 * Set up the array to hold table data.
+		 */
 		$tableInfo = [];
+		
+		/**
+		 * Run a query to get information.
+		 */
+		$query = '
+			SELECT
+				*
+			FROM
+				`information_schema`.`COLUMNS` AS c
+			WHERE
+				`TABLE_SCHEMA` = '.$this->pdo->quote($this->config->database).'
+				AND `TABLE_NAME` = '.$this->pdo->quote($tableName).'
+			;
+		';
+		
+		$resultSet = $this->rawQuery($query);
+		
+		/**
+		 * Store the results.
+		 */
+		$tableInfo['fields'] = [];
+		foreach($resultSet as $result)
+		{
+			unset($dataType);
+			unset($byteLength);
+			unset($signed);
+			
+			/**
+			 * Data types.
+			 */
+			if($result['DATA_TYPE'] === 'bigint')
+			{
+				$dataType = 'int';
+				$byteLength = 8;
+				$signed = ( stristr($result['COLUMN_TYPE'], 'unsigned') ? false : true );
+			}
+			elseif($result['DATA_TYPE'] === 'int')
+			{
+				$dataType = 'int';
+				$byteLength = 4;
+				$signed = ( stristr($result['COLUMN_TYPE'], 'unsigned') ? false : true );
+			}
+			elseif($result['DATA_TYPE'] === 'mediumint')
+			{
+				$dataType = 'int';
+				$byteLength = 3;
+				$signed = ( stristr($result['COLUMN_TYPE'], 'unsigned') ? false : true );
+			}
+			elseif($result['DATA_TYPE'] === 'smallint')
+			{
+				$dataType = 'int';
+				$byteLength = 2;
+				$signed = ( stristr($result['COLUMN_TYPE'], 'unsigned') ? false : true );
+			}
+			elseif($result['DATA_TYPE'] === 'tinyint')
+			{
+				$dataType = 'int';
+				$byteLength = 2;
+				$signed = ( stristr($result['COLUMN_TYPE'], 'unsigned') ? false : true );
+			}
+			elseif($result['DATA_TYPE'] === 'varchar')
+			{
+				$dataType = 'text';
+				$byteLength = $result['CHARACTER_MAXIMUM_LENGTH'];
+			}
+			elseif($result['DATA_TYPE'] === 'tinytext')
+			{
+				$dataType = 'text';
+				$byteLength = 2^8 - 1; // Up to 255 chars.
+			}
+			elseif($result['DATA_TYPE'] === 'text')
+			{
+				$dataType = 'text';
+				$byteLength = 2^16 - 1; // Up to 65,535 chars.
+			}
+			elseif($result['DATA_TYPE'] === 'mediumtext')
+			{
+				$dataType = 'text';
+				$byteLength = 2^24 - 1; // Up to 16,777,215 chars.
+			}
+			elseif($result['DATA_TYPE'] === 'longtext')
+			{
+				$dataType = 'text';
+				$byteLength = 2^32 - 1; // Up to 4,294,967,296 chars.
+			}
+			elseif($result['DATA_TYPE'] === 'datetime')
+			{
+				$dataType = 'datetime';
+			}
+			
+			
+			/**
+			 * Convert bool/null defaults to PHP equivalents.
+			 */
+			if($result['COLUMN_DEFAULT'] === 'NULL')
+			{
+				$defaultValue = null;
+			}
+			elseif($result['COLUMN_DEFAULT'] === 'TRUE')
+			{
+				$defaultValue = true;
+			}
+			elseif($result['COLUMN_DEFAULT'] === 'FALSE')
+			{
+				$defaultValue = false;
+			}
+			else
+			{
+				$defaultValue = $result['COLUMN_DEFAULT'];
+			}
+			
+			/**
+			 * Is column nullable values.
+			 */
+			if($result['IS_NULLABLE'] == 'YES')
+			{
+				$isNullable = true;
+			}
+			else
+			{
+				$isNullable = false;
+			}
+			
+			$tableInfo['fields'][$result['COLUMN_NAME']] = [
+				'name' => $result['COLUMN_NAME'],
+				'type' => $dataType,
+				'length' => $byteLength,
+				'signed' => ( !empty($signed) ? true : false ),
+				'default' => $defaultValue,
+				'nullable' => $isNullable,
+			];
+		}
+		
 		return $tableInfo;
 	}
 	

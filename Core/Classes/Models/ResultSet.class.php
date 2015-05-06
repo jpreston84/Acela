@@ -108,10 +108,9 @@ abstract class ResultSet implements \Countable, \Iterator
 			/**
 			 * Assign properties to the Model object.
 			 */
-			foreach($result as $fieldName => $fieldValue)
+			foreach($this->manager->databaseTableInfo['fields'] as $fieldName => $fieldInfo)
 			{
-				$fieldName = $this->manager->getObjectFieldName($fieldName); // Get the object field name.
-				$model->$fieldName = $fieldValue; // Assign the property.
+				$model->{$fieldInfo['objectFieldName']} = $result[$fieldName]; // Assign the property.
 			}
 			
 			$this->results[] = $model;

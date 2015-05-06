@@ -28,9 +28,9 @@ abstract class Manager
 	public $databaseFieldPrefix;
 	
 	/**
-	 * @var string $databaseFieldInfo Information about each object field from the database.
+	 * @var string $databaseTableInfo Information about each object field from the database table.
 	 */
-	public $databaseFieldInfo;
+	public $databaseTableInfo;
 	
 	/**
 	 * Return the singleton instance of this manager.
@@ -75,6 +75,11 @@ abstract class Manager
 		 * Set database field prefix.
 		 */
 		$this->setDatabaseFieldPrefix();
+		
+		/**
+		 * Load field information.
+		 */
+		$this->loadDatabaseTableInfo();
 	}
 	
 	/**
@@ -145,20 +150,32 @@ abstract class Manager
 	}
 	
 	/**
-	 * Load information about the fields from the database.
+	 * Load information about the table from the database.
 	 */
-	public function loadDatabaseFields()
+	public function loadDatabaseTableInfo()
 	{
-		$this->databaseFieldInfo = $GLOBALS['core']->db->getFieldInfo($this->databaseTableName);
+		$this->databaseTableInfo = $GLOBALS['core']->db->getTableInfo($this->databaseTableName);
+
+		/**
+		 * Process the entries.
+		 */
+		foreach($this->databaseTableInfo['fields'] as &$field)
+		{
+			$field['objectFieldName'] = $this->convertToObjectFieldName($field['name']);
+		}
+		unset($field); // Unset the reference.
 	}
-	
+
 	/**
-	 * Get an object field's name based on the corresponding database field name.
+	 * Convert a database field name to an appropriate object field name.
+	 * 
+	 * This function should never be called except by ->loadDatabaseTableInfo(). For
+	 * all other purposes, use ->getObjectFieldName() instead.
 	 * 
 	 * @param string $databaseFieldName The name of the database field to map to an object field.
 	 * @return string The name of the object field.
-	 */
-	public function getObjectFieldName($databaseFieldName)
+	 */	
+	protected function convertToObjectFieldName($databaseFieldName)
 	{
 		/**
 		 * If database field name begins with the database field prefix, remove the
@@ -174,6 +191,42 @@ abstract class Manager
 			$objectFieldName = $databaseFieldName;
 		}
 		
-		return $objectFieldName;
+		return $objectFieldName;		
+	}
+	
+	/**
+	 * Get the object field name for a particular database field.
+	 * 
+	 * @param string $databaseFieldName The name of the database field to get the object field name for.
+	 * @return mixed The name of the object field, FALSE on failure.
+	 */
+	public function getObjectFieldName($databaseFieldName)
+	{
+		if(!empty($this->databaseTableInfo['fields'][$databaseFieldName]))
+		{
+			return $this->databaseTableInfo['fields'][$databaseFieldName]['objectFieldName'];
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Get the database field name for a particular object field.
+	 * 
+	 * @param string $objectFieldName The name of the object field to get the database field name for.
+	 * @return mixed The name of the database field, FALSE on failure.
+	 */
+	public function getDatabaseFieldName($objectFieldName)
+	{
+		foreach($this->databaseTableInfo['fields']] as $field)
+		{
+			if($field['objectFieldName'] === $objectFieldName)
+			{
+				return $field['name'];
+			}
+		}
+		return false;
 	}
 }
