@@ -136,17 +136,80 @@ abstract class Manager
 	public function get($params, $qty = 1)
 	{
 		$query = $GLOBALS['core']->db->query();
-		$query->table($this->databaseTableName, 't1');
-		$query->quantity($qty);
+		
+		/**
+		 * Add params to query.
+		 */
+		$this->addParamsToQuery($params, $query);
+		
+		/**
+		 * Add table name and quantity of records to query.
+		 */
+		$query->table($this->databaseTableName, 't1')->quantity($qty);
+
+		/**
+		 * Run query and get results.
+		 */
 		$results = $query->run();
 		
+		/**
+		 * Create ResultSet and add database results to it.
+		 */
 		$className = __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
 		$resultSet = new $className;
 		$resultSet->manager = $this;
 		$resultSet->databaseResultSet = $results;
 		$resultSet->loadResultSet();
 		
+		/**
+		 * Return the completed ResultSet.
+		 */
 		return $resultSet;
+	}
+	
+	/**
+	 * Add the parameters to the database query.
+	 * 
+	 * @param array $params A list of parameters to add.
+	 * @param \Acela\Core\Database\Drivers\Query $query A database query to add the parameters to.
+	 */
+	protected function addParamsToQuery($params, $query)
+	{
+		foreach($params as $paramName => $param) // For each parameter passed.
+		{
+			/**
+			 * If only one value in the param, use the key as the field name, and assume we
+			 * want to use = as the operator.
+			 */
+			if(count($param) == 1)
+			{
+				$fieldName = $paramName;
+				$operator = '=';
+				$value = $param;
+			}
+			/**
+			 * If two values are in the param, the first is the field name, the second is
+			 * the value. We assume = is the operator.
+			 */
+			elseif(count($param) == 2)
+			{
+				$fieldName = $param[0];
+				$operator = '=';
+				$value = $param[1];
+			}
+			/**
+			 * Otherwise, assume there are 3 values in the param, with the middle one being
+			 * the operator.
+			 */
+			else
+			{
+				$fieldName = $param[0];
+				$operator = $param[1];
+				$value = $param[2];
+			}
+			
+			$query->where('t1', $fieldName, $operator, $value);
+		}
 	}
 	
 	/**
@@ -193,7 +256,7 @@ abstract class Manager
 		
 		return $objectFieldName;		
 	}
-	
+
 	/**
 	 * Get the object field name for a particular database field.
 	 * 

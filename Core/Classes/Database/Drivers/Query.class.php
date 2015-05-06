@@ -31,6 +31,16 @@ abstract class Query
 	protected $wheres = [];
 
 	/**
+	 * @var array $sets List of fields and values to update.
+	 */
+	protected $sets = [];
+	
+	/**
+	 * @var string $update The name of a table to update.
+	 */
+	protected $update = null;
+	
+	/**
 	 * @var string|null $nextOperator The operator to use for the next ->cond() or ->where().
 	 */
 	protected $nextOperator = null;
@@ -324,6 +334,35 @@ abstract class Query
 	public function page($num)
 	{
 		$this->page = $num;
+		
+		return $this;
+	}
+
+	/**
+	 * Set $fieldName to $value.
+	 * 
+	 * For UPDATE queries only.
+	 * 
+	 * @param string $fieldName The name of the field to set the value of.
+	 * @param mixed $value The value to set the field to.
+	 * @return self A reference to the current object.
+	 */
+	public function set($fieldName, $value)
+	{
+		$this->sets[$fieldName] = $value;
+		
+		return $this;
+	}
+	
+	/**
+	 * Specify the table name to UPDATE.
+	 * 
+	 * @param string $tableName The name of the table to update.
+	 * @return self A reference to the current object.
+	 */
+	public function update($tableName)
+	{
+		$this->update = $tableName;
 		
 		return $this;
 	}

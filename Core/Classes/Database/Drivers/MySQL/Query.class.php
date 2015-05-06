@@ -20,13 +20,17 @@ class Query extends Database\Drivers\Query
 	public function build()
 	{
 		/**
-		 * Build SELECT segment.
+		 * Build SELECT or UPDATE segment.
 		 */
-		if(empty($this->selects)) // If no selects are entered...
+		if(!empty($this->update)) // If a table name to update was specified, this is an update statement...
+		{
+			$tmpQuerySelects = 'UPDATE';
+		}
+		elseif(empty($this->selects)) // Otherwise, if no selects are entered...
 		{
 			$tmpQuerySelects = 'SELECT *';
 		}
-		else
+		else // If selects *were* entered...
 		{
 			$tmpQuerySelects = []; // A new array to hold the collected SELECT segments...
 			foreach($this->selects as $select)
@@ -46,31 +50,52 @@ class Query extends Database\Drivers\Query
 		/**
 		 * Build tables/joins.
 		 */
-		$tmpQueryTables = [];
-		foreach($this->tables as $num => $table)
+		if(!empty($this->update)) // If a table to UPDATE was specified...
 		{
-			$tmpQueryTableSegment = '`'.$this->driver->config->database.'`.`'.$table['name'].'` AS '.$table['alias'];
-			
-			/**
-			 * Except for the first table, add join conditions.
-			 */
-			if($num > 0)
-			{
-				if(!empty($table['conditions']))
-				{
-					$tmpConditions = [];
-					foreach($table['conditions'] as $num2 => $cond)
-					{
-						$tmpConditions[] = $cond['field1'][0].'.`'.$cond['field1'][1].'` '.$cond['matchType'].' '.$cond['field2'][0].'.`'.$cond['field2'][1].'`';
-					}
-					$tmpConditions = 'ON '.implode(' AND ', $tmpConditions);
-					$tmpQueryTableSegment .= ' '.$tmpConditions;
-				}
-			}
-			
-			$tmpQueryTables[] = $tmpQueryTableSegment;
+			$tmpQueryTables = $this->update;
 		}
-		$tmpQueryTables = 'FROM '.implode(' LEFT JOIN ', $tmpQueryTables);
+		else // Otherwise, build tables/joins for SELECT....
+		{
+			$tmpQueryTables = [];
+			foreach($this->tables as $num => $table)
+			{
+				$tmpQueryTableSegment = '`'.$this->driver->config->database.'`.`'.$table['name'].'` AS '.$table['alias'];
+				
+				/**
+				 * Except for the first table, add join conditions.
+				 */
+				if($num > 0)
+				{
+					if(!empty($table['conditions']))
+					{
+						$tmpConditions = [];
+						foreach($table['conditions'] as $num2 => $cond)
+						{
+							$tmpConditions[] = $cond['field1'][0].'.`'.$cond['field1'][1].'` '.$cond['matchType'].' '.$cond['field2'][0].'.`'.$cond['field2'][1].'`';
+						}
+						$tmpConditions = 'ON '.implode(' AND ', $tmpConditions);
+						$tmpQueryTableSegment .= ' '.$tmpConditions;
+					}
+				}
+				
+				$tmpQueryTables[] = $tmpQueryTableSegment;
+			}
+			$tmpQueryTables = 'FROM '.implode(' LEFT JOIN ', $tmpQueryTables);
+		}
+		
+		/**
+		 * Build SET clauses.
+		 */
+		$tmpQuerySets = '';
+		if(!empty($this->sets))
+		{
+			$tmpQuerySets = [];
+			foreach($this->sets as $fieldName => $value)
+			{
+				$tmpQuerySets[] = '`'.$fieldName.'` = '.$this->driver->pdo->quote($value);
+			}
+			$tmpQuerySets = 'SET '.implode(', ', $tmpQuerySets);
+		}
 		
 		/**
 		 * Build WHERE clauses.
@@ -85,7 +110,10 @@ class Query extends Database\Drivers\Query
 		 * Build LIMIT clause.
 		 */
 		$tmpQueryLimit = '';
-		if($this->quantity > 0) // If we are trying to retrieve a specific number of records...
+		if(
+			empty($this->update) // If this is a SELECT query...
+			and $this->quantity > 0 // And we're trying to retrieve a specific number of records...
+		)
 		{
 			$startLimit = ( (int) $this->page - 1 ) * ( (int) $this->quantity ); // Start of the limit should be (pageNum - 1) * numRecords.
 			$tmpQueryLimit = 'LIMIT '.$startLimit.', '.( (int) $this->quantity );
@@ -94,7 +122,7 @@ class Query extends Database\Drivers\Query
 		/**
 		 * Assemble the completed query string.
 		 */
-		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQueryWheres.' '.$tmpQueryLimit.';';
+		$query = $tmpQuerySelects.' '.$tmpQueryTables.' '.$tmpQuerySets.' '.$tmpQueryWheres.' '.$tmpQueryLimit.';';
 		
 		/**
 		 * Put the built query into the appropriate property.
