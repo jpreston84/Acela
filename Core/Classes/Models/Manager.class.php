@@ -154,6 +154,7 @@ abstract class Manager
 		if(substr($databaseFieldName, 0, strlen($this->databaseFieldPrefix)) === $this->databaseFieldPrefix)
 		{
 			$objectFieldName = substr($databaseFieldName, strlen($this->databaseFieldPrefix));
+			$objectFieldName[0] = strtolower($objectFieldName[0]);
 		}
 		else
 		{
