@@ -14,7 +14,7 @@ $users = $userManager->get(
 	[
 		'firstName' => 'Bob',
 		['firstName', 'Larry'],
-		['lastName', 'LIKE' '%Joe%'],
+		['lastName', 'LIKE', '%Joe%'],
 		['id', '>' 10],
 	],
 	10
