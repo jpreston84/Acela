@@ -28,6 +28,11 @@ abstract class Manager
 	public $databaseFieldPrefix;
 	
 	/**
+	 * @var string $databaseFieldInfo Information about each object field from the database.
+	 */
+	public $databaseFieldInfo;
+	
+	/**
 	 * Return the singleton instance of this manager.
 	 * 
 	 * It is important to note that this is not the only means of creating an
@@ -137,6 +142,14 @@ abstract class Manager
 		$resultSet->loadResultSet();
 		
 		return $resultSet;
+	}
+	
+	/**
+	 * Load information about the fields from the database.
+	 */
+	public function loadDatabaseFields()
+	{
+		$this->databaseFieldInfo = $GLOBALS['core']->db->getFieldInfo($this->databaseTableName);
 	}
 	
 	/**

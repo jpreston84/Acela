@@ -41,6 +41,20 @@ class Engine
 	}
 	
 	/**
+	 * Run a query to get data about a particular table and its fields from the
+	 * database.
+	 * 
+	 * This is a passthrough to ->driver->getTableInfo().
+	 * 
+	 * @param string $tableName The name of the table to get information about.
+	 * @return array An array of data about the table and its fields.
+	 */
+	public function getTableInfo($tableName)
+	{
+		return $this->driver->getTableInfo($tableName);
+	}
+	
+	/**
 	 * Generate a new query object for the selected database driver.
 	 * 
 	 * @return Driver\Query A database query object.

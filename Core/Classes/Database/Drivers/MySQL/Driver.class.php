@@ -88,6 +88,19 @@ class Driver extends Database\Drivers\Driver
 	}
 	
 	/**
+	 * Run a query to get data about a particular table and its fields from the
+	 * database.
+	 * 
+	 * @param string $tableName The name of the table to get information about.
+	 * @return array An array of data about the table and its fields.
+	 */
+	public function getTableInfo($tableName)
+	{
+		$tableInfo = [];
+		return $tableInfo;
+	}
+	
+	/**
 	 * Create a new query to run against the database.
 	 * 
 	 * @return Query A new database query object.
