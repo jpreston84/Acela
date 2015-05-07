@@ -14,6 +14,7 @@ if(empty($argv[2]))
 {
 	echo 'No model name was provided. Unable to continue.'."\n";
 	echo 'Usage: ./acli addTimestampsToModel modelName'."\n";
+	die();
 }
 
 /**
