@@ -28,7 +28,7 @@ abstract class Model
 	 * @param string $name The name of the property to get.
 	 * @return mixed The value of the property.
 	 */
-	public function __get($name, $value)
+	public function __get($name)
 	{
 		if(isset($this->properties[$name]))
 		{
