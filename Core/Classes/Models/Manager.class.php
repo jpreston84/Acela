@@ -123,6 +123,7 @@ abstract class Manager extends Core\GlobalInstance
 		 */
 		foreach($this->databaseTableInfo['fields'] as $field)
 		{
+			error_log('Adding field '.$field['objectFieldName'].' with value '.$field['default']);
 			$model->{$field['objectFieldName']} = $field['default'];
 		}
 		
