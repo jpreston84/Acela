@@ -179,7 +179,7 @@ abstract class Model
 		 * Update createdOn time.
 		 */
 		if(
-			array_key_exists($this->_properties['createdOn']) // If a createdOn field exists...
+			array_key_exists($this->_properties, 'createdOn') // If a createdOn field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
@@ -190,7 +190,7 @@ abstract class Model
 		 * Update modifiedOn time.
 		 */
 		if(
-			array_key_exists($this->_properties['modifiedOn']) // If a modifiedOn field exists...
+			array_key_exists($this->_properties, 'modifiedOn') // If a modifiedOn field exists...
 		)
 		{
 			$this->_properties['modifiedOn'] = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
@@ -200,7 +200,7 @@ abstract class Model
 		 * Update createdBy user.
 		 */
 		if(
-			array_key_exists($this->_properties['createdBy']) // If a createdBy field exists...
+			array_key_exists($this->_properties, 'createdBy') // If a createdBy field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
@@ -211,7 +211,7 @@ abstract class Model
 		 * Update modifiedBy user.
 		 */
 		if(
-			array_key_exists($this->_properties['modifiedBy']) // If a modifiedBy field exists...
+			array_key_exists($this->_properties, 'modifiedBy') // If a modifiedBy field exists...
 		)
 		{
 			$this->_properties['modifiedBy'] = Core\User::getInstance()->id;
