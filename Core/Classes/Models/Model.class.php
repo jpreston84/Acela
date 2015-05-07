@@ -93,7 +93,6 @@ abstract class Model
 				$query->where(null, $property, '=', $value);
 			}
 		}
-		$query->build();
-		print_r($query->queryData);
+		$query->run();
 	}
 }

@@ -387,6 +387,7 @@ abstract class Query
 	public function run()
 	{
 		$this->build();
+		print_r($this->queryData);
 		$this->execute();
 		
 		return $this->resultSet;
