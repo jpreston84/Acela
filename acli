@@ -1,0 +1,7 @@
+#!/usr/bin/php
+<?php
+/**
+ * ACLI - Acela Command-Line Interface Tool
+ */
+
+echo 'Welcome to ACLI, the Acela CLI Tool!';
