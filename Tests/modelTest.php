@@ -10,19 +10,13 @@ use \Acela\Core as Core;
 require_once __DIR__.'/../Core/Core.php';
 
 $userManager = Core\Model::getInstance('User');
-$users = $userManager->get(
-	[
-		'firstName' => 'Bob',
-		['firstName', 'Larry'],
-		['lastName', 'LIKE', '%Joe%'],
-		['id', '>', 10],
-	],
-	10
-);
+$users = $userManager->get([['id', '>', 0]], 10);
 print_r($users);
 foreach($users as $user)
 {
 	print_r($user);
+	$user->firstName .= ' - Test';
+	$user->save();
 }
 
 
