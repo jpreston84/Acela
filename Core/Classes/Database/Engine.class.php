@@ -47,7 +47,7 @@ class Engine
 	 */
 	public function getLastInsertId()
 	{
-		return $driver->getLastInsertId();
+		return $this->driver->getLastInsertId();
 	}
 	
 	/**
