@@ -208,6 +208,14 @@ abstract class Manager
 				$value = $param[2];
 			}
 			
+			/**
+			 * Convert field name to database name.
+			 */
+			$fieldName = $this->getDatabaseFieldName($fieldName);
+			
+			/**
+			 * Add the appropriate WHERE clause.
+			 */
 			$query->where('t1', $fieldName, $operator, $value);
 		}
 	}
