@@ -28,9 +28,9 @@ abstract class Model
 	public $_new = false;
 
 	/**
-	 * @var array $properties All the properties of this model.
+	 * @var array $_properties All the _properties of this model.
 	 */
-	protected $properties = [];
+	protected $_properties = [];
 	
 	/**
 	 * Magic Method - Get the value of a property of this object.
@@ -40,9 +40,9 @@ abstract class Model
 	 */
 	public function __get($name)
 	{
-		if(isset($this->properties[$name]))
+		if(isset($this->_properties[$name]))
 		{
-			return $this->properties[$name];
+			return $this->_properties[$name];
 		}
 		else
 		{
@@ -65,7 +65,7 @@ abstract class Model
 	 */
 	public function __set($name, $value)
 	{
-		$this->properties[$name] = $value; // Set the property.
+		$this->_properties[$name] = $value; // Set the property.
 		$this->_altered = true; // The object has been altered.
 	}
 	
@@ -89,7 +89,7 @@ abstract class Model
 		
 		$query = $GLOBALS['core']->db->query()->update($this->_manager->databaseTableName);
 		
-		foreach($this->properties as $property => $value) // For every property in this instance...
+		foreach($this->_properties as $property => $value) // For every property in this instance...
 		{
 			$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
 			
@@ -110,7 +110,7 @@ abstract class Model
 		/**
 		 * Add WHERE clause based on primary key.
 		 */
-		foreach($this->properties as $property => $value) // For every property in this instance...
+		foreach($this->_properties as $property => $value) // For every property in this instance...
 		{
 			$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
 			if($this->_manager->databaseTableInfo['fields'][$databaseFieldName]['primary']) // If this is the primary key for the table...
@@ -138,42 +138,42 @@ abstract class Model
 		 * Update createdOn time.
 		 */
 		if(
-			isset($this->properties, 'createdOn') // If a createdOn field exists...
+			isset($this->_properties['createdOn']) // If a createdOn field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
-			$this->properties['createdOn'] = date('Y-m-d H:i:s'); // Set the creation datetime to the current datetime.
+			$this->_properties['createdOn'] = date('Y-m-d H:i:s'); // Set the creation datetime to the current datetime.
 		}
 		
 		/**
 		 * Update modifiedOn time.
 		 */
 		if(
-			isset($this->properties, 'modifiedOn') // If a modifiedOn field exists...
+			isset($this->_properties['modifiedOn']) // If a modifiedOn field exists...
 		)
 		{
-			$this->properties['modifiedOn'] = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
+			$this->_properties['modifiedOn'] = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
 		}
 		
 		/**
 		 * Update createdBy user.
 		 */
 		if(
-			isset($this->properties, 'createdBy') // If a createdBy field exists...
+			isset($this->_properties['createdBy']) // If a createdBy field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
-			$this->properties['createdBy'] = Core\User::getInstance()->id;
+			$this->_properties['createdBy'] = Core\User::getInstance()->id;
 		}
 
 		/**
 		 * Update modifiedBy user.
 		 */
 		if(
-			isset($this->properties, 'modifiedBy') // If a modifiedBy field exists...
+			isset($this->_properties['modifiedBy']) // If a modifiedBy field exists...
 		)
 		{
-			$this->properties['modifiedBy'] = Core\User::getInstance()->id;
+			$this->_properties['modifiedBy'] = Core\User::getInstance()->id;
 		}
 	}	
 }
