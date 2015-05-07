@@ -114,6 +114,11 @@ abstract class ResultSet implements \Countable, \Iterator
 				$model->{$fieldInfo['objectFieldName']} = $result[$fieldName]; // Assign the property.
 			}
 			
+			/**
+			 * Reset altered status of model we just loaded.
+			 */
+			$model->_altered = false;
+			
 			$this->results[] = $model;
 		}
 	}

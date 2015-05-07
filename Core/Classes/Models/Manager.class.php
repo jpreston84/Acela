@@ -101,6 +101,29 @@ abstract class Manager extends Core\GlobalInstance
 	{
 		$this->databaseFieldPrefix = strtolower($this->modelName);
 	}
+
+	/**
+	 * Create a new model of the type this Manager belongs to.
+	 * 
+	 * @return Model The created model.
+	 */
+	public function create()
+	{
+		/**
+		 * Create the new Model.
+		 */
+		$className = __NAMESPACE__.'\\'.$this->modelName.'\Model';
+		$model = new $className();
+		$model->_new = true;
+		$model->_altered = true;
+		
+		foreach($this->databaseTableInfo['fields'] as $field)
+		{
+			$model->{$field['objectFieldName']} = $field['default'];
+		}
+		
+		return $model;
+	}
 	
 	/**
 	 * Get one or more records matching the provided parameters.
