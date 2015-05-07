@@ -18,5 +18,11 @@ $user->save();
 
 print_r($user);
 
+sleep(3);
+
 $users = $userManager->get( [ 'firstName' => 'Jonathan' ], 1 );
-print_r($users);
+foreach($users as $user)
+{
+	$user->firstName .= ' - Modified';
+	$user->save();
+}
