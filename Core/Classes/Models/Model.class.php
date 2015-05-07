@@ -119,6 +119,7 @@ abstract class Model
 			/**
 			 * Add this field to the query.
 			 */
+			error_log('in query, setting '.$property.' to db field '.$databaseFieldName.' and value '.$value);
 			$query->set($databaseFieldName, $value);
 		}
 		
@@ -138,7 +139,7 @@ abstract class Model
 		}
 		
 		/**
-		 * Run the UPDATE query.
+		 * Run the INSERT/UPDATE query.
 		 */
 		$query->run();
 		
