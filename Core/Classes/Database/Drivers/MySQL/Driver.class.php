@@ -226,7 +226,7 @@ class Driver extends Database\Drivers\Driver
 			$tableInfo['fields'][$result['COLUMN_NAME']] = [
 				'name' => $result['COLUMN_NAME'],
 				'type' => $dataType,
-				'length' => $byteLength,
+				'length' => ( $byteLength ?: null ),
 				'signed' => ( !empty($signed) ? true : false ),
 				'default' => $defaultValue,
 				'nullable' => $isNullable,
