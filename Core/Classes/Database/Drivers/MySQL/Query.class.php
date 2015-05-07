@@ -56,11 +56,11 @@ class Query extends Database\Drivers\Query
 		 */
 		if(!empty($this->update)) // If a table to UPDATE was specified...
 		{
-			$tmpQueryTables = $this->update;
+			$tmpQueryTables = '`'.$this->update.'`';
 		}
 		elseif(!empty($this->insert)) // If a table to INSERT INTO was specified...
 		{
-			$tmpQueryTables = $this->insert;
+			$tmpQueryTables = '`'.$this->insert.'`';
 		}
 		else // Otherwise, build tables/joins for SELECT....
 		{
