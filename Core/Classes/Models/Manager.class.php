@@ -116,6 +116,7 @@ abstract class Manager extends Core\GlobalInstance
 		$model = new $className();
 		$model->_new = true;
 		$model->_altered = true;
+		$model->_manager = $this;
 		
 		/**
 		 * Assign fields to the model based on default values.
