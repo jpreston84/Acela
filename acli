@@ -4,4 +4,10 @@
  * ACLI - Acela Command-Line Interface Tool
  */
 
-echo 'Welcome to ACLI, the Acela CLI Tool!';
+require_once __DIR__.'/Core/Core.php';
+ 
+echo 'Welcome to ACLI, the Acela CLI Tool!'."\n";
+echo "\n";
+echo 'Running command "'.$argv[1].'"...'."\n";
+
+require_once __DIR__.'/Util/ACLI/'.$argv[1].'.acli.php';
