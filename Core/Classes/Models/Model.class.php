@@ -20,7 +20,7 @@ abstract class Model
 	/**
 	 * @var bool $_altered Has this object been altered or not since it was loaded?
 	 */
-	protected $_altered = false;
+	public $_altered = false;
 	
 	/**
 	 * @var bool $_new Is this a new record or an existing one?
