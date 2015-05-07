@@ -16,5 +16,7 @@ $user->firstName = 'Jonathan';
 $user->lastName = 'Preston';
 $user->save();
 
+print_r($user);
+
 $users = $userManager->get( [ 'firstName' => 'Jonathan' ], 1 );
 print_r($users);
