@@ -37,7 +37,7 @@ class Engine
 	 */
 	public function rawQuery($data)
 	{
-		return $driver->rawQuery($data);
+		return $this->driver->rawQuery($data);
 	}
 	
 	/**
