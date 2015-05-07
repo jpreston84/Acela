@@ -134,11 +134,13 @@ abstract class Model
 	 */
 	protected function setTimestamps()
 	{
+		$properties = $this->_properties;
+		
 		/**
 		 * Update createdOn time.
 		 */
 		if(
-			isset($this->_properties['createdOn']) // If a createdOn field exists...
+			isset($properties['createdOn']) // If a createdOn field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
@@ -149,7 +151,7 @@ abstract class Model
 		 * Update modifiedOn time.
 		 */
 		if(
-			isset($this->_properties['modifiedOn']) // If a modifiedOn field exists...
+			isset($properties['modifiedOn']) // If a modifiedOn field exists...
 		)
 		{
 			$this->_properties['modifiedOn'] = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
@@ -159,7 +161,7 @@ abstract class Model
 		 * Update createdBy user.
 		 */
 		if(
-			isset($this->_properties['createdBy']) // If a createdBy field exists...
+			isset($properties['createdBy']) // If a createdBy field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
@@ -170,7 +172,7 @@ abstract class Model
 		 * Update modifiedBy user.
 		 */
 		if(
-			isset($this->_properties['modifiedBy']) // If a modifiedBy field exists...
+			isset($properties['modifiedBy']) // If a modifiedBy field exists...
 		)
 		{
 			$this->_properties['modifiedBy'] = Core\User::getInstance()->id;
