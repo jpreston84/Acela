@@ -230,6 +230,7 @@ class Driver extends Database\Drivers\Driver
 				'signed' => ( !empty($signed) ? true : false ),
 				'default' => $defaultValue,
 				'nullable' => $isNullable,
+				'primary' => ( $result['COLUMN_KEY'] === 'PRI' ? true : false ),
 			];
 		}
 		
