@@ -177,6 +177,8 @@ abstract class Model
 	{
 		$properties = $this->_properties;
 		
+		error_log('properties'.print_r($properties, true));
+		
 		/**
 		 * Update createdOn time.
 		 */
