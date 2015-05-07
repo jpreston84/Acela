@@ -80,7 +80,7 @@ abstract class Model
 			/**
 			 * Add this field to the query.
 			 */
-			$query->set($property, $value);
+			$query->set($databaseFieldName, $value);
 		}
 		
 		/**
@@ -88,9 +88,10 @@ abstract class Model
 		 */
 		foreach($this->properties as $property => $value) // For every property in this instance...
 		{
-			if($this->_manager->databaseTableInfo['fields'][$this->_manager->getDatabaseFieldName($property)]['primary'])
+			$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
+			if($this->_manager->databaseTableInfo['fields'][$databaseFieldName]['primary']) // If this is the primary key for the table...
 			{
-				$query->where(null, $property, '=', $value);
+				$query->where(null, $databaseFieldName, '=', $value);
 			}
 		}
 		$query->run();
