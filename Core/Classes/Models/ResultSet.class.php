@@ -104,6 +104,7 @@ abstract class ResultSet implements \Countable, \Iterator
 		{
 			$modelClass = __NAMESPACE__.'\\'.$this->manager->modelName.'\Model';
 			$model = new $modelClass;
+			$model->_manager = $this->manager;
 			
 			/**
 			 * Assign properties to the Model object.
