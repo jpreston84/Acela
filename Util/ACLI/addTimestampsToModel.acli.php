@@ -30,7 +30,7 @@ $tableName = $manager->databaseTableName;
 /**
  * Get field names.
  */
-$databaseFields = $manager->databaseFieldInfo;
+$databaseFields = $manager->databaseTableInfo['fields'];
 
 /**
  * Find ID field.
