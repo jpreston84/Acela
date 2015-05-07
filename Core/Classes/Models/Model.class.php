@@ -87,7 +87,22 @@ abstract class Model
 		 */
 		$this->setTimestamps();
 		
-		$query = $GLOBALS['core']->db->query()->update($this->_manager->databaseTableName);
+		/**
+		 * Create query object.
+		 */
+		$query = $GLOBALS['core']->db->query();
+		
+		/**
+		 * Determine UPDATE or INSERT.
+		 */
+		if($this->_new)
+		{
+			$query->insert($this->_manager->databaseTableName);
+		}
+		else
+		{
+			$query->update($this->_manager->databaseTableName);
+		}
 		
 		foreach($this->_properties as $property => $value) // For every property in this instance...
 		{
@@ -110,12 +125,15 @@ abstract class Model
 		/**
 		 * Add WHERE clause based on primary key.
 		 */
-		foreach($this->_properties as $property => $value) // For every property in this instance...
+		if(!$this->_new) // If this is not a new record...
 		{
-			$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
-			if($this->_manager->databaseTableInfo['fields'][$databaseFieldName]['primary']) // If this is the primary key for the table...
+			foreach($this->_properties as $property => $value) // For every property in this instance...
 			{
-				$query->where(null, $databaseFieldName, '=', $value);
+				$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
+				if($this->_manager->databaseTableInfo['fields'][$databaseFieldName]['primary']) // If this is the primary key for the table...
+				{
+					$query->where(null, $databaseFieldName, '=', $value);
+				}
 			}
 		}
 		
@@ -123,6 +141,28 @@ abstract class Model
 		 * Run the UPDATE query.
 		 */
 		$query->run();
+		
+		/**
+		 * Get insert ID and add it to primary key field.
+		 */
+		if($this->_new) // If this was a new entry...
+		{
+			$lastInsertId = $GLOBALS['core']->db->getLastInsertId();
+			foreach($this->_properties as $property => $value) // For every property in this instance...
+			{
+				$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
+				if($this->_manager->databaseTableInfo['fields'][$databaseFieldName]['primary']) // If this is the primary key for the table...
+				{
+					$this->_properties[$property] = $lastInsertId;
+				}
+			}
+		}
+
+		/**
+		 * Change parameters to reflect that we've saved changes.
+		 */
+		$this->_new = false;
+		$this->_altered = false;
 		
 		return;
 	}

@@ -39,6 +39,11 @@ abstract class Query
 	 * @var string $update The name of a table to update.
 	 */
 	protected $update = null;
+
+	/**
+	 * @var string $insert The name of a table to insert into.
+	 */
+	protected $insert = null;
 	
 	/**
 	 * @var string|null $nextOperator The operator to use for the next ->cond() or ->where().
@@ -363,6 +368,19 @@ abstract class Query
 	public function update($tableName)
 	{
 		$this->update = $tableName;
+		
+		return $this;
+	}
+		
+	/**
+	 * Specify the table name to INSERT into.
+	 * 
+	 * @param string $tableName The name of the table to insert a row into.
+	 * @return self A reference to the current object.
+	 */
+	public function insert($tableName)
+	{
+		$this->insert = $tableName;
 		
 		return $this;
 	}

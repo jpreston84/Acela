@@ -88,6 +88,16 @@ class Driver extends Database\Drivers\Driver
 	}
 	
 	/**
+	 * Get the ID of the last row inserted into the database.
+	 * 
+	 * @return int The ID of the last row inserted into the database.
+	 */
+	public function getLastInsertId()
+	{
+		return $this->pdo->lastInsertId();
+	}
+	
+	/**
 	 * Run a query to get data about a particular table and its fields from the
 	 * database.
 	 * 

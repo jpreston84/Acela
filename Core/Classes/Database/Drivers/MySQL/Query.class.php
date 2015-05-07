@@ -20,11 +20,15 @@ class Query extends Database\Drivers\Query
 	public function build()
 	{
 		/**
-		 * Build SELECT or UPDATE segment.
+		 * Build SELECT, UPDATE, or INSERT segment.
 		 */
 		if(!empty($this->update)) // If a table name to update was specified, this is an update statement...
 		{
 			$tmpQuerySelects = 'UPDATE';
+		}
+		elseif(!empty($this->insert)) // If a table name to insert into was specified, this is an insert statement...
+		{
+			$tmpQuerySelects = 'INSERT INTO';
 		}
 		elseif(empty($this->selects)) // Otherwise, if no selects are entered...
 		{
@@ -53,6 +57,10 @@ class Query extends Database\Drivers\Query
 		if(!empty($this->update)) // If a table to UPDATE was specified...
 		{
 			$tmpQueryTables = $this->update;
+		}
+		elseif(!empty($this->insert)) // If a table to INSERT INTO was specified...
+		{
+			$tmpQueryTables = $this->insert;
 		}
 		else // Otherwise, build tables/joins for SELECT....
 		{
@@ -112,6 +120,7 @@ class Query extends Database\Drivers\Query
 		$tmpQueryLimit = '';
 		if(
 			empty($this->update) // If this is a SELECT query...
+			and empty($this->insert) // If this is a SELECT query...
 			and $this->quantity > 0 // And we're trying to retrieve a specific number of records...
 		)
 		{

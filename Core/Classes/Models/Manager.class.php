@@ -117,11 +117,17 @@ abstract class Manager extends Core\GlobalInstance
 		$model->_new = true;
 		$model->_altered = true;
 		
+		/**
+		 * Assign fields to the model based on default values.
+		 */
 		foreach($this->databaseTableInfo['fields'] as $field)
 		{
 			$model->{$field['objectFieldName']} = $field['default'];
 		}
 		
+		/**
+		 * Return the initialized model.
+		 */
 		return $model;
 	}
 	

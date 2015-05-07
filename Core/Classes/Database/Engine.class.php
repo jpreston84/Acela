@@ -41,6 +41,16 @@ class Engine
 	}
 	
 	/**
+	 * Get the ID for the last row inserted into the database.
+	 * 
+	 * @return mixed The ID of the last row inserted into the database.
+	 */
+	public function getLastInsertId()
+	{
+		return $driver->getLastInsertId();
+	}
+	
+	/**
 	 * Run a query to get data about a particular table and its fields from the
 	 * database.
 	 * 
