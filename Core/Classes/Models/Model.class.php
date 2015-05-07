@@ -90,7 +90,7 @@ abstract class Model
 		{
 			if($this->_manager->databaseTableInfo['fields'][$this->_manager->getDatabaseFieldName($property)]['primary'])
 			{
-				$query->where($property, '=', $value);
+				$query->where(null, $property, '=', $value);
 			}
 		}
 		echo $query->build();

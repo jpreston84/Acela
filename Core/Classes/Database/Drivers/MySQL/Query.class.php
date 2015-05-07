@@ -169,7 +169,22 @@ class Query extends Database\Drivers\Query
 				$where['matchType'] = 'IS'; // Use the IS keyword, rather than =, because the expression ( anything = NULL ) always evaluates to null, never true. The expression (something IS NULL) can evaluate true.
 			}
 			
-			$whereString .= $where['alias'].'.`'.$where['name'].'` '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
+			/**
+			 * Set up alias and/or field name.
+			 */
+			if(!empty($this->update)) // If this is an update query, don't use aliases...
+			{
+				$fieldNameString = '`'.$where['name'].'`';
+			}
+			else
+			{
+				$fieldNameString = $where['alias'].'.`'.$where['name'].'`';
+			}
+			 
+			/**
+			 * Build the where string.
+			 */
+			$whereString .= $fieldNameString.' '.$where['matchType'].' '.$this->buildQueryWhereValue($where['value']); // Build string of the form t.`fieldName` = "value"
 		}
 		
 		return $whereString;
