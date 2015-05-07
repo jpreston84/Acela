@@ -16,6 +16,16 @@ abstract class Model
 	 * @var Manager $_manager Manager for this model.
 	 */
 	public $_manager; // It is necessary to use $_manager rather than $manager to avoid having manager as a reserved property not usable in database tables.
+	
+	/**
+	 * @var bool $_altered Has this object been altered or not since it was loaded?
+	 */
+	protected $_altered = false;
+	
+	/**
+	 * @var bool $_new Is this a new record or an existing one?
+	 */
+	public $_new = false;
 
 	/**
 	 * @var array $properties All the properties of this model.
@@ -55,7 +65,8 @@ abstract class Model
 	 */
 	public function __set($name, $value)
 	{
-		$this->properties[$name] = $value;
+		$this->properties[$name] = $value; // Set the property.
+		$this->_altered = true; // The object has been altered.
 	}
 	
 	/**
@@ -63,6 +74,19 @@ abstract class Model
 	 */
 	public function save()
 	{
+		/**
+		 * If the object hasn't been altered, don't save.
+		 */
+		if(!$this->_altered)
+		{
+			return;
+		}
+		
+		/**
+		 * Update the createdOn/modifiedOn times and users.
+		 */
+		$this->setTimestamps();
+		
 		$query = $GLOBALS['core']->db->query()->update($this->_manager->databaseTableName);
 		
 		foreach($this->properties as $property => $value) // For every property in this instance...
@@ -94,6 +118,62 @@ abstract class Model
 				$query->where(null, $databaseFieldName, '=', $value);
 			}
 		}
+		
+		/**
+		 * Run the UPDATE query.
+		 */
 		$query->run();
+		
+		return;
 	}
+	
+	/**
+	 * Update the createdOn/modifiedOn datetime fields and users.
+	 * 
+	 * This function should only be called by ->save().
+	 */
+	protected function setTimestamps()
+	{
+		/**
+		 * Update createdOn time.
+		 */
+		if(
+			property_exists($this, 'createdOn') // If a createdOn field exists...
+			and $this->_new // And this is a new record that hasn't been saved yet...
+		)
+		{
+			$this->createdOn = date('Y-m-d H:i:s'); // Set the creation datetime to the current datetime.
+		}
+		
+		/**
+		 * Update modifiedOn time.
+		 */
+		if(
+			property_exists($this, 'modifiedOn') // If a modifiedOn field exists...
+		)
+		{
+			$this->modifiedOn = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
+		}
+		
+		/**
+		 * Update createdBy user.
+		 */
+		if(
+			property_exists($this, 'createdBy') // If a createdBy field exists...
+			and $this->_new // And this is a new record that hasn't been saved yet...
+		)
+		{
+			$this->createdBy = Core\User::getInstance()->id;
+		}
+
+		/**
+		 * Update modifiedBy user.
+		 */
+		if(
+			property_exists($this, 'modifiedBy') // If a modifiedBy field exists...
+		)
+		{
+			$this->modifiedBy = Core\User::getInstance()->id;
+		}
+	}	
 }
