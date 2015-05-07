@@ -138,42 +138,42 @@ abstract class Model
 		 * Update createdOn time.
 		 */
 		if(
-			property_exists($this, 'createdOn') // If a createdOn field exists...
+			isset($this->properties, 'createdOn') // If a createdOn field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
-			$this->createdOn = date('Y-m-d H:i:s'); // Set the creation datetime to the current datetime.
+			$this->properties['createdOn'] = date('Y-m-d H:i:s'); // Set the creation datetime to the current datetime.
 		}
 		
 		/**
 		 * Update modifiedOn time.
 		 */
 		if(
-			property_exists($this, 'modifiedOn') // If a modifiedOn field exists...
+			isset($this->properties, 'modifiedOn') // If a modifiedOn field exists...
 		)
 		{
-			$this->modifiedOn = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
+			$this->properties['modifiedOn'] = date('Y-m-d H:i:s'); // Set the modification datetime to the current datetime.
 		}
 		
 		/**
 		 * Update createdBy user.
 		 */
 		if(
-			property_exists($this, 'createdBy') // If a createdBy field exists...
+			isset($this->properties, 'createdBy') // If a createdBy field exists...
 			and $this->_new // And this is a new record that hasn't been saved yet...
 		)
 		{
-			$this->createdBy = Core\User::getInstance()->id;
+			$this->properties['createdBy'] = Core\User::getInstance()->id;
 		}
 
 		/**
 		 * Update modifiedBy user.
 		 */
 		if(
-			property_exists($this, 'modifiedBy') // If a modifiedBy field exists...
+			isset($this->properties, 'modifiedBy') // If a modifiedBy field exists...
 		)
 		{
-			$this->modifiedBy = Core\User::getInstance()->id;
+			$this->properties['modifiedBy'] = Core\User::getInstance()->id;
 		}
 	}	
 }
