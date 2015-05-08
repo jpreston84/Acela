@@ -7,6 +7,9 @@ namespace Acela\Core\ACLI\Commands;
 
 use \Acela\Core as Core;
 
+/**
+ * ACLI Command - Add a pivot table linking two models.
+ */
 class addPivotTable extends Core\ACLI\Command
 {
 	/**
@@ -80,7 +83,7 @@ class addPivotTable extends Core\ACLI\Command
 		 */
 		$tableName1 = $manager1->databaseTableName;
 		$tableName2 = $manager2->databaseTableName;
-		if(strcmp($tableName1, $tableName2) == -1) // If $tableName1 < $tableName2, meaning it's earlier alphabetically...
+		if(strcmp($tableName1, $tableName2) > 0) // If $tableName1 > $tableName2, meaning it's earlier alphabetically...
 		{
 			$swap = false; // Do not swap the order of the objects.
 		}
@@ -108,13 +111,12 @@ class addPivotTable extends Core\ACLI\Command
 		 */
 		if($swap)
 		{
-			$pivotIdField = $manager2->databaseFieldPrefix.$manager1->databaseFieldPrefix.'Id';
+			$pivotIdField = $manager2->databaseFieldPrefix.ucwords($manager1->databaseFieldPrefix).'Id';
 		}
 		else
 		{
-			$pivotIdField = $manager1->databaseFieldPrefix.$manager2->databaseFieldPrefix.'Id';
+			$pivotIdField = $manager1->databaseFieldPrefix.ucwords($manager2->databaseFieldPrefix).'Id';
 		}
-		$pivotIdField[0] = strtolower($pivotIdField[0]);
 
 		/**
 		 * Table field strings.
