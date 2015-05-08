@@ -52,7 +52,10 @@ class ACLI
 			$filename = end($filename);
 			$filename = substr($filename, 0, -10);
 			
-			echo '  '.$filename.PHP_EOL;
+			$className = __NAMESPACE.'/Commands/'.$filename;
+			$usage = $className::getUsage();
+			
+			echo '  '.str_pad($usage['command'], 40).$usage['description'].PHP_EOL;
 		}
 	}
 }

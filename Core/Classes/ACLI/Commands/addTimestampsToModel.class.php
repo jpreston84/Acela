@@ -10,6 +10,19 @@ use \Acela\Core as Core;
 class addTimestampsToModel extends Core\ACLI\Command
 {
 	/**
+	 * Display usage for this command.
+	 * @return string The usage information for this command.
+	 */
+	public static function getUsage()
+	{
+		$usage = [];
+		$usage['command'] = 'addTimestampsToModel [modelName]';
+		$usage['description'] = 'Add created/updated fields to the database table for the specified model name.';
+		
+		return $usage;
+	}
+	
+	/**
 	 * Run the command, adding timestamps to the specified model.
 	 * 
 	 * @param array $args An array of arguments passed to the command.
