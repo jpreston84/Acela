@@ -50,7 +50,7 @@ class ACLI
 			 */
 			$filename = explode('/', $filename);
 			$filename = end($filename);
-			$filename = substr($filename, -10);
+			$filename = substr($filename, 0, -10);
 			
 			echo '  '.$filename.PHP_EOL;
 		}
