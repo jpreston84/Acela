@@ -83,7 +83,7 @@ class addPivotTable extends Core\ACLI\Command
 		 */
 		$tableName1 = $manager1->databaseTableName;
 		$tableName2 = $manager2->databaseTableName;
-		if(strcmp($tableName1, $tableName2) > 0) // If $tableName1 > $tableName2, meaning it's earlier alphabetically...
+		if(strcmp($tableName1, $tableName2) < 0) // If $tableName1 < $tableName2, meaning it's earlier alphabetically...
 		{
 			$swap = false; // Do not swap the order of the objects.
 		}
