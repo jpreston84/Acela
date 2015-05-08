@@ -96,7 +96,7 @@ class addTimestampsToModel extends Core\ACLI\Command
 		';
 		$GLOBALS['core']->db->rawQuery($query);
 
-		echo 'Complete.'."\n";
+		echo 'Complete.'.PHP_EOL;
 		
 		return;
 	}
