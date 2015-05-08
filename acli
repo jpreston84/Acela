@@ -4,30 +4,11 @@
  * ACLI - Acela Command-Line Interface Tool
  */
 
-require_once __DIR__.'/Core/Core.php';
+namespace Acela\Core\ACLI;
+
+use \Acela\Core as Core;
  
-echo 'Welcome to ACLI, the Acela CLI Tool!'."\n";
-echo "\n";
+require_once __DIR__.'/Core/Core.php';
 
-/**
- * Look for command.
- */
-if(empty($argv[1]))
-{
-	echo 'Usage: ./acli commandName [options]'."\n";
-	die();
-}
-
-echo 'Running command "'.$argv[1].'"...'."\n";
-echo "\n";
-
-/**
- * Try to find command. If not, provide error.
- */
-$commandFile = __DIR__.'/Util/ACLI/'.$argv[1].'.acli.php';
-if(!file_exists($commandFile))
-{
-	echo 'Error -- Unknown command "'.$argv[1].'".'."\n";
-	die();
-}
-require_once $commandFile;
+$acli = new ACLI;
+$acli->run();
