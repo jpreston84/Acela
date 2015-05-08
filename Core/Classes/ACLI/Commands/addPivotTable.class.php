@@ -140,7 +140,6 @@ class addPivotTable extends Core\ACLI\Command
 		 * Create pivot table.
 		 */
 		echo 'Creating table `'.$pivotTableName.'`...';
-		if($swap)
 		$query = 'CREATE TABLE `'.$pivotTableName.'` '.$tableFields.';';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;
