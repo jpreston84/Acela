@@ -49,6 +49,8 @@ class addTimestampsToModel extends Core\ACLI\Command
 			die();
 		}
 
+		echo 'Adding created/updated fields to the '.$args[0].' model...'.PHP_EOL;
+		
 		/**
 		 * Get manager.
 		 */
