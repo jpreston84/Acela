@@ -30,7 +30,7 @@ class ACLI
 		 */
 		$commandClass = __NAMESPACE__.'\Commands\\'.$GLOBALS['argv'][1];
 		$command = new $commandClass;
-		$command->run();
+		$command->run(array_slice($GLOBALS['argv'], 2));
 	}
 	
 	private function displayWelcome()

@@ -10,7 +10,7 @@ use \Acela\Core as Core;
 class addTimestampsToModel extends Core\ACLI\Command
 {
 	/**
-	 * Display usage for this command.
+	 * Get usage for this command.
 	 * @return string The usage information for this command.
 	 */
 	public static function getUsage()
@@ -21,6 +21,17 @@ class addTimestampsToModel extends Core\ACLI\Command
 		
 		return $usage;
 	}
+	
+	/**
+	 * Display usage for this command.
+	 */
+	public static function displayUsage()
+	{
+		echo 'Usage: ./acli addTimestampsToModel [modelName]'.PHP_EOL;
+		echo 'Add created/updated fields to the database table for the specified model name.'.PHP_EOL;
+	}
+	
+	
 	
 	/**
 	 * Run the command, adding timestamps to the specified model.
@@ -34,8 +45,7 @@ class addTimestampsToModel extends Core\ACLI\Command
 		 */
 		if(empty($args[0]))
 		{
-			echo 'No model name was provided. Unable to continue.'."\n";
-			echo 'Usage: ./acli addTimestampsToModel modelName'."\n";
+			$this->displayUsage();
 			die();
 		}
 
