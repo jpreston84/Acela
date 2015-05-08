@@ -52,7 +52,7 @@ class addTimestampsToModel extends Core\ACLI\Command
 		/**
 		 * Get manager.
 		 */
-		$manager = Core\Model::getInstance($argv[0]);
+		$manager = Core\Model::getInstance($args[0]);
 
 		/**
 		 * Get table name.
