@@ -106,7 +106,7 @@ class addBackupToModel extends Core\ACLI\Command
 		 * Remove auto increment.
 		 */
 		echo 'Adding field `versionId` on table `'.$tableName.'Versions`...';
-		$query = 'ALTER TABLE `'.$tableName.'Versions` ADD `versionId` BIGINT PRIMARY KEY AUTO_INCREMENT;';
+		$query = 'ALTER TABLE `'.$tableName.'Versions` ADD `versionId` BIGINT PRIMARY KEY AUTO_INCREMENT FIRST;';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;		
 
