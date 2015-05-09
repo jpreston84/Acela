@@ -268,6 +268,7 @@ abstract class Model
 		 */
 		$modelName = $this->_manager->modelName.'Version';
 		$tableName = Core\wordPluralize($modelName);
+		$tableName[0] = strtolower($tableName[0]);
 
 		/**
 		 * If backup version table does not exist, skip backup creation.
