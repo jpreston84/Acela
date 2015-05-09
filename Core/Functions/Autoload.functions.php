@@ -36,7 +36,10 @@ function autoloadClasses($class)
 			
 			$classNameComponents[count($classNameComponents) - 1] .= '.class.php';
 
-			require_once __DIR__.'/../../'.implode('/', $classNameComponents);
+			if(file_exists)
+			{
+				require_once __DIR__.'/../../'.implode('/', $classNameComponents);
+			}
 		}
 	}
 }
