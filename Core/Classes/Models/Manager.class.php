@@ -191,6 +191,7 @@ abstract class Manager extends Core\GlobalInstance
 	public function getFirst($params)
 	{
 		$resultSet = $this->get($params, 1);
+		print_r($resultSet);
 		foreach($resultSet as $result)
 		{
 			return $result;

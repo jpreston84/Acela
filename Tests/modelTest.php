@@ -18,7 +18,6 @@ $user->lastName = 1;
 for($i = 1; $i <= 10; $i++)
 {
 	$user = $userManager->getFirst( [ 'firstName' => 'Jonathan' ] );
-	print_r($user);
 	$user->lastName++;
 	$user->save();
 }
