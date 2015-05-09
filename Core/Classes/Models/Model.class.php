@@ -88,7 +88,7 @@ abstract class Model
 	public function setOriginalState()
 	{
 		$this->_altered = false;
-		$this->_originalProperties = $this->_properties.
+		$this->_originalProperties = $this->_properties;
 	}
 	
 	/**
