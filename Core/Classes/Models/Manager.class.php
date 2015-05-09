@@ -38,6 +38,22 @@ abstract class Manager extends Core\GlobalInstance
 	public function __construct()
 	{
 		/**
+		 * Initialize this manager.
+		 */
+		$this->initialize();
+	}
+	
+	/**
+	 * Initialize the current manager, assigning various properties.
+	 * 
+	 * This is called from ->__construct(), and also from the Generic model. It
+	 * may not be called from anywhere else.
+	 * 
+	 * @return [type] Return_Description
+	 */
+	public function initialize()
+	{
+		/**
 		 * Set the model name.
 		 */
 		$this->setModelName();
@@ -63,6 +79,14 @@ abstract class Manager extends Core\GlobalInstance
 	 */
 	protected function setModelName()
 	{
+		/**
+		 * If the model name has already been set, don't continue;
+		 */
+		if(!empty($this->modelName))
+		{
+			return;
+		}
+		
 		/**
 		 * Get the class name.
 		 */
@@ -91,6 +115,14 @@ abstract class Manager extends Core\GlobalInstance
 	 */
 	protected function setDatabaseTableName()
 	{
+		/**
+		 * If the database name has already been set, don't continue;
+		 */
+		if(!empty($this->modelName))
+		{
+			return;
+		}
+		
 		$this->databaseTableName = Core\wordPluralize(strtolower($this->modelName));
 	}
 
@@ -99,7 +131,16 @@ abstract class Manager extends Core\GlobalInstance
 	 */
 	protected function setDatabaseFieldPrefix()
 	{
-		$this->databaseFieldPrefix = strtolower($this->modelName);
+		/**
+		 * If the model name has already been set, don't continue;
+		 */
+		if(!empty($this->databaseFieldPrefix))
+		{
+			return;
+		}
+		
+		$this->databaseFieldPrefix = $this->modelName;
+		$this->databaseFieldPrefix[0] = strtolower($this->databaseFieldPrefix[0]);
 	}
 
 	/**
