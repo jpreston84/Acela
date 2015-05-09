@@ -123,7 +123,9 @@ abstract class Manager extends Core\GlobalInstance
 			return;
 		}
 		
-		$this->databaseTableName = Core\wordPluralize(strtolower($this->modelName));
+		$this->databaseTableName = $this->modelName;
+		$this->databaseTableName[0] = strtolower($this->databaseTableName[0]);
+		$this->databaseTableName = Core\wordPluralize($this->databaseTableName);
 	}
 
 	/**
