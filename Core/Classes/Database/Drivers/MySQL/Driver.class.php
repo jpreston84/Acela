@@ -58,6 +58,7 @@ class Driver extends Database\Drivers\Driver
 	 */
 	public function rawQuery($query, $resultSet = null)
 	{
+		error_log('Running query: '.$query);
 		$stmt = $this->pdo->query($query); // Run the query and retrieve the result handle.
 
 		/**
