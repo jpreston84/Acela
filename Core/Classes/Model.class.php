@@ -26,7 +26,7 @@ class Model
 		}
 		else // This class does not exist -- attempt to create a Generic object.
 		{
-			$instance = new Models\Generic\Manager::getInstance($name);
+			$instance = Models\Generic\Manager::getInstance($name);
 			return $instance;
 		}
 	}

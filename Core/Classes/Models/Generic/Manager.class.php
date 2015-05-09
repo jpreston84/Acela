@@ -28,7 +28,7 @@ class Manager extends Models\Manager
 	 */
 	public static function getInstance($name)
 	{
-		static $instances = array;
+		static $instances = [];
 		
 		/**
 		 * Create the global instance if it hasn't been created yet.
