@@ -255,7 +255,14 @@ abstract class Model
 	 */
 	public function saveBackupVersion()
 	{
-		error_log('Creating backup version manager for '.$this->_manager->modelName);
+		/**
+		 * If this *is* a backup version, do not continue.
+		 */
+		if($this->_backup)
+		{
+			return;
+		}
+		
 		$versionManager = Core\Model::getInstance($this->_manager->modelName.'Version'); // Try to get a manager for the appropriate version object, possibly creating one from scratch if need be.
 		if(!$versionManager) // If no manager was returned, no backup version model exists... 
 		{
@@ -267,6 +274,7 @@ abstract class Model
 			 * Create a new backup version model object.
 			 */
 			$backup = $versionManager->create(); // Create a new instance of the backup version model.
+			$backup->_backup = true; // This is a backup version.
 		
 			/**
 			 * Copy all properties from original state into the backup.
