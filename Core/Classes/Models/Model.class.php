@@ -139,6 +139,7 @@ abstract class Model
 		
 		foreach($this->_properties as $property => $value) // For every property in this instance...
 		{
+			error_log('adding property '.$property.' with value '.$value);
 			$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
 			
 			/**
