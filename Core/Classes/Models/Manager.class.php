@@ -181,13 +181,28 @@ abstract class Manager extends Core\GlobalInstance
 	}
 	
 	/**
+	 * Get the first record matching the parameters specified.
+	 * 
+	 * @param array $params An array of parameters to use in selecting records.
+	 * @return Model The first matching result.
+	 */
+	public function getFirst($params)
+	{
+		$resultSet = $this->get($params, 1);
+		foreach($resultSet as $result)
+		{
+			return $result;
+		}
+	}
+	
+	/**
 	 * Get one or more records matching the provided parameters.
 	 * 
 	 * @param array $params An array of parameters to use in selecting records.
 	 * @param int $qty The number of records to retrieve.
 	 * @return ResultSet A set of results.
 	 */
-	public function get($params, $qty = 1)
+	public function get($params, $qty = 0)
 	{
 		$query = $GLOBALS['core']->db->query();
 		
@@ -197,9 +212,17 @@ abstract class Manager extends Core\GlobalInstance
 		$this->addParamsToQuery($params, $query);
 		
 		/**
-		 * Add table name and quantity of records to query.
+		 * Add table name to query.
 		 */
-		$query->table($this->databaseTableName, 't1')->quantity($qty);
+		$query->table($this->databaseTableName, 't1');
+		
+		/**
+		 * Add quantity of records to query.
+		 */
+		if($qty)
+		{
+			$query->quantity($qty);
+		}
 
 		/**
 		 * Run query and get results.

@@ -11,7 +11,7 @@ require_once __DIR__.'/../Core/Core.php';
 
 $userManager = Core\Model::getInstance('User');
 
-$user = $userManager->get( [], 1 );
+$user = $userManager->getFirst( [] );
 
 foreach($users as $user)
 {
