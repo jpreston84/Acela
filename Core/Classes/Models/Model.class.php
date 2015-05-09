@@ -89,7 +89,6 @@ abstract class Model
 	{
 		$this->_altered = false;
 		$this->_originalProperties = $this->_properties;
-		print_r($this->_originalProperties);
 	}
 	
 	/**
@@ -292,7 +291,6 @@ abstract class Model
 		 */
 		foreach($this->_originalProperties as $property => $value)
 		{
-			error_log('adding property '.$property.' with value '.$value);
 			/**
 			 * Since this is an object of a different type, convert property name to
 			 * the database field name.
