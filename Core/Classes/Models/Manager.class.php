@@ -154,7 +154,14 @@ abstract class Manager extends Core\GlobalInstance
 		 * Create the new Model.
 		 */
 		$className = __NAMESPACE__.'\\'.$this->modelName.'\Model';
-		$model = new $className();
+		if(class_exists($className)) // If a model class exists, use it...
+		{
+			$model = new $className();
+		}
+		else // Otherwise, use a Generic model...
+		{
+			$model = Generic\Model;
+		}
 		$model->_new = true;
 		$model->_altered = true;
 		$model->_manager = $this;
