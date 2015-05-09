@@ -85,7 +85,7 @@ abstract class Model
 	 * This will turn off the ->_altered flag and copy all properties to
 	 * ->_originalProperties.
 	 */
-	public funcion setOriginalState()
+	public function setOriginalState()
 	{
 		$this->_altered = false;
 		$this->_originalProperties = $this->_properties.
