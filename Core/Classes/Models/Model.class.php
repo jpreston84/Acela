@@ -139,7 +139,6 @@ abstract class Model
 		
 		foreach($this->_properties as $property => $value) // For every property in this instance...
 		{
-			error_log('adding property '.$property.' with value '.$value);
 			$databaseFieldName = $this->_manager->getDatabaseFieldName($property);
 			
 			/**
@@ -292,6 +291,7 @@ abstract class Model
 		 */
 		foreach($this->_originalProperties as $property => $value)
 		{
+			error_log('adding property '.$property.' with value '.$value);
 			/**
 			 * Since this is an object of a different type, convert property name to
 			 * the database field name.
