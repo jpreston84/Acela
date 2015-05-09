@@ -33,7 +33,7 @@ class Manager extends Models\Manager
 		/**
 		 * Create the global instance if it hasn't been created yet.
 		 */
-		if(!array_key_exists($instances[$name])) // If the global instance hasn't been created yet...
+		if(!array_key_exists($name, $instances)) // If the global instance hasn't been created yet...
 		{
 			$instances[$name] = new static(); // Create a new global instance of the class that was called (uses late static bindings).
 			$instances[$name]->modelName = $name; // Change the model name from "Generic" to whatever we wanted an instance of.
