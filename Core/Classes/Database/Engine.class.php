@@ -56,7 +56,7 @@ class Engine
 	 * @param string $tableName The name of the table to check.
 	 * @return bool Does the table exist or not?
 	 */
-	public funtion tableExists($tableName)
+	public function tableExists($tableName)
 	{
 		return $this->driver->tableExists($tableName);
 	}
