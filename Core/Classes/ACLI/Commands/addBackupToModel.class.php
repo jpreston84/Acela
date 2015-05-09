@@ -81,32 +81,33 @@ class addBackupToModel extends Core\ACLI\Command
 		/**
 		 * Create backup table.
 		 */
-		echo 'Copying table `'.$tableName.'` to `'.$tableName.'Versions`...';
-		$query = 'CREATE TABLE `'.$tableName.'Versions` LIKE `'.$tableName.'`;';
+		$backupTableName = Core\wordSingularize($tableName).'Versions';
+		echo 'Copying table `'.$tableName.'` to `'.$backupTableName.'`...';
+		$query = 'CREATE TABLE `'.$backupTableName.'` LIKE `'.$tableName.'`;';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;
 
 		/**
 		 * Remove auto increment.
 		 */
-		echo 'Removing auto-increment on field `'.$idField.'` in table `'.$tableName.'Versions`...';
-		$query = 'ALTER TABLE `'.$tableName.'Versions` MODIFY `'.$idField.'` BIGINT NOT NULL;';
+		echo 'Removing auto-increment on field `'.$idField.'` in table `'.$backupTableName.'`...';
+		$query = 'ALTER TABLE `'.$backupTableName.'` MODIFY `'.$idField.'` BIGINT NOT NULL;';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;
 
 		/**
 		 * Remove auto increment.
 		 */
-		echo 'Removing primary key on table `'.$tableName.'Versions`...';
-		$query = 'ALTER TABLE `'.$tableName.'Versions` DROP PRIMARY KEY;';
+		echo 'Removing primary key on table `'.$backupTableName.'`...';
+		$query = 'ALTER TABLE `'.$backupTableName.'` DROP PRIMARY KEY;';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;
 
 		/**
 		 * Remove auto increment.
 		 */
-		echo 'Adding field `versionId` on table `'.$tableName.'Versions`...';
-		$query = 'ALTER TABLE `'.$tableName.'Versions` ADD `versionId` BIGINT PRIMARY KEY AUTO_INCREMENT FIRST;';
+		echo 'Adding field `versionId` on table `'.$backupTableName.'`...';
+		$query = 'ALTER TABLE `'.$backupTableName.'` ADD `versionId` BIGINT PRIMARY KEY AUTO_INCREMENT FIRST;';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;		
 
