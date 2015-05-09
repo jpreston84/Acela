@@ -106,7 +106,7 @@ class Driver extends Database\Drivers\Driver
 	 */
 	public function tableExists($tableName)
 	{
-		$tableExists = $this->pdo->query('SHOW TABLES LIKE '.$this->quote($tableName).';')->rowCount() > 0;
+		$tableExists = $this->pdo->query('SHOW TABLES LIKE '.$this->safeString($tableName).';')->rowCount() > 0;
 		return $tableExists;
 	}
 	
