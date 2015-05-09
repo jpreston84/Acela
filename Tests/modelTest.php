@@ -13,8 +13,5 @@ $userManager = Core\Model::getInstance('User');
 
 $user = $userManager->getFirst( [] );
 
-foreach($users as $user)
-{
-	$user->firstName .= ' - Modified';
-	$user->save();
-}
+$user->firstName .= ' - Modified';
+$user->save();
