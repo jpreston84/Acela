@@ -118,7 +118,7 @@ abstract class Manager extends Core\GlobalInstance
 		/**
 		 * If the database name has already been set, don't continue;
 		 */
-		if(!empty($this->modelName))
+		if(!empty($this->databaseTableName))
 		{
 			return;
 		}
@@ -132,7 +132,7 @@ abstract class Manager extends Core\GlobalInstance
 	protected function setDatabaseFieldPrefix()
 	{
 		/**
-		 * If the model name has already been set, don't continue;
+		 * If the database field prefix has already been set, don't continue;
 		 */
 		if(!empty($this->databaseFieldPrefix))
 		{

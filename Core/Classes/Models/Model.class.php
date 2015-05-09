@@ -263,40 +263,48 @@ abstract class Model
 			return;
 		}
 		
-		$versionManager = Core\Model::getInstance($this->_manager->modelName.'Version'); // Try to get a manager for the appropriate version object, possibly creating one from scratch if need be.
-		if(!$versionManager) // If no manager was returned, no backup version model exists... 
+		/**
+		 * Determine the table and object names of the backup.
+		 */
+		$modelName = $this->_manager->modelName.'Version';
+		$tableName = Core\wordPluralize($modelName);
+
+		/**
+		 * If backup version table does not exist, skip backup creation.
+		 */
+		if(!$GLOBALS['core']->db->tableExists($tableName))
 		{
 			return;
 		}
-		else
+		
+		$versionManager = Core\Model::getInstance($modelName); // Get the manager for the appropriate version object, possibly creating one from scratch if need be.
+
+		/**
+		 * Create a new backup version model object.
+		 */
+		$backup = $versionManager->create(); // Create a new instance of the backup version model.
+		$backup->_backup = true; // This is a backup version.
+		
+		/**
+		 * Copy all properties from original state into the backup.
+		 */
+		foreach($this->_originalProperties as $property => $value)
 		{
 			/**
-			 * Create a new backup version model object.
+			 * Since this is an object of a different type, convert property name to
+			 * the database field name.
 			 */
-			$backup = $versionManager->create(); // Create a new instance of the backup version model.
-			$backup->_backup = true; // This is a backup version.
-		
-			/**
-			 * Copy all properties from original state into the backup.
-			 */
-			foreach($this->_originalProperties as $property => $value)
-			{
-				/**
-				 * Since this is an object of a different type, convert property name to
-				 * the database field name.
-				 */
-				$property = $this->_manager->getDatabaseFieldName($property);
-				
-				/**
-				 * Add the property to the backup object.
-				 */
-				$backup->$property = $value;
-			}
+			$property = $this->_manager->getDatabaseFieldName($property);
 			
 			/**
-			 * Save the backup object.
+			 * Add the property to the backup object.
 			 */
-			$backup->save();
+			$backup->$property = $value;
 		}
+		
+		/**
+		 * Save the backup object.
+		 */
+		$backup->save();
 	}
 }

@@ -99,6 +99,18 @@ class Driver extends Database\Drivers\Driver
 	}
 	
 	/**
+	 * Determine whether the specified table name exists or not.
+	 * 
+	 * @param string $tableName The name of the table to check.
+	 * @return bool Does the table exist or not?
+	 */
+	public funtion tableExists($tableName)
+	{
+		$tableExists = $this->pdo->query('SHOW TABLES LIKE '.$this->quote($tableName).';')->rowCount() > 0;
+		return $tableExists;
+	}
+	
+	/**
 	 * Run a query to get data about a particular table and its fields from the
 	 * database.
 	 * 
