@@ -79,9 +79,18 @@ class addBackupToModel extends Core\ACLI\Command
 		}
 
 		/**
-		 * Create backup table.
+		 * Get backup table name.
 		 */
 		$backupTableName = Core\wordSingularize($tableName).'Versions';
+
+		/**
+		 * Get version ID field name.
+		 */
+		$backupFieldName = Core\wordSingularize($tableName).'VersionId';
+		
+		/**
+		 * Create backup table.
+		 */
 		echo 'Copying table `'.$tableName.'` to `'.$backupTableName.'`...';
 		$query = 'CREATE TABLE `'.$backupTableName.'` LIKE `'.$tableName.'`;';
 		$GLOBALS['core']->db->rawQuery($query);
@@ -96,7 +105,7 @@ class addBackupToModel extends Core\ACLI\Command
 		echo 'done.'.PHP_EOL;
 
 		/**
-		 * Remove auto increment.
+		 * Remove primary key.
 		 */
 		echo 'Removing primary key on table `'.$backupTableName.'`...';
 		$query = 'ALTER TABLE `'.$backupTableName.'` DROP PRIMARY KEY;';
@@ -104,10 +113,10 @@ class addBackupToModel extends Core\ACLI\Command
 		echo 'done.'.PHP_EOL;
 
 		/**
-		 * Remove auto increment.
+		 * Add new version ID field.
 		 */
-		echo 'Adding field `versionId` on table `'.$backupTableName.'`...';
-		$query = 'ALTER TABLE `'.$backupTableName.'` ADD `versionId` BIGINT PRIMARY KEY AUTO_INCREMENT FIRST;';
+		echo 'Adding field `'.$backupFieldName.'` on table `'.$backupTableName.'`...';
+		$query = 'ALTER TABLE `'.$backupTableName.'` ADD `'.$backupFieldName.'` BIGINT PRIMARY KEY AUTO_INCREMENT FIRST;';
 		$GLOBALS['core']->db->rawQuery($query);
 		echo 'done.'.PHP_EOL;		
 
