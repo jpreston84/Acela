@@ -137,6 +137,7 @@ abstract class Model
 			$query->update($this->_manager->databaseTableName);
 		}
 		
+		print_r($this->_manager->databaseTableInfo);
 		foreach($this->_properties as $property => $value) // For every property in this instance...
 		{
 			error_log('setting '.$property.' to '.$value);
@@ -298,8 +299,6 @@ abstract class Model
 			 * the database field name.
 			 */
 			$property = $this->_manager->getDatabaseFieldName($property);
-			
-			error_log('setting backup property '.$property.' to '.$value);
 			
 			/**
 			 * Add the property to the backup object.
