@@ -299,6 +299,8 @@ abstract class Model
 			 */
 			$property = $this->_manager->getDatabaseFieldName($property);
 			
+			error_log('setting backup property '.$property.' to '.$value);
+			
 			/**
 			 * Add the property to the backup object.
 			 */
