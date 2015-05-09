@@ -115,10 +115,13 @@ abstract class ResultSet implements \Countable, \Iterator
 			}
 			
 			/**
-			 * Reset altered status of model we just loaded.
+			 * Set the status of model we just loaded as the "original state".
 			 */
-			$model->_altered = false;
+			$model->setOriginalState();
 			
+			/**
+			 * Add the completed model to the result set.
+			 */
 			$this->results[] = $model;
 		}
 	}

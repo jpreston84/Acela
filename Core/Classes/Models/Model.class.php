@@ -28,9 +28,19 @@ abstract class Model
 	public $_new = false;
 
 	/**
+	 * @var bool $_backup Is this a backup copy of some other object?
+	 */
+	public $_backup = false;
+	
+	/**
 	 * @var array $_properties All the _properties of this model.
 	 */
 	protected $_properties = [];
+	
+	/**
+	 * @var array $_originalProperties The original properties of this object when it was created, for backup purposes.
+	 */
+	protected $_originalProperties = [];
 	
 	/**
 	 * Magic Method - Get the value of a property of this object.
@@ -70,6 +80,18 @@ abstract class Model
 	}
 	
 	/**
+	 * Make the "original state" of the object match the current state.
+	 * 
+	 * This will turn off the ->_altered flag and copy all properties to
+	 * ->_originalProperties.
+	 */
+	public funcion setOriginalState()
+	{
+		$this->_altered = false;
+		$this->_originalProperties = $this->_properties.
+	}
+	
+	/**
 	 * Save the current model.
 	 */
 	public function save()
@@ -83,9 +105,20 @@ abstract class Model
 		}
 		
 		/**
+		 * Save a backup copy before any changes have been made, if applicable.
+		 */
+		if(!$this->_backup) // If this object is not itself a backup copy...
+		{
+			$this->saveBackupVersion(); // Try to save a backup copy.
+		}
+		
+		/**
 		 * Update the createdOn/modifiedOn times and users.
 		 */
-		$this->setTimestamps();
+		if(!$this->_backup) // If this is not a backup copy...
+		{
+			$this->setTimestamps(); // Update timestamps for this record.
+		}
 		
 		/**
 		 * Create query object.
@@ -215,5 +248,46 @@ abstract class Model
 		{
 			$this->_properties['modifiedBy'] = Core\User::getInstance()->id;
 		}
-	}	
+	}
+	
+	/**
+	 * Save a backup copy of the current object.
+	 */
+	public function saveBackupVersion()
+	{
+		$versionManager = Core\Model::getInstance($this->_manager->modelName.'Version'); // Try to get a manager for the appropriate version object, possibly creating one from scratch if need be.
+		if(!$versionManager) // If no manager was returned, no backup version model exists... 
+		{
+			return;
+		}
+		else
+		{
+			/**
+			 * Create a new backup version model object.
+			 */
+			$backup = $versionManager->create(); // Create a new instance of the backup version model.
+		
+			/**
+			 * Copy all properties from original state into the backup.
+			 */
+			foreach($this->_originalProperties as $property => $value)
+			{
+				/**
+				 * Since this is an object of a different type, convert property name to
+				 * the database field name.
+				 */
+				$property = $this->_manager->getDatabaseFieldName($property);
+				
+				/**
+				 * Add the property to the backup object.
+				 */
+				$backup->$property = $value;
+			}
+			
+			/**
+			 * Save the backup object.
+			 */
+			$backup->save();
+		}
+	}
 }
