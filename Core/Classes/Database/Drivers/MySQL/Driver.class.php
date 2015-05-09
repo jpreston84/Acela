@@ -66,6 +66,7 @@ class Driver extends Database\Drivers\Driver
 		if($stmt === false)
 		{
 			error_log('There was a query error: '.$query.' -- '.print_r($this->pdo->errorInfo(), true));
+			error_log(print_r(debug_backtrace(), true));
 			die();
 		}
 		
