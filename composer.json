@@ -1,4 +1,8 @@
 {
+	"config":
+	{
+		"vendor-dir": "Vendor"
+	}
 	"require":
 	{
 		"monolog/monolog": "~1"
