@@ -105,6 +105,7 @@ class addPivotTable extends Core\ACLI\Command
 			$tableName2[0] = strtoupper($tableName2[0]);
 			$pivotTableName = Core\wordSingularize($tableName1).Core\wordSingularize($tableName2);
 		}
+		$pivotTableName = Core\wordPluralize($pivotTableName);
 		
 		/**
 		 * Determine pivot ID field.
