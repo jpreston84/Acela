@@ -8,10 +8,15 @@
 namespace Acela\Core;
 
 /**
- * Load the autoloader functions.
+ * Load Acela autoloader.
  */
 require_once __DIR__.'/Functions/Autoload.functions.php';
 spl_autoload_register('Acela\Core\autoloadClasses');
+
+/**
+ * Load Composer autoloader.
+ */
+require_once __DIR__.'/../Vendor/autoload.php';
 
 /**
  * Load all remaining core function files.
