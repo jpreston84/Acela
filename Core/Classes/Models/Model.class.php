@@ -80,6 +80,39 @@ abstract class Model
 	}
 	
 	/**
+	 * Magic Method - Call a method on this object.
+	 * 
+	 * This should be used exclusively for the wildcard ->getFirst*() and
+	 * ->getAll*() methods.
+	 * 
+	 * @param string $name The name of the method that was called.
+	 * @param array $arguments Arguments to pass to the method.
+	 * @return mixed The output of the method call.
+	 */
+	public function __call($name, $arguments)
+	{
+		/**
+		 * Handle methods like ->getFirstUser() for loading associated Models.
+		 */
+		if(substr($name, 0, 8) === 'getFirst')
+		{
+			return $this->getFirstLinkedObject(substr($name, 8), $arguments[0]);
+		}
+		/**
+		 * Handle methods like ->getAllUsers() for loading associated Models.
+		 */
+		elseif(substr($name, 0, 6) === 'getAll')
+		{
+			return $this->getFirstLinkedObject(Core\wordSingularize(substr($name, 6)), $arguments[0]);
+		}
+		else
+		{
+			error_log(print_r(debug_backtrace(), true));
+			die('Uncaught error.');
+		}
+	}
+
+	/**
 	 * Make the "original state" of the object match the current state.
 	 * 
 	 * This will turn off the ->_altered flag and copy all properties to
@@ -307,5 +340,159 @@ abstract class Model
 		 * Save the backup object.
 		 */
 		$backup->save();
+	}
+
+	/**
+	 * Get the first linked object of the specified type.
+	 * 
+	 * @param string $modelName The name of the model type to find links to.
+	 * @param array $params Additional search parameters to use.
+	 * @return Model The first matching result.
+	 */
+	public function getFirstLinkedObject($modelName, $params = [])
+	{
+		$resultSet = $this->getLinkedObjects($modelName, $params, 1);
+		foreach($resultSet as $result)
+		{
+			return $result;
+		}
+	}
+		
+	/**
+	 * Get linked objects of the specified type.
+	 * 
+	 * @param string $modelName The name of the model type to find links to.
+	 * @param array $params Additional search parameters to use.
+	 * @param int $qty The number of objects to returned.
+	 * @return ResultSet A set of results.
+	 */
+	public function getLinkedObjects($modelName, $params = [], $qty = 0)
+	{
+		/**
+		 * Find the kind of link that exists.
+		 */
+		$linkType = Core\Model::findLink($this->_manager->modelName, $modelName);
+		
+		/**
+		 * If no link, return false.
+		 */
+		if($linkType === false)
+		{
+			return false;
+		}
+		/**
+		 * If the link is in this model, generate the query based on the lookup field in
+		 * this model's table.
+		 */
+		elseif($linkType === 1)
+		{
+			/**
+			 * Get an instance of the foreign object manager.
+			 */
+			$manager = Core::Model->getInstance($modelName);
+			
+			/**
+			 * Get name of ID field from foreign manager to use as foreign key in this
+			 * table.
+			 */
+			$idField = $manager->getPrimaryKey();
+			
+			/**
+			 * Identify the name of the foreign key field in this object.
+			 */
+			$foreignKeyField = $this->_manager->getObjectFieldName($manager->getDatabaseFieldName($idField));
+			
+			/**
+			 * Retrieve records that match.
+			 */
+			$params[$idField] = $this->$foreignKeyField; // Get the value of the foreign key field, and set it as the ID field to match.
+			$resultSet = $manager->get($params, $qty);
+			
+			/**
+			 * Return the records.
+			 */
+			return $resultSet;
+		}
+		/**
+		 * If the link is in the foreign model, do the inverse of above.
+		 */
+		elseif($linkType === 1)
+		{
+			/**
+			 * Get an instance of the foreign object manager.
+			 */
+			$manager = Core::Model->getInstance($modelName);
+			
+			/**
+			 * Get name of ID field from the current manager to use as foreign key.
+			 */
+			$idField = $this->_manager->getPrimaryKey();
+			
+			/**
+			 * Identify the name of the foreign key field in the foreign object, which will
+			 * point specifically to the current object.
+			 */
+			$foreignKeyField = $manager->getObjectFieldName($this->_manager->getDatabaseFieldName($idField));
+			
+			/**
+			 * Retrieve records that match.
+			 */
+			$params[$foreignKeyField] = $this->$idField;
+			$resultSet = $manager->get($params, $qty);
+			
+			/**
+			 * Return the records.
+			 */
+			return $resultSet;
+		}
+		/**
+		 * If there is a pivot table, get pivot records, then get actual results.
+		 */
+		elseif($linkType === 1)
+		{
+			/**
+			 * Get an instance of the foreign object manager.
+			 */
+			$manager = Core::Model->getInstance($modelName);
+			
+			/**
+			 * Get the pivot model name.
+			 */
+			$pivotModelName = Core\Model::getPivotModelName($this->_manager->modelName, $manager->modelName);
+
+			/**
+			 * Set up parameters.
+			 */
+			$pivotParams = []; // Set up a separate set of pivot parameters, so as not to overwrite the $params provided to the function.
+			$pivotParams[$this->_manager->getDatabaseFieldName($this->_manager->getPrimaryKey)] = $this->{$this->_manager->getPrimaryKey}; // Get the database field name for the primary key of the current manager, and set the search parameter to the current object's primary key value.
+			
+			/**
+			 * Get an instance of the pivot table manager, and retrieve the pivot records.
+			 */
+			$pivotManager = Core::Model->getInstance($pivotModelName);
+			$resultSet = $pivotManager->get($pivotParams, 0);
+			
+			/**
+			 * Iterate through each pivot record, and build an array of IDs to
+			 * look for in the foreign model.
+			 */
+			$foreignModelIds = [];
+			$foreignModelKeyPivotFieldName = $pivotManager->getObjectFieldName($model->getDatabaseFieldName($model->getPrimaryKey)); // Get the name of the database field for the primary key in the foreign model, then convert it to the object field name that will be used in the pivot model.
+			foreach($resultSet as $result) // For each pivot record...
+			{
+				$foreignModelIds[] = $result->$foreignModelKeyPivotFieldName; // Get the value from the pivot record that corresponds to a primary key value in the foreign manager, which is related to the current object.
+			}
+			
+			/**
+			 * Retrieve records that match.
+			 */
+			$params[$model->getPrimaryKey] = $foreignModelIds;
+			$resultSet = $manager->get($params, $qty);
+			
+			/**
+			 * Return the records.
+			 */
+			return $resultSet;
+		}
 	}
 }

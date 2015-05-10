@@ -380,4 +380,21 @@ abstract class Manager extends Core\GlobalInstance
 		}
 		return false;
 	}
+	
+	/**
+	 * Get the object field name of the primary key of this object type.
+	 * 
+	 * @return string The name of the object field for the primary key.
+	 */
+	public function getPrimaryKey()
+	{
+		foreach($this->databaseTableInfo['fields'] as $field)
+		{
+			if($field['primary'])
+			{
+				return $field['objectFieldName'];
+			}
+		}
+		return false;
+	}
 }
