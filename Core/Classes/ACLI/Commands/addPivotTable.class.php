@@ -98,12 +98,12 @@ class addPivotTable extends Core\ACLI\Command
 		if($swap)
 		{
 			$tableName1[0] = strtoupper($tableName1[0]);
-			$pivotTableName = $tableName2.$tableName1;
+			$pivotTableName = Core\wordSingularize($tableName2).Core\wordSingularize($tableName1);
 		}
 		else
 		{
 			$tableName2[0] = strtoupper($tableName2[0]);
-			$pivotTableName = $tableName1.$tableName2;
+			$pivotTableName = Core\wordSingularize($tableName1).Core\wordSingularize($tableName2);
 		}
 		
 		/**
