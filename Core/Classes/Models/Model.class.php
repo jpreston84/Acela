@@ -453,7 +453,7 @@ abstract class Model
 			/**
 			 * Get an instance of the foreign object manager.
 			 */
-			$manager = Core::Model->getInstance($modelName);
+			$manager = Core\Model::getInstance($modelName);
 			
 			/**
 			 * Get the pivot model name.
@@ -469,7 +469,7 @@ abstract class Model
 			/**
 			 * Get an instance of the pivot table manager, and retrieve the pivot records.
 			 */
-			$pivotManager = Core::Model->getInstance($pivotModelName);
+			$pivotManager = Core\Model::getInstance($pivotModelName);
 			$resultSet = $pivotManager->get($pivotParams, 0);
 			
 			/**
