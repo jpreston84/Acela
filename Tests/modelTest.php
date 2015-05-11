@@ -13,14 +13,14 @@ $fooManager = Core\Model::getInstance('Foo');
 
 $foo = $fooManager->getFirst();
 
-echo 'Foo'
+echo 'Foo';
 echo '<pre>';
 print_r($foo);
 echo '</pre>';
 
 $bar = $foo->getFirstBar();
 
-echo 'Bar'
+echo 'Bar';
 echo '<pre>';
 print_r($bar);
 echo '</pre>';
