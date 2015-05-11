@@ -96,14 +96,30 @@ abstract class Model
 		 */
 		if(substr($name, 0, 8) === 'getFirst')
 		{
-			return $this->getFirstLinkedObject(substr($name, 8), $arguments[0]);
+			/**
+			 * Get $params if provided.
+			 */
+			$params = [];
+			if(!empty($arguments))
+			{
+				$params = $arguments[0];
+			}
+			return $this->getFirstLinkedObject(substr($name, 8), $params);
 		}
 		/**
 		 * Handle methods like ->getAllUsers() for loading associated Models.
 		 */
 		elseif(substr($name, 0, 6) === 'getAll')
 		{
-			return $this->getFirstLinkedObject(Core\wordSingularize(substr($name, 6)), $arguments[0]);
+			/**
+			 * Get $params if provided.
+			 */
+			$params = [];
+			if(!empty($arguments))
+			{
+				$params = $arguments[0];
+			}
+			return $this->getFirstLinkedObject(Core\wordSingularize(substr($name, 6)), $params);
 		}
 		else
 		{
