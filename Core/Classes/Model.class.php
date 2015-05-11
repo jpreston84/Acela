@@ -69,7 +69,7 @@ class Model
 		/**
 		 * Look for $idField2 in $model1.
 		 */
-		if($manager1->getObjectFieldName($manager2->getDatabaseFieldName($idField2) !== false)
+		if($manager1->getObjectFieldName($manager2->getDatabaseFieldName($idField2) !== false))
 		{
 			return 1;
 		}
@@ -77,7 +77,7 @@ class Model
 		/**
 		 * Look for $idField1 in $model2.
 		 */
-		if($manager2->getObjectFieldName($manager1->getDatabaseFieldName($idField1) !== false)
+		if($manager2->getObjectFieldName($manager1->getDatabaseFieldName($idField1) !== false))
 		{
 			return -1;
 		}
