@@ -384,21 +384,16 @@ abstract class Model
 	 */
 	public function getLinkedObjects($modelName, $params = [], $qty = 0)
 	{
-		error_log('getting linked objects from model '.$modelName.' matching params: '.print_r($params, true));
-		
 		/**
 		 * Find the kind of link that exists.
 		 */
 		$linkType = Core\Model::findLink($this->_manager->modelName, $modelName);
-		
-		error_log('link type is '.$linkType);
 		
 		/**
 		 * If no link, return false.
 		 */
 		if($linkType === false)
 		{
-			error_log('no link');
 			return false;
 		}
 		/**
@@ -407,7 +402,6 @@ abstract class Model
 		 */
 		elseif($linkType === 1)
 		{
-			error_log('link in model 1');
 			/**
 			 * Get an instance of the foreign object manager.
 			 */
@@ -438,9 +432,8 @@ abstract class Model
 		/**
 		 * If the link is in the foreign model, do the inverse of above.
 		 */
-		elseif($linkType === 1)
+		elseif($linkType === -1)
 		{
-			error_log('link in model 2');
 			/**
 			 * Get an instance of the foreign object manager.
 			 */
@@ -471,7 +464,7 @@ abstract class Model
 		/**
 		 * If there is a pivot table, get pivot records, then get actual results.
 		 */
-		elseif($linkType === 1)
+		elseif($linkType === 0)
 		{
 			/**
 			 * Get an instance of the foreign object manager.
