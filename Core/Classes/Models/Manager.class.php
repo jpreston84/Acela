@@ -188,7 +188,7 @@ abstract class Manager extends Core\GlobalInstance
 	 * @param array $params An array of parameters to use in selecting records.
 	 * @return Model The first matching result.
 	 */
-	public function getFirst($params)
+	public function getFirst($params = [])
 	{
 		$resultSet = $this->get($params, 1);
 		print_r($resultSet);
@@ -205,7 +205,7 @@ abstract class Manager extends Core\GlobalInstance
 	 * @param int $qty The number of records to retrieve.
 	 * @return ResultSet A set of results.
 	 */
-	public function get($params, $qty = 0)
+	public function get($params = [], $qty = 0)
 	{
 		$query = $GLOBALS['core']->db->query();
 		
