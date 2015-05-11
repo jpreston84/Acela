@@ -237,7 +237,10 @@ class Query extends Database\Drivers\Query
 		{
 			// Do nothing.
 		}
-		elseif(array_filter($value, 'is_int') == $value)
+		elseif(
+			is_array($value)
+			and array_filter($value, 'is_int') == $value
+		)
 		{
 			$value = '('.implode(', ', $value).')';
 		}
