@@ -102,9 +102,7 @@ abstract class ResultSet implements \Countable, \Iterator
 	{
 		foreach($this->databaseResultSet as $result)
 		{
-			$modelClass = __NAMESPACE__.'\\'.$this->manager->modelName.'\Model';
-			$model = new $modelClass;
-			$model->_manager = $this->manager;
+			$model = $this->createModel();
 			
 			/**
 			 * Assign properties to the Model object.
@@ -124,5 +122,31 @@ abstract class ResultSet implements \Countable, \Iterator
 			 */
 			$this->results[] = $model;
 		}
+	}
+	
+	/**
+	 * Create a new model of the relevant type.
+	 * 
+	 * @return Model A new model.
+	 */
+	protected function createModel()
+	{
+		/**
+		 * Get the appropriate class name for the model.
+		 */
+		$className = get_called_class(); // Should be something like \Acela\Core\Models\Generic\ResultSet
+		$className = explode('\\', $className); // Explode into an array so we can grab "Generic".
+		$className = __NAMESPACE__.'\\'.$className[count($className) - 2].'\Model'; // Should be something like \Acela\Core\Models\Generic\Model
+
+		/**
+		 * Create a new model instance.
+		 */
+		$model = new $className;
+		$model->_manager = $this->manager;
+		
+		/**
+		 * Return the new model instance.
+		 */
+		return $model;
 	}
 }
