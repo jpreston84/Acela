@@ -148,10 +148,10 @@ class Model
 		 * re-pluralized. Additionally, the first character of the second model table is
 		 * capitalized.
 		 */
-		$table1 = Core\wordSingularize($table1);
-		$table2 = Core\wordSingularize($table2);
+		$table1 = wordSingularize($table1);
+		$table2 = wordSingularize($table2);
 		$table2[0] = strtoupper($table2[0]);
-		$pivotTableName = Core\wordPluralize($table1.$table2);
+		$pivotTableName = wordPluralize($table1.$table2);
 
 		return $pivotTableName;
 	}
