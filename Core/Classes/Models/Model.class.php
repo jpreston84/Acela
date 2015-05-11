@@ -389,7 +389,7 @@ abstract class Model
 			/**
 			 * Get an instance of the foreign object manager.
 			 */
-			$manager = Core::Model->getInstance($modelName);
+			$manager = Core\Model::getInstance($modelName);
 			
 			/**
 			 * Get name of ID field from foreign manager to use as foreign key in this
@@ -421,7 +421,7 @@ abstract class Model
 			/**
 			 * Get an instance of the foreign object manager.
 			 */
-			$manager = Core::Model->getInstance($modelName);
+			$manager = Core\Model::getInstance($modelName);
 			
 			/**
 			 * Get name of ID field from the current manager to use as foreign key.
