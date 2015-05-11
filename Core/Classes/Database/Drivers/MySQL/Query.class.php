@@ -173,9 +173,23 @@ class Query extends Database\Drivers\Query
 			/**
 			 * Set match type for NULL.
 			 */
-			if(is_null($where['value']))
+			if(
+				$where['matchType'] === '='
+				and is_null($where['value'])
+			)
 			{
 				$where['matchType'] = 'IS'; // Use the IS keyword, rather than =, because the expression ( anything = NULL ) always evaluates to null, never true. The expression (something IS NULL) can evaluate true.
+			}
+			/**
+			 * Set match type for = against a group (IN keyword).
+			 */
+			elseif(
+				$where['matchType'] === '='
+				and is_array($where['value'])
+				and array_filter($where['value'], 'is_int') == $where['value']
+			)
+			{
+				$where['matchType'] = 'IN';
 			}
 			
 			/**
@@ -222,6 +236,10 @@ class Query extends Database\Drivers\Query
 		elseif(is_int($value))
 		{
 			// Do nothing.
+		}
+		elseif(array_filter($value, 'is_int') == $value)
+		{
+			$value = '('.implode(', ', $value).')';
 		}
 		else // Otherwise, treat this as a string...
 		{
