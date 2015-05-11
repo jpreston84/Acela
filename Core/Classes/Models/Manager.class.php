@@ -231,19 +231,46 @@ abstract class Manager extends Core\GlobalInstance
 		 * Run query and get results.
 		 */
 		$results = $query->run();
-		
+
 		/**
-		 * Create ResultSet and add database results to it.
+		 * Create a ResultSet.
 		 */
-		$className = __NAMESPACE__.'\\'.$this->modelName.'\ResultSet';
-		$resultSet = new $className;
-		$resultSet->manager = $this;
-		$resultSet->databaseResultSet = $results;
-		$resultSet->loadResultSet();
+		$resultSet = $this->createResultSet($results);
 		
 		/**
 		 * Return the completed ResultSet.
 		 */
+		return $resultSet;
+	}
+	
+	/**
+	 * Create a ResultSet object and load the database results into it.
+	 * 
+	 * @param \Acela\Core\Database\Drivers\ResultSet $results A database result set.
+	 * @return ResultSet A model result set.
+	 */
+	protected function createResultSet($results)
+	{
+		/**
+		 * Get the name of the ResultSet class to be used, either named, or Generic.
+		 */
+		$className = get_called_class(); // Get the name of the called class, something like \Acela\Core\Models\User\Manager.
+		$className = explode('\\', $className); // Explode into an array.
+		$className = $className[count($className) - 2]; // Retrieve the penultimate entry from the class path (something like User or Generic), which should be the actual name of the model in use.
+		$className = __NAMESPACE__.'\\'.$className.'\ResultSet'; // Build the complete class name of the ResultSet we want to load.
+		
+		/**
+		 * Create an instance of the corresponding ResultSet.
+		 */
+		$resultSet = new $className;
+		$resultSet->manager = $this; // Set a pointer in the ResultSet to the appropriate manager instance.
+
+		/**
+		 * Load the results.
+		 */
+		$resultSet->databaseResultSet = $results; // Add the database ResultSet object into the new model ResultSet.
+		$resultSet->loadResultSet(); // Load entries from the database results.
+		
 		return $resultSet;
 	}
 	
