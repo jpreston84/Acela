@@ -221,6 +221,8 @@ class Query extends Database\Drivers\Query
 	 */
 	private function buildQueryWhereValue($value)
 	{
+		error_log('building query where value for '.print_r($value, true));
+		
 		if(is_null($value))
 		{
 			$value = 'NULL';
