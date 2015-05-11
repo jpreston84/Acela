@@ -480,7 +480,7 @@ abstract class Model
 			 * Set up parameters.
 			 */
 			$pivotParams = []; // Set up a separate set of pivot parameters, so as not to overwrite the $params provided to the function.
-			$pivotParams[$this->_manager->getDatabaseFieldName($this->_manager->getPrimaryKey)] = $this->{$this->_manager->getPrimaryKey}; // Get the database field name for the primary key of the current manager, and set the search parameter to the current object's primary key value.
+			$pivotParams[$this->_manager->getDatabaseFieldName($this->_manager->getPrimaryKey())] = $this->{$this->_manager->getPrimaryKey()}; // Get the database field name for the primary key of the current manager, and set the search parameter to the current object's primary key value.
 			
 			/**
 			 * Get an instance of the pivot table manager, and retrieve the pivot records.
@@ -493,7 +493,7 @@ abstract class Model
 			 * look for in the foreign model.
 			 */
 			$foreignModelIds = [];
-			$foreignModelKeyPivotFieldName = $pivotManager->getObjectFieldName($model->getDatabaseFieldName($model->getPrimaryKey)); // Get the name of the database field for the primary key in the foreign model, then convert it to the object field name that will be used in the pivot model.
+			$foreignModelKeyPivotFieldName = $pivotManager->getObjectFieldName($model->getDatabaseFieldName($model->getPrimaryKey())); // Get the name of the database field for the primary key in the foreign model, then convert it to the object field name that will be used in the pivot model.
 			foreach($resultSet as $result) // For each pivot record...
 			{
 				$foreignModelIds[] = $result->$foreignModelKeyPivotFieldName; // Get the value from the pivot record that corresponds to a primary key value in the foreign manager, which is related to the current object.
@@ -502,7 +502,7 @@ abstract class Model
 			/**
 			 * Retrieve records that match.
 			 */
-			$params[$model->getPrimaryKey] = $foreignModelIds;
+			$params[$model->getPrimaryKey()] = $foreignModelIds;
 			$resultSet = $manager->get($params, $qty);
 			
 			/**
