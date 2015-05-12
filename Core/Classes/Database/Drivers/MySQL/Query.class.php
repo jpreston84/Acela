@@ -248,7 +248,6 @@ class Query extends Database\Drivers\Query
 		{
 			$value = $this->driver->safeString($value);
 		}
-		error_log('created value '.$value);
 		
 		return $value;
 	}
