@@ -244,6 +244,7 @@ class Query extends Database\Drivers\Query
 			and array_filter($value, 'is_int') == $value
 		)
 		{
+			error_log('identified numeric array');
 			$value = '('.implode(', ', $value).')';
 		}
 		else // Otherwise, treat this as a string...
