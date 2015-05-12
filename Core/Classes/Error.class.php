@@ -10,5 +10,4 @@ namespace Acela\Core;
  */
 class Error extends GlobalInstance
 {
-	
 }
