@@ -222,6 +222,7 @@ class Query extends Database\Drivers\Query
 	private function buildQueryWhereValue($value)
 	{
 		error_log('building query where value for '.print_r($value, true));
+		error_log(print_r(array_filter($value, 'is_int')), true);
 		
 		if(is_null($value))
 		{
