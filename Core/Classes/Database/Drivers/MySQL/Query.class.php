@@ -186,7 +186,7 @@ class Query extends Database\Drivers\Query
 			elseif(
 				$where['matchType'] === '='
 				and is_array($where['value'])
-				and array_filter($where['value'], 'is_int') == $where['value']
+				and array_filter($where['value'], 'is_numeric') == $where['value']
 			)
 			{
 				$where['matchType'] = 'IN';
@@ -221,9 +221,6 @@ class Query extends Database\Drivers\Query
 	 */
 	private function buildQueryWhereValue($value)
 	{
-		error_log('building query where value for '.print_r($value, true));
-		error_log('filtered '.print_r(array_filter($value, 'is_int'), true));
-		
 		if(is_null($value))
 		{
 			$value = 'NULL';
@@ -242,10 +239,9 @@ class Query extends Database\Drivers\Query
 		}
 		elseif(
 			is_array($value)
-			and array_filter($value, 'is_int') == $value
+			and array_filter($value, 'is_numeric') == $value
 		)
 		{
-			error_log('identified numeric array');
 			$value = '('.implode(', ', $value).')';
 		}
 		else // Otherwise, treat this as a string...
