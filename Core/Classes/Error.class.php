@@ -5,6 +5,8 @@
 
 namespace Acela\Core;
 
+use \Monolog;
+
 /**
  * Define error level constants.
  */
