@@ -114,7 +114,7 @@ class Error extends GlobalInstance
 		 */
 		if($levelNum >= ERROR_CRITICAL)
 		{
-			$additionalParameters['backtrace'] = debug_backtrace();
+			$additionalParameters['backtrace'] = debug_backtrace(false);
 		}
 		
 		$this->log->$methodName($message, $additionalParameters);

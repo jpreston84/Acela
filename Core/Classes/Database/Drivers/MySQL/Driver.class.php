@@ -72,7 +72,7 @@ class Driver extends Database\Drivers\Driver
 				1001,
 				[
 					'query' => $query,
-					'pdoErrorInfo' => $this->pdo->errorInfo,
+					'pdoErrorInfo' => $this->pdo->errorInfo(),
 				]
 			);
 		}
