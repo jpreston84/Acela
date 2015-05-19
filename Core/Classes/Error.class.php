@@ -35,7 +35,7 @@ class Error extends GlobalInstance
 	public function __construct()
 	{
 		$log = new Monolog\Logger('name');
-		$log->pushHandler(new Monolog\StreamHandler(__DIR__.'../../Logs/general.log', Monolog\Logger::WARNING));
+		$log->pushHandler(new Monolog\Handler\StreamHandler(__DIR__.'../../Logs/general.log', Monolog\Logger::WARNING));
 	}
 	
 	/**
