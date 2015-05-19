@@ -34,8 +34,8 @@ class Error extends GlobalInstance
 	 */
 	public function __construct()
 	{
-		$log = new Monolog\Logger('name');
-		$log->pushHandler(new Monolog\Handler\StreamHandler(__DIR__.'../../Logs/general.log', Monolog\Logger::WARNING));
+		$this->log = new Monolog\Logger('name');
+		$this->log->pushHandler(new Monolog\Handler\StreamHandler(__DIR__.'../../Logs/general.log', Monolog\Logger::WARNING));
 	}
 	
 	/**
