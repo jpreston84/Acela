@@ -33,6 +33,11 @@ foreach(glob(__DIR__.'/Functions/*.functions.php') as $filename)
 $GLOBALS['core'] = new Core;
 
 /**
+ * Set default error handler.
+ */
+set_error_handler('Error::phpError');
+
+/**
  * Load the database engine.
  */
 $core->db = new Database\Engine($core->config->database->default);
