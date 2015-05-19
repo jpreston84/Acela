@@ -8,7 +8,7 @@ require_once __DIR__.'/../Core/Core.php';
 $query = $core->db->query();
 
 $query
-	->table('users', 'u')
+	->table('usersFake', 'u')
 ;
 
 echo '<pre>'.$query->build().'</pre>';
