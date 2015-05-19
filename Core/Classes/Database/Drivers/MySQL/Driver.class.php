@@ -5,6 +5,8 @@
 
 namespace Acela\Core\Database\Drivers\MySQL;
 
+use \Acela\Core as Core;
+use \Acela\Core\Error as Error;
 use \Acela\Core\Database as Database;
 
 /**
@@ -65,9 +67,14 @@ class Driver extends Database\Drivers\Driver
 		 */
 		if($stmt === false)
 		{
-			error_log('There was a query error: '.$query.' -- '.print_r($this->pdo->errorInfo(), true));
-			error_log(print_r(debug_backtrace(false), true));
-			die();
+			Error::critical(
+				'There was a query error.',
+				1001,
+				[
+					'query' => $query,
+					'pdoErrorInfo' => $this->pdo->errorInfo,
+				]
+			);
 		}
 		
 		/**
