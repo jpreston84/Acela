@@ -30,12 +30,27 @@ class Error extends GlobalInstance
 	private $log = null;
 	
 	/**
+	 * @var \stdClass $config A configuration for the error handler.
+	 */
+	private $config = null;
+	
+	/**
 	 * Constructor - Creates the Monolog logger instance.
 	 */
-	public function __construct()
+	public function __construct($name = null)
 	{
-		$this->log = new Monolog\Logger('general');
-		$handler = new Monolog\Handler\StreamHandler(__DIR__.'/../../Logs/general.log', Monolog\Logger::WARNING);
+		/**
+		 * Set default name.
+		 */
+		if(is_null($name))
+		{
+			$name = 'default';
+		}
+		
+		$this->config = $GLOBALS['core']->config->error->$name;
+		
+		$this->log = new Monolog\Logger($this->config->name);
+		$handler = new Monolog\Handler\StreamHandler($this->config->path, Monolog\Logger::WARNING);
 		$handler->setFormatter(new Monolog\Formatter\LineFormatter(null, null, true));
 		$this->log->pushHandler($handler);
 	}
