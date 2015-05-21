@@ -5,10 +5,12 @@
 
 namespace Acela\Core\Database;
 
+use \Acela\Core;
+
 /**
  * Database handler class.
  */
-class Engine extends Singleton
+class Engine extends Core\Singleton
 {
 	/**
 	 * @var DriverTemplate $driver An instance of the database driver being used by this database engine instance.
