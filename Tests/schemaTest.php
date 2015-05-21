@@ -9,7 +9,7 @@ use \Acela\Core;
  
 require_once __DIR__.'/../Core/Core.php';
 
-$table = Core\Schema::get('users');
+$table = Core\Database\Engine::schema()->get('users');
 
 echo '<pre>';
 foreach($table as $field)
