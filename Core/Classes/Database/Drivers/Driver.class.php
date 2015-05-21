@@ -18,4 +18,11 @@ abstract class Driver
 	 * @return array An array of data about the table and its fields.
 	 */
 	abstract public function getTableInfo($tableName);
+	
+	/**
+	 * Get an appropriate schema object for this driver.
+	 * 
+	 * @return Schema The appropriate schema object for this driver.
+	 */
+	abstract public function schema();
 }

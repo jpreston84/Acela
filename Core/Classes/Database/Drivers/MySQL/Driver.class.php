@@ -254,6 +254,15 @@ class Driver extends Database\Drivers\Driver
 				$isNullable = false;
 			}
 			
+			/**
+			 * Check for auto increment.
+			 */
+			$autoIncrement = false;
+			if(stristr($result['EXTRA'], 'auto_increment'))
+			{
+				$autoIncrement = true;
+			}
+			
 			$tableInfo['fields'][$result['COLUMN_NAME']] = [
 				'name' => $result['COLUMN_NAME'],
 				'type' => $dataType,
@@ -262,6 +271,7 @@ class Driver extends Database\Drivers\Driver
 				'default' => $defaultValue,
 				'nullable' => $isNullable,
 				'primary' => ( $result['COLUMN_KEY'] === 'PRI' ? true : false ),
+				'autoIncrement' => $autoIncrement,
 			];
 		}
 		
@@ -288,5 +298,12 @@ class Driver extends Database\Drivers\Driver
 	{
 		$string = $this->pdo->quote($string);
 		return $string;
+	}
+	
+	public function schema()
+	{
+		$schema = Schema::getInstance();
+		$schema->driver = $this;
+		return $schema;
 	}
 }
