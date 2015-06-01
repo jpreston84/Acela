@@ -35,7 +35,7 @@ $GLOBALS['core'] = new Core;
 /**
  * Set default error handler.
  */
-set_error_handler('\Acela\Core\Error::phpError');
+// set_error_handler('\Acela\Core\Error::phpError');
 
 /**
  * Load the database engine.
