@@ -13,6 +13,10 @@ echo '<h1>Schema Test</h1>';
 
 $schema = Core\Database\Engine::schema();
 
+echo '<pre>';
+print_r($schema);
+echo '</pre>';
+
 die();
 
 // $table = Core\Database\Engine::schema()->get('users');
