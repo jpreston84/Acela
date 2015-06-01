@@ -11,6 +11,8 @@ require_once __DIR__.'/../Core/Core.php';
 
 echo '<h1>Schema Test</h1>';
 
+die();
+
 // $table = Core\Database\Engine::schema()->get('users');
 $table = Core\Database\Engine::schema();
 
