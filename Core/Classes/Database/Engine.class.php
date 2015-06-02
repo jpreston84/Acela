@@ -45,7 +45,7 @@ class Engine extends Core\Singleton
 	 * @param mixed $data The input for the database driver's ->rawQuery(), which is usually a string.
 	 * @return mixed The data returned from the database driver. This is usually an array.
 	 */
-	private function rawQuery($data)
+	protected function rawQuery($data)
 	{
 		return $this->driver->rawQuery($data);
 	}
@@ -55,7 +55,7 @@ class Engine extends Core\Singleton
 	 * 
 	 * @return mixed The ID of the last row inserted into the database.
 	 */
-	private function getLastInsertId()
+	protected function getLastInsertId()
 	{
 		return $this->driver->getLastInsertId();
 	}
@@ -66,7 +66,7 @@ class Engine extends Core\Singleton
 	 * @param string $tableName The name of the table to check.
 	 * @return bool Does the table exist or not?
 	 */
-	private function tableExists($tableName)
+	protected function tableExists($tableName)
 	{
 		return $this->driver->tableExists($tableName);
 	}
@@ -80,7 +80,7 @@ class Engine extends Core\Singleton
 	 * @param string $tableName The name of the table to get information about.
 	 * @return array An array of data about the table and its fields.
 	 */
-	private function getTableInfo($tableName)
+	protected function getTableInfo($tableName)
 	{
 		return $this->driver->getTableInfo($tableName);
 	}
@@ -90,7 +90,7 @@ class Engine extends Core\Singleton
 	 * 
 	 * @return Driver\Query A database query object.
 	 */
-	private function query()
+	protected function query()
 	{
 		$tmpQueryClass = __NAMESPACE__.'\Drivers\\'.$this->driver->config->driver.'\Query'; // Determine the full path of the appropriate Query class.
 		$query = new $tmpQueryClass(); // Instantiate the Query object.
@@ -103,7 +103,7 @@ class Engine extends Core\Singleton
 	/**
 	 * Return an appropriate Schema object for the driver.
 	 */
-	private function schema()
+	protected function schema()
 	{
 		return $this->driver->schema();
 	}
