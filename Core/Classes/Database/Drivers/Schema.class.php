@@ -11,7 +11,7 @@ use \Acela\Core\Database;
 /**
  * Template for database schema handlers.
  */
-class Schema extends Singleton
+class Schema extends Core\Singleton
 {
 	/**
 	 * @var Driver $driver A database driver instance.
