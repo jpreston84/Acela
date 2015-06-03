@@ -78,11 +78,14 @@ class Error extends GlobalInstance
 	 */
 	public function __call($name, $arguments)
 	{
-		$errorLevel = $this->getErrorLevel($name); // Get the numeric error level for the name provided.
-		if($errorLevel) // If this is a real error level, we should call ->addMessage() instead...
+		if(substr($name, 0, 3) == 'add')
 		{
-			array_unshift($arguments, $name);
-			$name = 'addMessage';
+			$errorLevel = $this->getErrorLevel($name); // Get the numeric error level for the name provided.
+			if($errorLevel) // If this is a real error level, we should call ->addMessage() instead...
+			{
+				array_unshift($arguments, $name);
+				$name = 'addMessage';
+			}
 		}
 		
 		return call_user_func_array([$this, $name], $arguments);
