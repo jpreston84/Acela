@@ -8,7 +8,7 @@ namespace Acela\Core;
  /**
  * A function to autoload classes and traits.
  * 
- * @param string $class The name of the class that needs to be loaded.
+ * @param string $class The name of the class or trait that needs to be loaded.
  */
 function autoloadClasses($class)
 {
@@ -38,6 +38,7 @@ function autoloadClasses($class)
 			);
 			$classNameComponents[count($classNameComponents) - 1] .= '.class.php';
 			$filename = __DIR__.'/../../'.implode('/', $classNameComponents);
+			error_log('Attempting to load '.$filename);
 			if(file_exists($filename))
 			{
 				require_once $filename;
@@ -54,6 +55,7 @@ function autoloadClasses($class)
 			);
 			$classNameComponents[count($classNameComponents) - 1] .= '.trait.php';
 			$filename = __DIR__.'/../../'.implode('/', $classNameComponents);
+			error_log('Attempting to load '.$filename);
 			if(file_exists($filename))
 			{
 				require_once $filename;
