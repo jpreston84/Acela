@@ -11,7 +11,7 @@ use \Acela\Core\Database;
 /**
  * Template for database schema tables.
  */
-class SchemaTable implements Iterator
+class SchemaTable implements \Iterator
 {
 	/**
 	 * Use the IterateItems trait.
