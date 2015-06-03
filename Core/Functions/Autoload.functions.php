@@ -22,45 +22,36 @@ function autoloadClasses($class)
 	 */
 	if(
 		$classNameComponents[0] == 'Acela'
+		and $classNameComponents[1] == 'Core'
 	)
 	{
 		array_shift($classNameComponents); // Shift off Acela.
+		array_shift($classNameComponents); // Shift off Core.
 
-		if($classNameComponents[0] == 'Core')
-		{
-			/**
-			 * Attempt to autoload class from classes folder.
-			 */
-			$classNameComponents = array_merge( // Add 'classes' as the second element of the file path.
-				array_slice($classNameComponents, 0, 1),
-				['Classes'],
-				array_slice($classNameComponents, 1)
-			);
-			$classNameComponents[count($classNameComponents) - 1] .= '.class.php';
-			$filename = __DIR__.'/../../'.implode('/', $classNameComponents);
-			error_log('Attempting to load '.$filename);
-			if(file_exists($filename))
-			{
-				require_once $filename;
-				return;
-			}
-			
-			/**
-			 * Attempt to autoload trait from traits folder.
-			 */
-			$classNameComponents = array_merge( // Add 'Traits' as the second element of the file path.
-				array_slice($classNameComponents, 0, 1),
-				['Traits'],
-				array_slice($classNameComponents, 1)
-			);
-			$classNameComponents[count($classNameComponents) - 1] .= '.trait.php';
-			$filename = __DIR__.'/../../'.implode('/', $classNameComponents);
-			error_log('Attempting to load '.$filename);
-			if(file_exists($filename))
-			{
-				require_once $filename;
-				return;
-			}
-		}
+		/**
+		 *  Attempt to autoload classes.
+		 */
+		$filename = __DIR__.'/../Classes/'.implode('/', $classNameComponents).'.class.php'; // Generate a class path like Core/Classes/Core.class.php
+		autoloadClassFile($filename);
+
+		/**
+		 *  Attempt to autoload traits.
+		 */
+		$filename = __DIR__.'/../Traits/'.implode('/', $classNameComponents).'.trait.php'; // Generate a trait path like Core/Traits/IterateItems.trait.php
+		autoloadClassFile($filename);
+	}
+}
+
+/**
+ *  A helper function to require the class or trait file once the path has been determined.
+ *  
+ *  @param string $filename The full path and filename of the file to be required.
+ */
+function autoloadClassFile($filename)
+{
+	error_log('Attempting to load '.$filename);
+	if(file_exists($filename))
+	{
+		require_once $filename;
 	}
 }
