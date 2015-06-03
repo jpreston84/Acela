@@ -80,7 +80,7 @@ class Error extends GlobalInstance
 	{
 		if(substr($name, 0, 3) == 'add')
 		{
-			$errorLevel = $this->getErrorLevel($name); // Get the numeric error level for the name provided.
+			$errorLevel = $this->getErrorLevel(substr($name, 0, 3)); // Get the numeric error level for the name provided.
 			if($errorLevel) // If this is a real error level, we should call ->addMessage() instead...
 			{
 				array_unshift($arguments, $name);
