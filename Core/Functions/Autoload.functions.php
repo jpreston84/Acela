@@ -32,13 +32,21 @@ function autoloadClasses($class)
 		 *  Attempt to autoload classes.
 		 */
 		$filename = __DIR__.'/../Classes/'.implode('/', $classNameComponents).'.class.php'; // Generate a class path like Core/Classes/Core.class.php
-		autoloadClassFile($filename);
+		$loaded = autoloadClassFile($filename);
+		if($loaded)
+		{
+			return;
+		}
 
 		/**
 		 *  Attempt to autoload traits.
 		 */
 		$filename = __DIR__.'/../Traits/'.implode('/', $classNameComponents).'.trait.php'; // Generate a trait path like Core/Traits/IterateItems.trait.php
-		autoloadClassFile($filename);
+		$loaded = autoloadClassFile($filename);
+		if($loaded)
+		{
+			return;
+		}
 	}
 }
 
@@ -53,5 +61,8 @@ function autoloadClassFile($filename)
 	if(file_exists($filename))
 	{
 		require_once $filename;
+		return true;
 	}
+	
+	return false;
 }
