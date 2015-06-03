@@ -57,7 +57,6 @@ function autoloadClasses($class)
  */
 function autoloadClassFile($filename)
 {
-	error_log('Attempting to load '.$filename);
 	if(file_exists($filename))
 	{
 		require_once $filename;
