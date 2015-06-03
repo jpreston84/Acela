@@ -89,8 +89,6 @@ class Error extends GlobalInstance
 			}
 		}
 		
-		error_log('Calling function '.$name);
-		
 		return call_user_func_array([$this, $name], $arguments);
 	}
 
