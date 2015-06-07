@@ -78,7 +78,7 @@ class Error extends GlobalInstance
 	 */
 	public function __call($name, $arguments)
 	{
-		if(substr($name, 0, 3) == 'add')
+		if(substr($name, 0, 3) == 'add') // If a method name like ->addWarning() was passed...
 		{
 			$name = substr($name, 3);
 			$errorLevel = $this->getErrorLevel($name); // Get the numeric error level for the name provided.
@@ -87,6 +87,19 @@ class Error extends GlobalInstance
 				array_unshift($arguments, $name);
 				$name = 'addMessage';
 			}
+		}
+		elseif($this->getErrorLevel($name)) // If the function name passed is in fact an error level...
+		{
+			array_unshift($arguments, $name);
+			$name = 'addMessage';
+		}
+		elseif($name === 'phpError')
+		{
+			// Do nothing -- just pass the call through.
+		}
+		else
+		{
+			$this->critical('The error handler does not have the method "'.$name.'".');
 		}
 		
 		return call_user_func_array([$this, $name], $arguments);

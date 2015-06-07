@@ -11,7 +11,7 @@ use \Acela\Core\Database;
 /**
  * Template for database schema table fields.
  */
-class SchemaField
+abstract class SchemaField
 {
 	/**
 	 * @var SchemaTable $schemaTable The SchemaTable this field belongs to.
@@ -19,42 +19,199 @@ class SchemaField
 	public $schemaTable;
 	
 	/**
-	 * @var string $name The name of the field.
+	 *  @var array $properties The properties of this field.
 	 */
-	public $name;
+	protected $properties = [];
 	
 	/**
-	 * @var string $type The data type in the field.
+	 *  @var array $originalProperties The properties of this field in its original state.
 	 */
-	public $type;
+	protected $originalProperties = [];
 	
 	/**
-	 * @var int $length For string types, the max length of the string. For int types, the number of bytes used.
+	 *  @var bool $new Is this a new field?
 	 */
-	public $length;
+	public $new = true;
+
+	/**
+	 *  @var bool $deleted Has this field been deleted from the schema?
+	 */
+	public $deleted = false;
+
+	/**
+	 *  @var bool $altered Have any of the properties of this object been altered?
+	 */
+	protected $altered = false;
+
+	/**
+	 * Magic Method - Get the value of a property of this object.
+	 * 
+	 * @param string $name The name of the property to get.
+	 * @return mixed The value of the property.
+	 */
+	public function __get($name)
+	{
+		if(isset($this->properties[$name]))
+		{
+			return $this->properties[$name];
+		}
+		else
+		{
+			Core\Error::warning('The value of property "'.$name.'" is undefined.');
+		}
+	}
+
+	/**
+	 * Magic Method - Set a property of this object.
+	 * 
+	 * @param string $name The name of the property to set.
+	 * @param mixed $value The value of the property.
+	 */
+	public function __set($name, $value)
+	{
+		$this->properties[$name] = $value; // Set the property.
+		$this->altered = true; // The object has been altered.
+	}
 	
 	/**
-	 * @var bool $signed Is this a signed field or not? Has no value for non-integer fields.
+	 * Make the "original state" of the object match the current state.
+	 * 
+	 * This will turn off the ->altered flag and copy all properties to
+	 * ->originalProperties.
 	 */
-	public $signed = true;
+	public function setOriginalState()
+	{
+		$this->altered = false;
+		$this->originalProperties = $this->properties;
+	}
 	
 	/**
-	 * @var mixed $default The default value for this field in new records.
+	 *  Make the current field as the primary key.
+	 *  
+	 *  @return A reference to the current field.
 	 */
-	public $default = null;
+	public function primary()
+	{
+		$this->properties['primary'] = true;
+		$this->altered = true;
+		
+		/**
+		 *  Unset primary status on all other fields.
+		 */
+		foreach($this->schemaTable as $schemaField)
+		{
+			if($schemaField->primary and $schemaField !== $this)
+			{
+				$schemaField->primary = false;
+			}
+		}
+		
+		return $this;
+	}
+
+	/**
+	 *  Make the current field an auto-increment field.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function autoIncrement()
+	{
+		$this->properties['autoIncrement'] = true;
+		$this->altered = true;
+		
+		return $this;
+	}
+
+	/**
+	 *  Make the current field a signed field.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function signed()
+	{
+		$this->properties['signed'] = true;
+		$this->altered = true;
+		
+		return $this;
+	}
+
+	/**
+	 *  Make the current field an unsigned field.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function unsigned()
+	{
+		$this->properties['signed'] = false;
+		$this->altered = true;
+		
+		return $this;
+	}
+
+	/**
+	 *  Make the current field a nullable field.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function nullable()
+	{
+		$this->properties['nullable'] = true;
+		$this->altered = true;
+		
+		return $this;
+	}
+
+	/**
+	 *  Make the current field a non-nullable field.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function nonNullable()
+	{
+		$this->properties['nullable'] = false;
+		$this->altered = true;
+		
+		return $this;
+	}
 	
 	/**
-	 * @var bool $nullable Can this field store null values?
+	 *  Remove this field from the schema.
+	 *  
+	 *  @return A reference to the current field.
 	 */
-	public $nullable = true;
+	public function delete()
+	{
+		/**
+		 *  Check to see if this field is the only remaining non-deleted field.
+		 */
+		$remainingFields = 0;
+		foreach($this->schemaTable as $schemaField) // For each field in the table...
+		{
+			if(
+				$schemaField->name != $this->properties['name'] // If the name of the iterated field does not match the name of the current object...
+				and !$schemaField->deleted // And the iterated field has not been deleted...
+			)
+			{
+				$remainingFields++;
+			}
+		}
+		if($remainingFields == 0) // If there are no other remaining fields, we can't delete this one...
+		{
+			Core\Error::critical('Unable to delete the field "'.$this->properties['name'].'" from table "'.$this->schemaTable->name.'", because it is the last field in that table. Use SchemaTable::delete() instead.');
+		}
 	
+		$this->deleted = true;
+		$this->altered = true;
+	}
+
 	/**
-	 * @var bool $primary Is this field the primary key?
+	 *  Undelete this field from the schema.
+	 *  
+	 *  @return A reference to the current field.
 	 */
-	public $primary = false;
-	
-	/**
-	 * @var bool $autoIncrement Is this field an auto-increment field? Has no effect for non-integer fields.
-	 */
-	public $autoIncrement = false;
+	public function undelete()
+	{
+		$this->deleted = false;
+		$this->altered = true;
+	}
 }

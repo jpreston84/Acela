@@ -9,5 +9,6 @@
 	<files>
 		<directory>.</directory>
 		<ignore>Vendor/*</ignore>
+		<ignore>Tests/*</ignore>
 	</files>
 </phpdoc>

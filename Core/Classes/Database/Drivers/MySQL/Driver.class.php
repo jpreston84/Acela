@@ -188,7 +188,7 @@ class Driver extends Database\Drivers\Driver
 			elseif($result['DATA_TYPE'] === 'tinyint')
 			{
 				$dataType = 'int';
-				$byteLength = 2;
+				$byteLength = 1;
 				$signed = ( stristr($result['COLUMN_TYPE'], 'unsigned') ? false : true );
 			}
 			elseif($result['DATA_TYPE'] === 'varchar')
