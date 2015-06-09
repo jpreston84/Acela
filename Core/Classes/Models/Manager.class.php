@@ -10,8 +10,13 @@ use \Acela\Core as Core;
 /**
  *  The data model manager template.
  */
-abstract class Manager extends Core\GlobalInstance
+abstract class Manager
 {
+	/**
+	 *  Include GlobalInstance functionality.
+	 */
+	use Core\GlobalInstance;
+
 	/**
 	 * @var string $modelName The name of the model.
 	 */

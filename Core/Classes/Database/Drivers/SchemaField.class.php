@@ -108,6 +108,19 @@ abstract class SchemaField
 		
 		return $this;
 	}
+	
+	/**
+	 *  Make the current field not the primary key.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function notPrimary()
+	{
+		$this->properties['primary'] = false;
+		$this->altered = true;
+		
+		return $this;
+	}
 
 	/**
 	 *  Make the current field an auto-increment field.
@@ -117,6 +130,18 @@ abstract class SchemaField
 	public function autoIncrement()
 	{
 		$this->properties['autoIncrement'] = true;
+		$this->altered = true;
+		
+		return $this;
+	}
+	/**
+	 *  Make the current field not an auto-increment field.
+	 *  
+	 *  @return A reference to the current field.
+	 */
+	public function notAutoIncrement()
+	{
+		$this->properties['autoIncrement'] = false;
 		$this->altered = true;
 		
 		return $this;
@@ -162,11 +187,11 @@ abstract class SchemaField
 	}
 
 	/**
-	 *  Make the current field a non-nullable field.
+	 *  Make the current field not a nullable field.
 	 *  
 	 *  @return A reference to the current field.
 	 */
-	public function nonNullable()
+	public function notNullable()
 	{
 		$this->properties['nullable'] = false;
 		$this->altered = true;
@@ -202,6 +227,8 @@ abstract class SchemaField
 	
 		$this->deleted = true;
 		$this->altered = true;
+
+		return $this;
 	}
 
 	/**
@@ -213,5 +240,37 @@ abstract class SchemaField
 	{
 		$this->deleted = false;
 		$this->altered = true;
+
+		return $this;
+	}
+
+	/**
+	 *  Make the current field the first field in the table.
+	 *  
+	 *  @return A reference to the current object.
+	 */
+	public function first()
+	{
+		$this->properties['positionFirst'] = true;
+		$this->properties['positionAfter'] = false;
+		$this->altered = true;
+		
+		return $this;
+	}
+
+	/**
+	 *  Position the current field after the specified field.
+	 *  
+	 *  @param string $fieldName The name of the field after which the current field should be positioned.
+	 *  
+	 *  @return A reference to the current object.
+	 */
+	public function after($fieldName)
+	{
+		$this->properties['positionFirst'] = false;
+		$this->properties['positionAfter'] = $fieldName;
+		$this->altered = true;
+		
+		return $this;
 	}
 }

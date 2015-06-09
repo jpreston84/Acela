@@ -89,41 +89,50 @@ class addBackupToModel extends Core\ACLI\Command
 		$backupFieldName = Core\wordSingularize($tableName).'VersionId';
 		
 		/**
+		 *  Get SchemaTable.
+		 */
+		$schemaTable = Core\Schema::get($tableName);
+		
+		/**
 		 * Create backup table.
 		 */
 		echo 'Copying table `'.$tableName.'` to `'.$backupTableName.'`...';
-		$query = 'CREATE TABLE `'.$backupTableName.'` LIKE `'.$tableName.'`;';
-		$GLOBALS['core']->db->rawQuery($query);
+		$schemaTableBackup = $schemaTable->copy($backupTableName);
 		echo 'done.'.PHP_EOL;
 
 		/**
 		 * Remove auto increment.
 		 */
 		echo 'Removing auto-increment on field `'.$idField.'` in table `'.$backupTableName.'`...';
-		$query = 'ALTER TABLE `'.$backupTableName.'` MODIFY `'.$idField.'` BIGINT NOT NULL;';
-		$GLOBALS['core']->db->rawQuery($query);
+		$schemaTableBackup->get($idField)->notAutoIncrement();
 		echo 'done.'.PHP_EOL;
 
 		/**
 		 * Remove primary key.
 		 */
 		echo 'Removing primary key on table `'.$backupTableName.'`...';
-		$query = 'ALTER TABLE `'.$backupTableName.'` DROP PRIMARY KEY;';
-		$GLOBALS['core']->db->rawQuery($query);
+		$schemaTableBackup->get($idField)->notPrimary();
 		echo 'done.'.PHP_EOL;
+
 
 		/**
 		 * Add new version ID field.
 		 */
 		echo 'Adding field `'.$backupFieldName.'` on table `'.$backupTableName.'`...';
-		$query = 'ALTER TABLE `'.$backupTableName.'` ADD `'.$backupFieldName.'` BIGINT PRIMARY KEY AUTO_INCREMENT FIRST;';
-		$GLOBALS['core']->db->rawQuery($query);
+		$schemaTableBackup->bigint($backupFieldName)->primary()->autoIncrement()->first();
+		echo 'done.'.PHP_EOL;		
+
+		/**
+		 * Saving changes.
+		 */
+		echo 'Saving changes...';
+		$schemaTableBackup->save();
 		echo 'done.'.PHP_EOL;		
 
 		/**
 		 * All done.
 		 */
-		echo 'Complete.'.PHP_EOL;
+		echo 'Operation complete.'.PHP_EOL;
 		
 		return;
 	}

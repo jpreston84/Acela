@@ -37,6 +37,7 @@ class Engine extends Core\Singleton
 		 */
 		$tmpDriverClass = __NAMESPACE__.'\Drivers\\'.$config->driver.'\Driver';
 		$this->driver = new $tmpDriverClass($config);
+		$this->driver->engine = $this;
 	}
 	
 	/**

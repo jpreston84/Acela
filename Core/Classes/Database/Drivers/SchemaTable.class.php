@@ -79,6 +79,8 @@ abstract class SchemaTable implements \Iterator
 			$schemaField->nullable = $field['nullable'];
 			$schemaField->primary = $field['primary'];
 			$schemaField->autoIncrement = $field['autoIncrement'];
+			$schemaField->positionFirst = $field['positionFirst'];
+			$schemaField->positionAfter = $field['positionAfter'];
 			$schemaField->setOriginalState(); // Set this as the original state of the field, so that any future changes will indicate that the field has been altered.
 			$schemaField->new = false; // This is not a new field.
 			
@@ -153,7 +155,7 @@ abstract class SchemaTable implements \Iterator
 	 *  @param bool $autoIncrement Is this field an auto-increment field?
 	 *  @return The completed SchemaField.
 	 */
-	public function field($name, $type = null, $length = null, $signed = null, $default = null, $nullable = false, $primary = false, $autoIncrement = false)
+	public function field($name, $type = null, $length = null, $signed = null, $default = null, $nullable = false, $primary = false, $autoIncrement = false, $position = false)
 	{
 		/**
 		 *  Generate a new SchemaField.
@@ -171,6 +173,7 @@ abstract class SchemaTable implements \Iterator
 		$schemaField->nullable = $nullable;
 		$schemaField->primary = $primary;
 		$schemaField->autoIncrement = $autoIncrement;
+		$schemaField->position = $position;
 
 		/**
 		 *  Add the field to the stack of fields.

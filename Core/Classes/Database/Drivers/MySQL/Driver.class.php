@@ -152,7 +152,7 @@ class Driver extends Database\Drivers\Driver
 		 * Store the results.
 		 */
 		$tableInfo['fields'] = [];
-		foreach($resultSet as $result)
+		foreach($resultSet as $num => $result)
 		{
 			unset($dataType);
 			unset($byteLength);
@@ -272,7 +272,14 @@ class Driver extends Database\Drivers\Driver
 				'nullable' => $isNullable,
 				'primary' => ( $result['COLUMN_KEY'] === 'PRI' ? true : false ),
 				'autoIncrement' => $autoIncrement,
+				'positionFirst' => ( $num == 0 ? true : false ),
+				'positionAfter' => ( $num == 0 ? false : $previousFieldName ),
 			];
+			
+			/**
+			 *  Set previous field name so we can use it for positionAfter.
+			 */
+			$previousFieldName = $result['COLUMN_NAME'];
 		}
 		
 		return $tableInfo;

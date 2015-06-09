@@ -8,14 +8,19 @@ namespace Acela\Core;
 /**
  * A base class for Singleton classes.
  * 
- * This expands the GlobalInstance class, adding the ability to call methods
+ * This expands the GlobalInstance trait, adding the ability to call methods
  * of a global instance via static operators. This is not a restricted
  * singleton, because you could technically create multiple instances of it.
  * When implementing this class, all methods which need to be accessible from
  * static context should be declared as private or protected.
  */
-abstract class Singleton extends GlobalInstance
+abstract class Singleton
 {
+	/**
+	 *  Use GlobalInstance functionality.
+	 */
+	use GlobalInstance;
+
 	/**
 	 * Magic Method - Call static function. When a method is called statically, the
 	 * global instance is located, and the function call is passed on.

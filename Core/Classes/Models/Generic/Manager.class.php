@@ -5,6 +5,7 @@
 
 namespace Acela\Core\Models\Generic;
 
+use \Acela\Core as Core;
 use \Acela\Core\Models as Models;
 
 /**
@@ -13,20 +14,32 @@ use \Acela\Core\Models as Models;
 class Manager extends Models\Manager
 {
 	/**
+	 *  Override the Manager template's ->getInstance() method.
+	 *  
+	 *  Unlike all other managers, the generic manager will only ever be
+	 *  instantiated from \Acela\Core\Model->getInstance(), and will always need an
+	 *  additional parameter. Therefore, the normal inherited ->getInstance() method
+	 *  should never be used, and will return a critical error. Instead, the method
+	 *  ->getInstanceOf($name) will be used.
+	 */
+	public static function getInstance()
+	{
+		Core\Error::critical('You cannot directly instantiate the Generic model manager. Please use Core\Model::getInstance($name) instead.');
+	}
+
+	/**
 	 * Return the global instance of this class.
 	 * 
-	 * It is important to note that this is not the only means of creating an
-	 * instance of the manager. However, it is recommended that the global
-	 * instance be used whenever possible.
+	 * Please see the documentation for \Acela\Core\Models\Manager::getInstance().
 	 * 
-	 * Additionally, this particular ->getInstance() method takes an optional
-	 * parameter specifying the name of the model, which is not found in the parent
-	 * class version of this method.
+	 * Additionally, this particular method takes a required parameter
+	 * specifying the name of the model, which is not found in the parent class
+	 * version of this method.
 	 * 
 	 * @param string $name The name of the model for which to get a global instance of a manager.
 	 * @return Manager A global instance of this class.
 	 */
-	public static function getInstance($name)
+	public static function getInstanceOf($name)
 	{
 		static $instances = [];
 		

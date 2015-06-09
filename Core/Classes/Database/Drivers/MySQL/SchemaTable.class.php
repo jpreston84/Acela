@@ -15,6 +15,36 @@ use \Acela\Core\Database\Drivers;
 class SchemaTable extends Drivers\SchemaTable
 {
 	/**
+	 *  Copy a table.
+	 *  
+	 *  @param string $tableName The name of the new table to be created.
+	 *  @return SchemaTable The new table.
+	 */
+	public function copy($tableName)
+	{
+		/**
+		 *  Verify destination table does not exist.
+		 */
+		if($this->schema->driver->tableExists($tableName))
+		{
+			Core\Error::critical('Unable to copy table "'.$this->name.'" because destination table "'.$tableName.'" already exists.');
+		}
+	
+		/**
+		 *  Create a new schema table.
+		 */
+		$query = 'CREATE TABLE `'.$tableName.'` LIKE `'.$this->name.'`;';
+		$this->schema->driver->engine->rawQuery($query); // Run the database query, creating the table.
+
+		/**
+		 *  Load the new schema table.
+		 */
+		$schemaTable = $this->schema->get($tableName);
+		
+		return $schemaTable;
+	}
+
+	/**
 	 *  Get a complete MySQL statement to change or generate this table.
 	 *  
 	 *  @return string The completed SQL statement which will make the necessary changes to this table.
@@ -72,13 +102,21 @@ class SchemaTable extends Drivers\SchemaTable
 		/**
 		 *  Add field changes.
 		 */
-		$query .= '('.$changes.')';
+		if(!empty($changes))
+		{
+			$query .= '('.$changes.')';
+		}
 		
 		/**
 		 *  End query.
 		 */
 		$query .= ';';
 		
-		echo $query;
+		/**
+		 *  Run the query.
+		 */
+		$this->schema->driver->engine->rawQuery($query);
+		
+		return;
 	}
 }

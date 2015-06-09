@@ -22,8 +22,13 @@ define('ERROR_EMERGENCY', 600);
 /**
  * A class for handling errors.
  */
-class Error extends GlobalInstance
+class Error
 {
+	/**
+	 *  Use GlobalInstance functionality.
+	 */
+	use GlobalInstance;
+
 	/**
 	 * @var Monolog\Logger $log A Monolog Logger instance.
 	 */

@@ -165,5 +165,22 @@ class Schema extends Core\Singleton implements \Iterator
 		 *  Delete the table.
 		 */
 		$schemaTable->delete();
+		
+		return $this;
+	}
+	
+	/**
+	 *  Save all tables in the current schema.
+	 *  
+	 *  @return A reference to the current object.
+	 */
+	protected function save()
+	{
+		foreach($this->items as $schemaTable)
+		{
+			$schemaTable->save();
+		}
+	
+		return $this;
 	}
 }

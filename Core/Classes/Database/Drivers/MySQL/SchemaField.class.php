@@ -68,7 +68,7 @@ class SchemaField extends Drivers\SchemaField
 			return;
 		}
 		
-		$query .= ' `'.$this->properties['name'].'` '.$this->getMySQLDefinitionDataType().' '.$this->getMySQLDefinitionNullable().' '.$this->getMySQLDefinitionDefaultValue().' '.$this->getMySQLDefinitionAutoIncrement().' '.$this->getMySQLDefinitionPrimaryKey();
+		$query .= ' `'.$this->properties['name'].'` '.$this->getMySQLDefinitionDataType().' '.$this->getMySQLDefinitionNullable().' '.$this->getMySQLDefinitionDefaultValue().' '.$this->getMySQLDefinitionAutoIncrement().' '.$this->getMySQLDefinitionPrimaryKey().' '.$this->getMySQLDefinitionPosition();
 		
 		return $query;
 	}
@@ -193,7 +193,11 @@ class SchemaField extends Drivers\SchemaField
 	 */
 	private function getMySQLDefinitionDefaultValue()
 	{
-		if($this->properties['default'] === true)
+		if($this->properties['autoIncrement'] === true) // If this is an auto-increment column, no default value is allowed...
+		{
+			return; // Return an empty string, indicating no default value.
+		}
+		elseif($this->properties['default'] === true)
 		{
 			return 'DEFAULT TRUE';
 		}
@@ -240,5 +244,21 @@ class SchemaField extends Drivers\SchemaField
 			return 'PRIMARY KEY';
 		}
 	}
-
+	
+	/**
+	 *  Get the MySQL definition string for the position of this field.
+	 *  
+	 *  @return The MySQL definition string.
+	 */
+	private function getMySQLDefinitionPosition()
+	{
+		if($this->properties['positionFirst'])
+		{
+			return 'FIRST';
+		}
+		elseif(!empty($this->properties['positionAfter']))
+		{
+			return 'AFTER `'.$this->properties['positionAfter'].'`';
+		}
+	}
 }
