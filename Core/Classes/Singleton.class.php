@@ -44,6 +44,13 @@ abstract class Singleton
 	 */
 	public function __call($name, $arguments)
 	{
-		return call_user_func_array([$this, $name], $arguments);
+		if(method_exists($this, $name))
+		{
+			return call_user_func_array([$this, $name], $arguments);
+		}
+		else
+		{
+			Error::critical('Call to undefined method "'.$name.'" in class "'.get_called_class().'".');
+		}
 	}
 }

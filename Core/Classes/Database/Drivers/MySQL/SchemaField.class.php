@@ -68,7 +68,7 @@ class SchemaField extends Drivers\SchemaField
 			return;
 		}
 		
-		$query .= ' `'.$this->properties['name'].'` '.$this->getMySQLDefinitionDataType().' '.$this->getMySQLDefinitionNullable().' '.$this->getMySQLDefinitionDefaultValue().' '.$this->getMySQLDefinitionAutoIncrement().' '.$this->getMySQLDefinitionPrimaryKey().' '.$this->getMySQLDefinitionPosition();
+		$query .= ' `'.$this->properties['name'].'` '.$this->getMySQLDefinitionDataType().' '.$this->getMySQLDefinitionNullable().' '.$this->getMySQLDefinitionDefaultValue().' '.$this->getMySQLDefinitionAutoIncrement().' '.$this->getMySQLDefinitionPosition();
 		
 		return $query;
 	}
@@ -135,6 +135,14 @@ class SchemaField extends Drivers\SchemaField
 		if($this->properties['type'] === 'text' and $this->properties['length'] < 2^8 - 1)
 		{
 			return 'VARCHAR('.$this->properties['length'].')';
+		}
+		
+		/**
+		 *  Boolean type.
+		 */
+		if($this->properties['type'] === 'boolean')
+		{
+			return 'BOOLEAN';
 		}
 		
 		/**
@@ -209,9 +217,21 @@ class SchemaField extends Drivers\SchemaField
 		{
 			return 'DEFAULT NULL';
 		}
+		elseif(empty($this->properties['default']) and $this->properties['type'] === 'datetime')
+		{
+			return 'DEFAULT "0000-00-00 00:00:00"';
+		}
+		elseif(empty($this->properties['default']) and $this->properties['type'] === 'boolean')
+		{
+			return 'DEFAULT FALSE';
+		}
 		elseif($this->properties['type'] === 'int')
 		{
 			return 'DEFAULT '.(int) $this->properties['default'];
+		}
+		elseif($this->properties['type'] === 'boolean')
+		{
+			return 'DEFAULT '.( ((bool) $this->properties['default']) ? 'TRUE' : 'FALSE' );
 		}
 		else // Otherwise, make the string safe and return it...
 		{
@@ -228,20 +248,28 @@ class SchemaField extends Drivers\SchemaField
 	{
 		if($this->properties['autoIncrement'])
 		{
-			return 'AUTO_INCREMENT';
-		}
-	}
-
-	/**
-	 *  Get the MySQL definition string for the primary key status of this field.
-	 *  
-	 *  @return The MySQL definition string.
-	 */
-	private function getMySQLDefinitionPrimaryKey()
-	{
-		if($this->properties['primary'])
-		{
-			return 'PRIMARY KEY';
+			/**
+			 *  Unset PRIMARY KEY constraint.
+			 *  
+			 *  In MySQL, the PRIMARY KEY must be declared at the same time as the
+			 *  AUTO_INCREMENT property. Therefore, we will declare the key here and mark
+			 *  the constraint as unaltered so it won't be created via another ALTER TABLE
+			 *  query later.
+			 */
+			foreach($this->schemaTable->constraints as $schemaConstraint) // Iterate through each constraint...
+			{
+				if(
+					$schemaConstraint->type == 'primary' // If this is the primary key constraint...
+					and $schemaConstraint->deleted === false // This constraint hasn't been deleted...
+					and $schemaConstraint->fieldNames[0] == $this->name // And it's using the field name of the current field...
+				)
+				{
+					$schemaConstraint->setOriginalState(); // Mark this constraint as unaltered/saved.
+				}
+			}
+			unset($schemaConstraint);
+		
+			return 'AUTO_INCREMENT PRIMARY KEY';
 		}
 	}
 	
@@ -252,7 +280,7 @@ class SchemaField extends Drivers\SchemaField
 	 */
 	private function getMySQLDefinitionPosition()
 	{
-		if($this->properties['positionFirst'])
+		if(!empty($this->properties['positionFirst']))
 		{
 			return 'FIRST';
 		}

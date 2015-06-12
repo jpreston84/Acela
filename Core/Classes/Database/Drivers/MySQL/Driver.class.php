@@ -69,7 +69,7 @@ class Driver extends Database\Drivers\Driver
 		{
 			Error::critical(
 				'There was a query error.',
-				1001,
+				null,
 				[
 					'query' => $query,
 					'pdoErrorInfo' => $this->pdo->errorInfo(),
@@ -133,23 +133,22 @@ class Driver extends Database\Drivers\Driver
 		$tableInfo = [];
 		
 		/**
-		 * Run a query to get information.
+		 * Run a query to get field information.
 		 */
 		$query = '
 			SELECT
 				*
 			FROM
-				`information_schema`.`COLUMNS` AS c
+				`information_schema`.`COLUMNS`
 			WHERE
 				`TABLE_SCHEMA` = '.$this->pdo->quote($this->config->database).'
 				AND `TABLE_NAME` = '.$this->pdo->quote($tableName).'
 			;
 		';
-		
 		$resultSet = $this->rawQuery($query);
 		
 		/**
-		 * Store the results.
+		 * Store the field results.
 		 */
 		$tableInfo['fields'] = [];
 		foreach($resultSet as $num => $result)
@@ -161,7 +160,11 @@ class Driver extends Database\Drivers\Driver
 			/**
 			 * Data types.
 			 */
-			if($result['DATA_TYPE'] === 'bigint')
+			if($result['COLUMN_TYPE'] === 'tinyint(1)')
+			{
+				$dataType = 'boolean';
+			}
+			elseif($result['DATA_TYPE'] === 'bigint')
 			{
 				$dataType = 'int';
 				$byteLength = 8;
@@ -270,7 +273,6 @@ class Driver extends Database\Drivers\Driver
 				'signed' => ( !empty($signed) ? true : false ),
 				'default' => $defaultValue,
 				'nullable' => $isNullable,
-				'primary' => ( $result['COLUMN_KEY'] === 'PRI' ? true : false ),
 				'autoIncrement' => $autoIncrement,
 				'positionFirst' => ( $num == 0 ? true : false ),
 				'positionAfter' => ( $num == 0 ? false : $previousFieldName ),
@@ -281,6 +283,69 @@ class Driver extends Database\Drivers\Driver
 			 */
 			$previousFieldName = $result['COLUMN_NAME'];
 		}
+		
+		/**
+		 * Run a query to get constraint information.
+		 */
+		$query = '
+			SELECT
+				*
+			FROM
+				`information_schema`.`STATISTICS`
+			WHERE
+				`TABLE_SCHEMA` = '.$this->pdo->quote($this->config->database).'
+				AND `TABLE_NAME` = '.$this->pdo->quote($tableName).'
+			;
+		';
+		$resultSet = $this->rawQuery($query);
+
+		/**
+		 * Store the constraint results.
+		 */
+		$tableInfo['constraints'] = [];
+		foreach($resultSet as $num => $result)
+		{
+			/**
+			 *  Throw an error for unhandled index types.
+			 */
+			if($result['INDEX_TYPE'] !== 'BTREE')
+			{
+				Core\Error::critical('Unable to load table "'.$tableName.'" because it has one or more indexes which are not BTREE indexes.');
+			}
+			
+			/**
+			 *  Check whether this is just an additional field for an existing index.
+			 */
+			if(!empty($tableInfo['constraints'][$result['INDEX_NAME']]))
+			{
+				$tableInfo['constraints'][$result['INDEX_NAME']][] = $result['COLUMN_NAME'];
+				continue;
+			}
+		
+			/**
+			 *  Constraint types.
+			 */
+			if($result['INDEX_NAME'] === 'PRIMARY') // Primary Keys...
+			{
+				$constraintType = 'primary';
+				$unique = true;
+				$fieldNames = [ $result['COLUMN_NAME'] ];
+			}
+			else
+			{
+				$constraintType = 'index';
+				$unique = !((bool) $result['NON_UNIQUE']);
+				$fieldNames = [ $result['COLUMN_NAME'] ];
+			}
+			
+			$tableInfo['constraints'][$result['INDEX_NAME']] = [
+				'name' => $result['INDEX_NAME'],
+				'type' => $constraintType,
+				'unique' => $unique,
+				'fieldNames' => $fieldNames,
+			];
+		}
+
 		
 		return $tableInfo;
 	}

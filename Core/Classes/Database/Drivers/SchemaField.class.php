@@ -57,7 +57,7 @@ abstract class SchemaField
 		}
 		else
 		{
-			Core\Error::warning('The value of property "'.$name.'" is undefined.');
+			Core\Error::critical('The value of property "'.$name.'" is undefined.');
 		}
 	}
 
@@ -90,34 +90,22 @@ abstract class SchemaField
 	 *  
 	 *  @return A reference to the current field.
 	 */
-	public function primary()
+	public function primaryKey()
 	{
-		$this->properties['primary'] = true;
-		$this->altered = true;
-		
-		/**
-		 *  Unset primary status on all other fields.
-		 */
-		foreach($this->schemaTable as $schemaField)
-		{
-			if($schemaField->primary and $schemaField !== $this)
-			{
-				$schemaField->primary = false;
-			}
-		}
+		$this->schemaTable->primaryKey($this->name);
 		
 		return $this;
 	}
 	
 	/**
-	 *  Make the current field not the primary key.
+	 *  Add an index on this field.
 	 *  
 	 *  @return A reference to the current field.
+
 	 */
-	public function notPrimary()
+	public function index()
 	{
-		$this->properties['primary'] = false;
-		$this->altered = true;
+		$this->schemaTable->index($this->name, [ $this->name ]);
 		
 		return $this;
 	}
@@ -134,6 +122,7 @@ abstract class SchemaField
 		
 		return $this;
 	}
+	
 	/**
 	 *  Make the current field not an auto-increment field.
 	 *  

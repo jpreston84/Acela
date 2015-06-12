@@ -5,8 +5,6 @@
 
 namespace Acela\Core;
 
-use \Acela\Core;
-
 /**
  * The main schema accessor.
  */

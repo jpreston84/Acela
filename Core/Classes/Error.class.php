@@ -154,9 +154,35 @@ class Error
 		if($levelNum >= ERROR_CRITICAL)
 		{
 			$additionalParameters['backtrace'] = debug_backtrace(false);
+			
+			/**
+			 *  Clean up the backtrace.
+			 *  
+			 *  We want to remove all backtrace elements relevant to the error logger.
+			 */
+			foreach($additionalParameters['backtrace'] as $key => $param)
+			{
+				if(
+					(!empty($param['file']) and $param['file'] == __FILE__) // If this part of the backtrace took place in the error logger file...
+					or (!empty($param['class']) and $param['class'] == get_class()) // Or this part of the backtrace took place in the \Acela\Core\Error class (this class)...
+				)
+				{
+					unset($additionalParameters['backtrace'][$key]);
+				}
+			}
 		}
 		
-		$this->log->$methodName($message, $additionalParameters);
+		$message .= PHP_EOL.'Extra Data:'.PHP_EOL.print_r($additionalParameters, true);
+		
+		$this->log->$methodName($message);
+		
+		/**
+		 *  If in CLI mode, echo the error to the console.
+		 */
+		if(ACELA_MODE === 'cli')
+		{
+			echo $message.PHP_EOL;
+		}
 		
 		/**
 		 * Terminate execution if this is critical or higher.

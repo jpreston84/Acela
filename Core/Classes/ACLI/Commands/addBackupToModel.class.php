@@ -62,6 +62,11 @@ class addBackupToModel extends Core\ACLI\Command
 		$tableName = $manager->databaseTableName;
 
 		/**
+		 *  Get SchemaTable.
+		 */
+		$schemaTable = Core\Schema::get($tableName);
+
+		/**
 		 * Get field names.
 		 */
 		$databaseFields = $manager->databaseTableInfo['fields'];
@@ -69,14 +74,8 @@ class addBackupToModel extends Core\ACLI\Command
 		/**
 		 * Find ID field.
 		 */
-		foreach($databaseFields as $field)
-		{
-			if($field['primary'])
-			{
-				$idField = $field['name'];
-				break;
-			}
-		}
+		$schemaConstraint = $schemaTable->getConstraint('PRIMARY');
+		$idField = $schemaConstraint->fieldNames[0];
 
 		/**
 		 * Get backup table name.
@@ -89,9 +88,31 @@ class addBackupToModel extends Core\ACLI\Command
 		$backupFieldName = Core\wordSingularize($tableName).'VersionId';
 		
 		/**
-		 *  Get SchemaTable.
+		 *  Check for existing backup table.
 		 */
-		$schemaTable = Core\Schema::get($tableName);
+		if(Core\Database\Engine::tableExists($backupTableName))
+		{
+			do
+			{
+				$input = readline('Backup table "'.$backupTableName.'" already exists. Do you want to delete and re-create it? (yes/no): ');
+				if($input === 'yes')
+				{
+					echo 'Deleting table "'.$backupTableName.'"...';
+					Core\Schema::get($backupTableName)->delete()->save();
+					echo 'done.'.PHP_EOL;
+					break;
+				}
+				elseif($input === 'no')
+				{
+					echo 'Aborting operation.'.PHP_EOL;
+					return false;
+				}
+				else
+				{
+					echo 'Invalid input. Please enter only "yes" or "no".'.PHP_EOL;
+				}
+			} while(true);
+		}
 		
 		/**
 		 * Create backup table.
@@ -111,15 +132,21 @@ class addBackupToModel extends Core\ACLI\Command
 		 * Remove primary key.
 		 */
 		echo 'Removing primary key on table `'.$backupTableName.'`...';
-		$schemaTableBackup->get($idField)->notPrimary();
+		$schemaTableBackup->deleteConstraint('PRIMARY');
 		echo 'done.'.PHP_EOL;
 
+		/**
+		 * Add index to original primary key.
+		 */
+		echo 'Adding index on field `'.$idField.'` in table `'.$backupTableName.'`...';
+		$schemaTableBackup->get($idField)->index();
+		echo 'done.'.PHP_EOL;
 
 		/**
 		 * Add new version ID field.
 		 */
 		echo 'Adding field `'.$backupFieldName.'` on table `'.$backupTableName.'`...';
-		$schemaTableBackup->bigint($backupFieldName)->primary()->autoIncrement()->first();
+		$schemaTableBackup->bigInt($backupFieldName)->primaryKey()->autoIncrement()->first();
 		echo 'done.'.PHP_EOL;		
 
 		/**

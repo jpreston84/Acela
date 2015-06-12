@@ -29,6 +29,11 @@ abstract class SchemaTable implements \Iterator
 	public $items = [];
 	
 	/**
+	 *  @var array An array of SchemaConstraint objects. 
+	 */
+	public $constraints = [];
+	
+	/**
 	 *  @var bool $new Is this schema table new?
 	 */
 	public $new = true;
@@ -77,7 +82,7 @@ abstract class SchemaTable implements \Iterator
 			$schemaField->signed = $field['signed'];
 			$schemaField->default = $field['default'];
 			$schemaField->nullable = $field['nullable'];
-			$schemaField->primary = $field['primary'];
+			// $schemaField->primary = $field['primary'];
 			$schemaField->autoIncrement = $field['autoIncrement'];
 			$schemaField->positionFirst = $field['positionFirst'];
 			$schemaField->positionAfter = $field['positionAfter'];
@@ -88,6 +93,32 @@ abstract class SchemaTable implements \Iterator
 			 * Add the field to the stack of fields.
 			 */
 			$this->items[] = $schemaField;
+		}	
+		
+		/**
+		 * Generate constraints.
+		 */
+		foreach($tableInfo['constraints'] as $constraint)
+		{
+			/**
+			 * Generate a new SchemaConstraint.
+			 */
+			$schemaConstraint = $this->getConstraintInstance();
+			
+			/**
+			 * Assign properties of the field.
+			 */
+			$schemaConstraint->name = $constraint['name'];
+			$schemaConstraint->type = $constraint['type'];
+			$schemaConstraint->unique = $constraint['unique'];
+			$schemaConstraint->fieldNames = $constraint['fieldNames'];
+			$schemaConstraint->setOriginalState(); // Set this as the original state of the constraint, so that any future changes will indicate that the constraint has been altered.
+			$schemaConstraint->new = false; // This is not a new constraint.
+			
+			/**
+			 * Add the constraint to the stack of constraints.
+			 */
+			$this->constraints[] = $schemaConstraint;
 		}
 		
 		/**
@@ -155,7 +186,7 @@ abstract class SchemaTable implements \Iterator
 	 *  @param bool $autoIncrement Is this field an auto-increment field?
 	 *  @return The completed SchemaField.
 	 */
-	public function field($name, $type = null, $length = null, $signed = null, $default = null, $nullable = false, $primary = false, $autoIncrement = false, $position = false)
+	public function field($name, $type = null, $length = null, $signed = null, $default = null, $nullable = false, $autoIncrement = false, $position = false)
 	{
 		/**
 		 *  Generate a new SchemaField.
@@ -171,7 +202,6 @@ abstract class SchemaTable implements \Iterator
 		$schemaField->signed = $signed;
 		$schemaField->default = $default;
 		$schemaField->nullable = $nullable;
-		$schemaField->primary = $primary;
 		$schemaField->autoIncrement = $autoIncrement;
 		$schemaField->position = $position;
 
@@ -187,6 +217,17 @@ abstract class SchemaTable implements \Iterator
 	}
 	
 	/**
+	 *  Create a new boolean column.
+	 *  
+	 *  @param string $name The name of the column to be created.
+	 *  @return The completed column.
+	 */
+	public function bool($name)
+	{
+		return $this->field($name, 'boolean');
+	}	
+	
+	/**
 	 *  Create a new integer column.
 	 *  
 	 *  @param string $name The name of the column to be created.
@@ -194,7 +235,7 @@ abstract class SchemaTable implements \Iterator
 	 */
 	public function int($name)
 	{
-		return $this->field($name, 'int', 4, true, null, false, false, false);
+		return $this->field($name, 'int', 4, true);
 	}
 
 	/**
@@ -203,9 +244,20 @@ abstract class SchemaTable implements \Iterator
 	 *  @param string $name The name of the column to be created.
 	 *  @return The completed column.
 	 */
-	public function bigint($name)
+	public function bigInt($name)
 	{
-		return $this->field($name, 'int', 8, true, null, false, false, false);
+		return $this->field($name, 'int', 8, true);
+	}
+
+	/**
+	 *  Create a new date/time column.
+	 *  
+	 *  @param string $name The name of the column to be created.
+	 *  @return The completed column.
+	 */
+	public function dateTime($name)
+	{
+		return $this->field($name, 'datetime');
 	}
 	
 	/**
@@ -228,18 +280,175 @@ abstract class SchemaTable implements \Iterator
 	}
 	
 	/**
+	 *  Create a new constraint on this table.
+	 *  
+	 *  @param string $name The name of the constraint to create.
+	 *  @param string $type The type of constraint.
+	 *  @param bool $unique Is this constraint unique?
+	 *  @param array $fieldNames The name of the fields to use in this constraint.
+	 *  @return SchemaConstraint The completed constraint.
+	 */
+	public function constraint($name, $type = null, $unique = false, $fieldNames = [])
+	{
+		/**
+		 *  Throw an error if a given constraint already exists.
+		 */
+		foreach($this->constraints as $schemaConstraint)
+		{
+			if($schemaConstraint->name === $name and !$schemaConstraint->deleted)
+			{
+				Core\Error::critical('Unable to create the database constraint "'.$name.'" on table "'.$this->name.'" because a constraint by that name already exists.');
+			}
+		}
+		unset($schemaConstraint);
+	
+		/**
+		 *  Generate a new SchemaConstraint.
+		 */
+		$schemaConstraint = $this->getConstraintInstance();
+		
+		/**
+		 *  Assign properties to the constraint.
+		 */
+		$schemaConstraint->name = $name;
+		$schemaConstraint->type = $type;
+		$schemaConstraint->unique = $unique;
+		$schemaConstraint->fieldNames = $fieldNames;
+		
+		/**
+		 *  Add the constraint to the stack of constraints.
+		 */
+		$this->constraints[] = $schemaConstraint;
+		
+		/**
+		 *  Return the created constraint.
+		 */
+		return $schemaConstraint;
+	}
+	
+	/**
+	 *  Get the named constraint or index from the table.
+	 *  
+	 *  @param string $name The name of the constraint or index to retrieve.
+	 *  @return SchemaConstraint The desired SchemaConstraint.
+	 */
+	public function getConstraint($name)
+	{
+		foreach($this->constraints as $schemaConstraint) // For each constraint in the table...
+		{
+			if(
+				!$schemaConstraint->deleted
+				and $schemaConstraint->name === $name
+			)
+			{
+				return $schemaConstraint;
+			}
+		}
+
+		Core\Error::critical('Unable to get the constraint or index named "'.$name.'" from the table "'.$this->name.'", because that constraint does not exist.');
+	}
+	
+	/**
+	 *  Delete the named constraint or index from the table.
+	 *  
+	 *  @param string $name The name of the constraint or index to delete.
+	 *  @return this A reference to the current SchemaTable.
+	 */
+	public function deleteConstraint($name)
+	{
+		$schemaConstraint = $this->getConstraint($name);
+		$schemaConstraint->delete();
+
+		return $this;
+	}
+	
+	/**
+	 * Get a blank instance of the SchemaConstraint for the current driver.
+	 * 
+	 * @return SchemaConstraint A blank SchemaConstraint.
+	 */
+	public function getConstraintInstance()
+	{
+		$className = get_called_class();
+		$className = substr($className, 0, -5).'Constraint';
+		$schemaConstraint = new $className;
+		
+		/**
+		 * Attach the schema table to the schema constraint.
+		 */
+		$schemaConstraint->schemaTable = $this;
+		
+		return $schemaConstraint;
+	}
+
+	/**
+	 *  Add a primary key constraint to the table.
+	 *  
+	 *  @param string $fieldNames The name(s) of the field(s) to use as the primary key.
+	 *  @return A reference to the current table.
+	 */
+	public function primaryKey($fieldNames)
+	{
+		/**
+		 *  Make sure $fieldNames is an array.
+		 */
+		if(!is_array($fieldNames))
+		{
+			$fieldNames = [ $fieldNames ];
+		}
+		
+		/**
+		 *  Add the constraint.
+		 */
+		$this->constraint('PRIMARY', 'primary', true, $fieldNames);
+	
+		return $this;
+	}
+
+	/**
+	 *  Add an index constraint to the table.
+	 *  
+	 *  @param string $name The name of the index to create.
+	 *  @param string $fieldNames The name(s) of the field(s) to use in the index.
+	 *  @return A reference to the current table.
+	 */
+	public function index($name, $fieldNames)
+	{
+		/**
+		 *  Make sure $fieldNames is an array.
+		 */
+		if(!is_array($fieldNames))
+		{
+			$fieldNames = [ $fieldNames ];
+		}
+
+		/**
+		 *  Add the constraint.
+		 */
+		$this->constraint($name, 'index', false, $fieldNames);
+	
+		return $this;
+	}
+	
+	/**
 	 *  Delete this table from the schema.
 	 *  
 	 *  This method only flags the table for deletion. To actually delete the table,
 	 *  you will also need to call ->save().
+	 *  
+	 *  @return this A reference to the curernt object.
 	 */
 	public function delete()
 	{
 		$this->deleted = true;
+		
+		return $this;
 	}
 
 	/**
 	 *  Undo deletions.
+	 *  
+	 *  @return this A reference to the curernt object.
 	 */
 	public function undelete()
 	{
@@ -248,9 +457,25 @@ abstract class SchemaTable implements \Iterator
 	
 	/**
 	 *  Save the changes to this table.
+	 *  
+	 *  @return this A reference to the current object.
 	 */
 	public function save()
 	{
 		$this->saveSchemaChanges();
+		$this->schema->clearTableCache($this->name);
+
+		/**
+		 *  If we didn't just delete the table, try to reload it to get all the changes.
+		 */
+		if(!$this->deleted)
+		{
+			$schemaTable = $this->schema->get($this->name, true, false);
+			return $schemaTable;
+		}
+		else
+		{
+			return $this;
+		}
 	}
 }

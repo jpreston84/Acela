@@ -8,6 +8,14 @@
 namespace Acela\Core;
 
 /**
+ *  Define mode.
+ */
+if(!defined('ACELA_MODE'))
+{
+	define('ACELA_MODE', 'web');
+}
+
+/**
  * Load Acela autoloader.
  */
 require_once __DIR__.'/Functions/Autoload.functions.php';

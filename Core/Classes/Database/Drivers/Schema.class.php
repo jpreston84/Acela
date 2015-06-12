@@ -89,8 +89,13 @@ class Schema extends Core\Singleton implements \Iterator
 	 * @param string $tableName The name of the table in the schema to get.
 	 * @return SchemaTable A constructed instance of the table.
 	 */
-	protected function get($tableName)
+	protected function get($tableName, $forceReload = false)
 	{
+		/**
+		 *  Force reload, if necessary.
+		 */
+		$this->clearTableCache($tableName);
+	
 		/**
 		 * Verify that the table exists.
 		 */
@@ -102,7 +107,7 @@ class Schema extends Core\Singleton implements \Iterator
 		/**
 		 *  Look for the table in the ->items stack.
 		 */
-		foreach($this->items as $schemaTable) // Look through each table that's already been loaded...
+		foreach($this->items as $i => $schemaTable) // Look through each table that's already been loaded...
 		{
 			if($schemaTable->name === $tableName) // If the iterated table matches the name of the table we're looking for...
 			{
@@ -127,6 +132,30 @@ class Schema extends Core\Singleton implements \Iterator
 		$this->items[] = $schemaTable;
 		
 		return $schemaTable;
+	}
+	
+	/**
+	 *  Clear the named table from the table cache.
+	 *  
+	 *  @param string $tableName The name of the table to clear from the cache.
+	 *  @return A reference to the current schema.
+	 */
+	protected function clearTableCache($tableName)
+	{
+		/**
+		 *  Look for the table in the ->items stack, and delete it.
+		 */
+		foreach($this->items as $i => $schemaTable) // Look through each table that's already been loaded...
+		{
+			if($schemaTable->name === $tableName) // If the iterated table matches the name of the table we're looking for...
+			{
+				unset($this->items[$i]); // Remove the table from the item list.
+				break; // Stop iterating through the list of items, since we already found what we're looking for.
+			}
+		}
+		unset($schemaTable);
+		
+		return $this;
 	}
 	
 	/**

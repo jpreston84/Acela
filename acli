@@ -7,8 +7,12 @@
 namespace Acela\Core\ACLI;
 
 use \Acela\Core as Core;
+
+define('ACELA_MODE', 'cli');
  
 require_once __DIR__.'/Core/Core.php';
 
 $acli = new ACLI;
 $acli->run();
+
+echo 'ACLI finished.'.PHP_EOL;

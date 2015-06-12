@@ -49,7 +49,7 @@ class addTimestampsToModel extends Core\ACLI\Command
 			die();
 		}
 
-		echo 'Adding created/updated fields to the '.$args[0].' model...'.PHP_EOL;
+		echo 'Adding created/updated fields to the '.$args[0].' model...';
 		
 		/**
 		 * Get manager.
@@ -57,49 +57,38 @@ class addTimestampsToModel extends Core\ACLI\Command
 		$manager = Core\Model::getInstance($args[0]);
 
 		/**
-		 * Get table name.
+		 *  Get the table.
 		 */
-		$tableName = $manager->databaseTableName;
-
-		/**
-		 * Get field names.
-		 */
-		$databaseFields = $manager->databaseTableInfo['fields'];
+		$schemaTable = Core\Schema::get($manager->databaseTableName);
 
 		/**
 		 * Find ID field.
 		 */
-		foreach($databaseFields as $field)
+		foreach($schemaTable->constraints as $schemaConstraint)
 		{
-			if($field['primary'])
+			if($schemaConstraint->type === 'primary')
 			{
-				$idField = $field['name'];
+				$idField = $schemaConstraint->fieldNames[0];
 				break;
 			}
 		}
+		unset($schemaConstraint);
 
 		/**
-		 * Build strings for additional fields.
+		 *  Add additional fields.
 		 */
-		$addStrings = [];
-		$addStrings[] = 'ADD `'.$manager->databaseFieldPrefix.'CreatedOn` DATETIME NOT NULL AFTER `'.$idField.'`';
-		$addStrings[] = 'ADD `'.$manager->databaseFieldPrefix.'CreatedBy` BIGINT NOT NULL AFTER `'.$manager->databaseFieldPrefix.'CreatedOn`';
-		$addStrings[] = 'ADD `'.$manager->databaseFieldPrefix.'ModifiedOn` DATETIME NOT NULL AFTER `'.$manager->databaseFieldPrefix.'CreatedBy`';
-		$addStrings[] = 'ADD `'.$manager->databaseFieldPrefix.'ModifiedBy` BIGINT NOT NULL AFTER `'.$manager->databaseFieldPrefix.'ModifiedOn`';
-
-		/**
-		 * Create the query.
-		 */
-		$query = '
-			ALTER TABLE
-				`'.$tableName.'`
-			'.implode(', ', $addStrings).'
-			;
-		';
-		$GLOBALS['core']->db->rawQuery($query);
-
-		echo 'Complete.'.PHP_EOL;
+		$schemaTable->dateTime($manager->databaseFieldPrefix.'CreatedOn')->notNullable()->after($idField)->index();
+		$schemaTable->bigInt($manager->databaseFieldPrefix.'CreatedBy')->notNullable()->after($manager->databaseFieldPrefix.'CreatedOn')->index();
+		$schemaTable->dateTime($manager->databaseFieldPrefix.'ModifiedOn')->notNullable()->after($manager->databaseFieldPrefix.'CreatedBy')->index();
+		$schemaTable->bigInt($manager->databaseFieldPrefix.'ModifiedBy')->notNullable()->after($manager->databaseFieldPrefix.'ModifiedOn')->index();
 		
+		/**
+		 *  Save table changes.
+		 */
+		$schemaTable->save();
+		
+		echo 'complete.'.PHP_EOL;
+
 		return;
 	}
 }
